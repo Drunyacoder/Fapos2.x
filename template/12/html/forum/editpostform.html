@@ -1,0 +1,138 @@
+﻿<script language="JavaScript" type="text/javascript">
+l_empty_message = "Вы должны ввести текст сообщения";
+l_no_text_selected = "Выделите текст на странице и попробуйте еще раз";
+</script>
+<form name="sendForm" id="sendForm" action="{{ context.action }}" method="POST" 
+enctype="multipart/form-data" onsubmit="return checkForm(this)">
+<table border="0"  class="add-form reply" cellspacing="0" cellpadding="0" width="100%">
+	<tr>
+		<td colspan="3" class="title">Быстрый ответ</td>
+	<tr>
+	<tr>
+		<td width="18%" rowspan="4" valign="top">
+			<div id="smiles" class="smilebox">
+				<div><a href="javascript://" onClick="emoticon(':)');"><img src="/sys/img/smiles/smile.gif" /></a></div>
+				<div><a href="javascript://" onClick="emoticon('=)');"><img src="/sys/img/smiles/tongue.gif" /></a></div>
+				<div><a href="javascript://" onClick="emoticon('%)');"><img src="/sys/img/smiles/nifiga.gif" /></a></div>
+				<div><a href="javascript://" onClick="emoticon(':D');"><img src="/sys/img/smiles/lol.gif" /></a></div>
+				<div><a href="javascript://" onClick="emoticon('gg)');"><img src="/sys/img/smiles/gg.gif" /></a></div>
+				<div><a href="javascript://" onClick="emoticon(':(');"><img src="/sys/img/smiles/plak.gif" /></a></div>
+				<div><a href="javascript://" onClick="emoticon('=0');"><img src="/sys/img/smiles/glaza.gif" /></a></div>
+				<div><a href="javascript://" onClick="emoticon(';)');"><img src="/sys/img/smiles/biggrin2.gif" /></a></div>
+				<div><a href="javascript://" onClick="emoticon(':0');"><img src="/sys/img/smiles/biggrin.gif" /></a></div>
+				<div><a href="javascript://" onClick="emoticon(':|');"><img src="/sys/img/smiles/cool.gif" /></a></div>
+				<div><a href="javascript://" onClick="emoticon('0_o');"><img src="/sys/img/smiles/fing.gif" /></a></div>
+			</div>
+			<script>getSmiles('smiles');</script>
+		</td>
+		<td>
+			<table style="width:100%;" class="">
+				<tr>
+					<td colspan="2">
+						<input type="button" accesskey="b" name="addbbcode0" value=" b " onClick="bbstyle(0)" 
+						onMouseOver="helpline('b')" onMouseOut="helpline('h')" class="codeButtons" />
+
+						<input type="button" accesskey="i" name="addbbcode2" value=" i " onClick="bbstyle(2)" 
+						onMouseOver="helpline('i')" onMouseOut="helpline('h')" class="codeButtons" />
+
+						<input type="button" name="addbbcode4" value=" u " onClick="bbstyle(4)" 
+						onMouseOver="helpline('u')" onMouseOut="helpline('h')" class="codeButtons" />
+
+						<input type="button" name="addbbcode6" value="Quote" onClick="bbstyle(6)" 
+						onMouseOver="helpline('q')" onMouseOut="helpline('h')" class="codeButtons" />
+
+						<input type="button" name="addbbcode8" value="Code" onClick="bbstyle(8)" 
+						onMouseOver="helpline('c')" onMouseOut="helpline('h')" class="codeButtons" />
+
+						<input type="button" name="addbbcode10" value="PHP" onClick="bbstyle(10)" 
+						onMouseOver="helpline('p')" onMouseOut="helpline('h')" class="codeButtons" />
+
+						<input type="button" name="addbbcode12" value="List" onClick="bbstyle(12)" 
+						onMouseOver="helpline('l')" onMouseOut="helpline('h')" class="codeButtons" />
+
+						<input type="button" name="addbbcode14" value="List=" onClick="bbstyle(14)" 
+						onMouseOver="helpline('o')" onMouseOut="helpline('h')" class="codeButtons" />
+
+						<input type="button" name="addbbcode16" value="Img"  onClick="bbstyle(16)" 
+						onMouseOver="helpline('m')" onMouseOut="helpline('h')" class="codeButtons" />
+
+						<input type="button" name="addbbcode18" value="URL" onClick="bbstyle(18)" 
+						onMouseOver="helpline('w')" onMouseOut="helpline('h')" class="codeButtons" />
+						
+						<input type="button" name="addbbcode20" value="Hide" onClick="bbstyle(20)" 
+						onMouseOver="helpline('hd')" onMouseOut="helpline('h')" class="codeButtons" />
+
+						<input type="button" name="addbbcode22" value="Left" onClick="bbstyle(22)" 
+						onMouseOver="helpline('le')" onMouseOut="helpline('h')" class="codeButtons" />
+
+						<input type="button" name="addbbcode24" value="Center" onClick="bbstyle(24)" 
+						onMouseOver="helpline('ce')" onMouseOut="helpline('h')" class="codeButtons" />
+
+						<input type="button" name="addbbcode26" value="Right" onClick="bbstyle(26)" 
+						onMouseOver="helpline('ri')" onMouseOut="helpline('h')" class="codeButtons" />
+						<br />
+						<span class="code-help">Цвет шрифта:</span>
+						<select class="codeSelect" name="addbbcode30" onChange="bbfontstyle('[color=' + this.form.addbbcode30.options[this.form.addbbcode30.selectedIndex].value + ']', '[/color]');this.selectedIndex=0;" onMouseOver="helpline('s')" onMouseOut="helpline('h')">
+				<option style="color:#000000;" value="000000">Черный</option>
+				<option style="color:#FF0000;" value="red">Красный</option>
+				<option style="color:#008000;" value="green">Зелёный</option>
+				<option style="color:#0000FF;" value="blue">Синий</option>
+				<option style="color:#00FFFF;" value="00FFFF">Аква</option>        
+				<option style="color:#FF00FF;" value="FF00FF">Розовый</option>
+				<option style="color:#808080;" value="808080">Серый</option>        
+				<option style="color:#00FF00;" value="00FF00">Лаймовый</option>
+				<option style="color:#800000;" value="800000">Темно-бордовый</option>
+				<option style="color:#000080;" value="000080">Темно-синий</option>
+				<option style="color:#808000;" value="808000">Оливковый</option>
+				<option style="color:#800080;" value="800080">фиолетовый</option>
+				<option style="color:#C0C0C0;" value="C0C0C0">Серебряный</option>
+				<option style="color:#008080;" value="008080">Чирок</option>
+				<option style="color:#FFFFFF;" value="FFFFFF">Белый</option>
+				<option style="color:#FFFF00;" value="FFFF00">Желтый</option>
+						</select>
+						
+						<span class="code-help">Размер шрифта:</span>
+						<select class="codeSelect"  name="addbbcode31" onChange="bbfontstyle('[size=' + this.form.addbbcode31.options[this.form.addbbcode31.selectedIndex].value + ']', '[/size]');this.selectedIndex=0;" onMouseOver="helpline('si')" onMouseOut="helpline('h')">
+							<option style="font-size:13px;" value="13">По умолчанию</option>
+							<option style="font-size:10px;" value="10">Текст 2</option>
+							<option style="font-size:15px;" value="15">Текст 3</option>
+							<option style="font-size:20px;" value="20">Текст 4</option>
+							<option style="font-size:25px;" value="25">Текст 5</option>
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<td colspan="2">
+						<input type="text" name="helpbox" font-size:10px" 
+						class="helpline" value="Подсказка: Можно быстро применить стили к выделенному тексту" />
+						<a href="javascript:bbstyle(-1)" onMouseOver="helpline('a')" onMouseOut="helpline('h')">Закрыть все теги</a>
+					</td>
+				</tr>
+				<tr>
+					<td colspan="2">
+						<textarea class="text-area" name="mainText" onselect="storeCaret(this);" onclick="storeCaret(this);" onkeyup="storeCaret(this);">{{ context.main_text }}</textarea>
+					</td>
+				</tr>
+				<tr>
+					<td align="left" class="gTableRight">
+						<div id="attachments">
+							<input class="attachField" type="file" id="attach1" name="attach1"  onChange="getFile(1)" />{{ context.unlinkfiles.att1 }}<span id="attachMeta1"></span><br />
+							<input class="attachField" type="file" id="attach2" name="attach2"  onChange="getFile(2)" />{{ context.unlinkfiles.att2 }}<span id="attachMeta2"></span><br />
+							<input class="attachField" type="file" id="attach3" name="attach3"  onChange="getFile(3)" />{{ context.unlinkfiles.att3 }}<span id="attachMeta3"></span><br />
+							<input class="attachField" type="file" id="attach4" name="attach4"  onChange="getFile(4)" />{{ context.unlinkfiles.att4 }}<span id="attachMeta4"></span><br />
+							<input class="attachField" type="file" id="attach5" name="attach5"  onChange="getFile(5)" />{{ context.unlinkfiles.att5 }}<span id="attachMeta5"></span><br />
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<td colspan="2">
+						<input class="subm" type="submit" name="submitForm" value="Отправить" />
+						<input class="subm" type="submit" name="viewMessage" value="Предварительный просмотр" />
+					</td>
+				</tr>
+			</table>
+		</td>
+	</tr>
+</table>
+</form>
+

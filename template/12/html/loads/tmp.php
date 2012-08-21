@@ -1,0 +1,6 @@
+INSERT INTO loads (`title`, `main`, `views`, `downloads`, `rate`, `download`, `download_url`, `download_url_size`, `date`, `category_id`, `author_id`, `comments`, `tags`, `description`, `sourse`, `sourse_email`, `sourse_site`, `commented`, `available`, `view_on_home`, `on_home_top`) VALUES ('sssss', 'sssssss dfdfdsssssss dfdfdsssssss dfdfdsssssss dfdfdsssssss dfdfdsssssss dfdfdsssssss dfdfdsssssss dfdfdsssssss dfdfdsssssss dfdfdsssssss dfdfdsssssss dfdfdsssssss dfdfdsssssss dfdfdsssssss dfdfdsssssss dfdfdsssssss dfdfdsssssss dfdfdsssssss dfdfdsssssss dfdfdsssssss dfdfdsssssss dfdfdsssssss dfdfdsssssss dfdfdsssssss dfdfdsssssss dfdfdsssssss dfdfdsssssss dfdfdsssssss dfdfdsssssss dfdfdsssssss dfdfdsssssss dfdfdsssssss dfdfdsssssss dfdfdsssssss dfdfdsssssss dfdfdsssssss dfdfdsssssss dfdfdsssssss dfdfdsssssss dfdfdsssssss dfdfdsssssss dfdfdsssssss dfdfdsssssss dfdfdsssssss dfdfdsssssss dfdfdsssssss dfdfdsssssss dfdfdsssssss dfdfdsssssss dfdfdsssssss dfdfdsssssss dfdfdsssssss dfdfdsssssss dfdfdsssssss dfdfdsssssss dfdfd', 0, 0, 0, '', '', 0, NOW(), '1', '1', 0, '', '', '', '', '', '1', '1', '1', '0')
+
+
+Warning: Cannot modify header information - headers already sent by (output started at Z:\home\localhost\www\sys\inc\helpers.lib.php:561) in Z:\home\localhost\www\sys\inc\module.class.php on line 617
+Информация
+Новый материал успешно добавлен
