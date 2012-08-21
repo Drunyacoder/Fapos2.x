@@ -1,0 +1,64 @@
+<?php
+/*---------------------------------------------\
+|											   |
+| @Author:       Andrey Brykin (Drunya)        |
+| @Version:      1.0                           |
+| @Project:      CMS                           |
+| @package       CMS Fapos                     |
+| @subpackege    Foto Model                    |
+| @copyright     ©Andrey Brykin 2010-2012      |
+| @last mod      2012/04/26                    |
+|----------------------------------------------|
+|											   |
+| any partial or not partial extension         |
+| CMS Fapos,without the consent of the         |
+| author, is illegal                           |
+|----------------------------------------------|
+| Любое распространение                        |
+| CMS Fapos или ее частей,                     |
+| без согласия автора, является не законным    |
+\---------------------------------------------*/
+
+
+
+/**
+ *
+ */
+class FotoModel extends FpsModel
+{
+	public $Table = 'foto';
+
+    protected $RelatedEntities = array(
+        'author' => array(
+            'model' => 'Users',
+            'type' => 'has_one',
+            'foreignKey' => 'author_id',
+      	),
+        'category' => array(
+            'model' => 'FotoSections',
+            'type' => 'has_one',
+            'foreignKey' => 'category_id',
+        ),
+    );
+
+
+	
+	public function getNextPrev($id)
+	{
+		$Register = Register::getInstance();
+
+		$records = array();
+		$records['prev'] = $this->getDbDriver()->select($this->Table, DB_FIRST, array('cond' => array('`id` < ' . $id), 'limit' => 1, 'order' => '`id` DESC'));
+		$records['next'] = $this->getDbDriver()->select($this->Table, DB_FIRST, array('cond' => array('`id` > ' . $id), 'limit' => 1, 'order' => '`id`'));
+		
+
+		if ($records) {
+			foreach ($records as $key => $value) {
+				if (!empty($value['id']))
+					$records[$key] = new FotoEntity($value);
+			}
+		}
+		
+		return $records;
+	}
+}
