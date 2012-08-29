@@ -227,6 +227,7 @@ Class PagesModule extends Module {
                         $markers['announce'] = $this->Textarier->getAnnounce($announce, $entry_url, 0,
                             $this->Register['Config']->read('announce_lenght'), $result);
 
+						$markers['profile_url'] = get_url('/users/info/' . $result->getAuthor_id());
 
                         $markers['module_title'] = $this->Register['Config']->read('title', $result->getSkey());
                         $result->setAdd_markers($markers);

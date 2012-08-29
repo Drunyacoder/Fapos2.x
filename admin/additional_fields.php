@@ -63,7 +63,7 @@ if ($_GET['ac'] == 'index'):
 	$fields = $FpsDB->select($_GET['m'] . '_add_fields', DB_ALL);
 	$AddFields = new FpsAdditionalFields;
 	if (count($fields) > 0)
-		$inputs = $AddFields->getInputs($fields, false);
+		$inputs = $AddFields->getInputs($fields, false, $_GET['m']);
 
 
 

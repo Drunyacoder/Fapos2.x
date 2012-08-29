@@ -252,7 +252,16 @@ $(document).ready(function(){
 	</tr>
 </table>
 </form>
-
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
 
 <?php 
 include_once 'template/footer.php';

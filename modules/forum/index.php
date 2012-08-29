@@ -338,7 +338,7 @@ Class ForumModule extends Module {
 			
 			
 			$cnt_themes_here = count($themes);
-			if ($cnt_themes_here > 0) {
+			if ($cnt_themes_here > 0 && is_array($themes)) {
 				foreach ($themes as $theme) {
 				
 					$theme = $this->__parseThemeTable($theme);
@@ -353,9 +353,6 @@ Class ForumModule extends Module {
 				));
 				
 				
-			} else {
-				$htmltheme = __('No topics');
-				$this->cached = false;
 			}	
 			
 

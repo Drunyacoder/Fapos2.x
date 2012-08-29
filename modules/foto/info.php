@@ -6,7 +6,7 @@ $menuInfo = array(
 	'sub' => array(
         'settings.php?m=foto' => 'Настройки',
         'design.php?m=foto' => 'Дизайн',
-        'categoory.php?m=foto' => 'Управление категориями',
+        'category.php?m=foto' => 'Управление категориями',
 	),
 );
 

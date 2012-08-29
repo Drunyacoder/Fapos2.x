@@ -67,6 +67,8 @@ class SearchModule extends Module {
 		
 		$html = null;
 		$error = null;
+		$results = null;
+		
 		if (isset($_POST['search']) || isset($_GET['search'])) {
 			$str = (isset($_POST['search'])) ? $_POST['search'] : '';
 			if (empty($str)) $str = (isset($_GET['search'])) ? $_GET['search'] : '';

@@ -31,9 +31,13 @@ class ModulesManager
 	private $accessFile;
 	
 	
-	public function __construct($path)
+	public function __construct($path = false)
 	{
-		$this->accessFile = $path;
+		if ($path) {
+			$this->accessFile = $path;
+		} else {
+			$this->accessFile = ROOT . '/sys/settings/modules_access.php';
+		}
 	}
 	
 	

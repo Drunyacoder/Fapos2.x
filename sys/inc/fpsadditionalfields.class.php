@@ -161,18 +161,21 @@ class FpsAdditionalFields {
         $Model = new $ModelName();
 
         $Model->bindModel(ucfirst($module) . 'AddContent');
-        $addFields = $Model->getCollection();
-		
-		
 		if (!empty($records)) $addFields = $records;
 		else $addFields = $Model->getCollection();
+		
+
 		$_addFields = array();
 		$output = array();
 		
 		
 		if (!empty($addFields)) {
 			foreach($addFields as $key => $field) {
-				$_addFields[$key] = 'add_field_' . $field->getId();
+				
+				$id = (is_object($field)) ? $field->getId() : $field['id'];
+				$type = (is_object($field)) ? $field->getType() : $field['type'];
+				
+				$_addFields[$key] = 'add_field_' . $id;
 				$output[$_addFields[$key]] = '';
 				$value = '';
 				
@@ -183,7 +186,7 @@ class FpsAdditionalFields {
 						$value = h($_SESSION['FpsForm'][$_addFields[$key]]);
 				}
 
-				switch ($field->getType()) {
+				switch ($type) {
 					case 'text':
 						$output[$_addFields[$key]] = '<input type="text" value="' . $value 
 						. '" name="' . $_addFields[$key] . '" />';

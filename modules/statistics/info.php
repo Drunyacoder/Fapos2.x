@@ -5,10 +5,10 @@
 
 
 $menuInfo = array(
-    'url' => 'settings.php?m=statistic',
+    'url' => 'settings.php?m=statistics',
     'ankor' => 'Статистика',
 	'sub' => array(
-        'settings.php?m=statistic' => 'Настройки',
+        'settings.php?m=statistics' => 'Настройки',
         'statistic.php' => 'Просмотр статистики',
 	),
 );
