@@ -29,6 +29,30 @@ class PagesModel extends FpsModel
 	public $Table = 'pages';
 
     protected $RelatedEntities;
+
+
+
+	/**
+     * @param $id
+     * @return bool
+     */
+	public function getByUrl($id)
+	{
+        $Register = Register::getInstance();
+		$entity = $this->getDbDriver()->select($this->Table, DB_FIRST, array(
+			'cond' => array(
+				'url' => $id
+			)
+		));
+
+		if (!empty($entity[0])) {
+            $entity = $this->getAllAssigned($entity);
+			$entityClassName = $Register['ModManager']->getEntityNameFromModel(get_class($this));
+			$entity = new $entityClassName($entity[0]);
+			return (!empty($entity)) ? $entity : false;
+		}
+		return false;
+	}
 	
 	
 	public function getTree($id)

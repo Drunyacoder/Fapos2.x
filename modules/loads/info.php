@@ -7,7 +7,7 @@ $menuInfo = array(
 	'sub' => array(
         'settings.php?m=loads' => 'Настройки',
         'design.php?m=loads' => 'Дизайн',
-        'category.php?m=loads' => 'Управление категориями',
+        'category.php?mod=loads' => 'Управление категориями',
         'additional_fields.php?m=loads' => 'Дополнительные поля',
 	),
 );

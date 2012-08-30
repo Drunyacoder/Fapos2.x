@@ -145,6 +145,7 @@ document.top_menu = new drunyaMenu([
 <?php
 $modsInstal = new FpsModuleInstaller;
 $nsmods = $modsInstal->checkNewModules();
+
 if (count($nsmods)):
 	foreach ($nsmods as $mk => $mv):
 ?>	

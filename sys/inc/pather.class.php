@@ -99,7 +99,7 @@ Class Pather {
 			$pathParams = array(
 				0 => 'pages',
 				1 => 'index',
-				2 => (int)$pathParams[0],
+				2 => $pathParams[0],
 			);
 		} else if (count($pathParams) == 0 ) {
 			$pathParams[1] = 'index';
@@ -142,9 +142,11 @@ Class Pather {
 					2 => $mat_id,
 				);
 			} else {
-				$_GET['ac'] = 404;
-				include_once ROOT . '/error.php';
-				//die("can't find " . h($params[0]) . " Module");
+				$params = array(
+					0 => 'pages',
+					1 => 'index',
+					2 => $params[0],
+				);
 			}
 		}
 

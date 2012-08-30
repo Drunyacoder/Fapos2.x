@@ -327,7 +327,7 @@ class Module {
 		$this->afterRender();
 		
 		echo $output;
-		die();
+		//die();
 		
 		
 		

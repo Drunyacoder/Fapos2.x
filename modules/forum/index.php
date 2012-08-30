@@ -267,7 +267,7 @@ Class ForumModule extends Module {
 			$who_is_here .= $val['profile_link'] . ', ';
 		}
 		file_put_contents($forumFile, serialize($who));
-		$context = array('who_is_here', substr($who_is_here, 0, -2));
+		//$context = array('who_is_here', substr($who_is_here, 0, -2));
 
 		
 		//are we have cache?
@@ -355,9 +355,10 @@ Class ForumModule extends Module {
 				
 			}	
 			
-
+			
 			$forum->setCount_themes_here($cnt_themes_here);
-			$forum->setCount_themes(count($themes));
+			$forum->setWho_is_here(substr($who_is_here, 0, -2));
+			//$forum->setCount_themes(count($themes));
 
 
 			//write cache

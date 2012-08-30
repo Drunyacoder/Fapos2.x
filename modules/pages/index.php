@@ -46,8 +46,17 @@ Class PagesModule extends Module {
 	function index($id = null, $s =null, $x = null) {
 		//if isset ID - we need load page with this ID
 		if (!empty($id)) {
-			$id = (int)$id;
-			if ($id < 2)  redirect('/pages/');
+			if (is_int($id)) {
+				$id = (int)$id;
+				if ($id < 2)  redirect('/pages/');
+			} else {
+				if (!preg_match('#^[\da-z_\-]+$#i', $id))  redirect('/pages/');
+			
+				$record = $this->Model->getByUrl($id);
+				if (empty($record)) return $this->showInfoMessage(__('Can not find this page'), '/');
+				
+				$id = $record->getId();
+			}
 		
 		
 			$page = $this->Model->getById($id);
@@ -74,8 +83,10 @@ Class PagesModule extends Module {
 					'order' => 'path',
 				));
 				
-				foreach($pages as $p) {
-					$navi['navigation'] .= __('Separator') . get_link(__($p->getName()), '/' . $p->getId());
+				if (!empty($pages) && is_array($pages)) {
+					foreach($pages as $p) {
+						$navi['navigation'] .= __('Separator') . get_link(__($p->getName()), '/' . $p->getId());
+					}
 				}
 			}
 			$navi['navigation'] .= __('Separator') . h($page->getName());
