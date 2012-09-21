@@ -64,7 +64,7 @@ class PrintText {
 			if ($length < 1) $length = 500;
 			if ($start >= $length) $start = 0; 
 			$announce = mb_substr($str, $start, $length);
-			if (!preg_match('#[a-zа-я]$#ui', $announce)) $announce = mb_substr($announce, 0, -1);
+			//if (!preg_match('#[a-zа-я]$#ui', $announce)) $announce = mb_substr($announce, 0, -1);
 		}
 
 		
@@ -168,7 +168,7 @@ class PrintText {
 		$start_tag = mb_strpos($message, '[announce]');
 		$end_tag = mb_strpos($message, '[/announce]');
 		if (false !== $start_tag && false !== $end_tag && $end_tag > $start_tag) {
-			$message = preg_replace('#\[announce\].*\[/announce\]#sui', '', $message);
+			$message = preg_replace('#\[announce\].+\[/announce\]#sui', '', $message);
 		}
 	
 		

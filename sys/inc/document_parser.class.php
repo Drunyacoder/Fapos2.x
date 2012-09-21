@@ -3,12 +3,12 @@
 ##################################################
 ##												##
 ## Author:       Andrey Brykin (Drunya)         ##
-## Version:      1.6.4                          ##
+## Version:      1.6.5                          ##
 ## Project:      CMS                            ##
 ## package       CMS Fapos                      ##
 ## subpackege    Document parser library        ##
 ## copyright     ©Andrey Brykin 2010-2012       ##
-## last mod.     2012/07/08                     ##
+## last mod.     2012/09/17                     ##
 ##################################################
 
 
@@ -265,7 +265,7 @@ class Document_Parser {
 	}
 	
 	
-	/**
+	/** DEPRECATED
 	* @param      string $page
 	* @param      string $modul - current module
 	* @return     data with head menu
@@ -358,4 +358,3 @@ class Document_Parser {
 	
 }
 
-?>

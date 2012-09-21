@@ -31,18 +31,18 @@ Class StatisticsModule
 	
 	
 	
-	function index() 
+	public static function index() 
 	{
 		$Register = Register::getInstance();
 	
 	
 		//ip
-		if (isset($_SERVER['REMOTE_ADDR'])) {
+		if (!empty($_SERVER['REMOTE_ADDR'])) {
 			$ip = $_SERVER['REMOTE_ADDR'];
 		} else {
 			$ip = (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) ? $_SERVER['HTTP_X_FORWARDED_FOR'] : '00.00.00.00';
 		}
-		if (mb_strlen($ip) > 15 || !preg_match('#^\d+\.\d+\.\d+\.\d+$#', $ip)) $ip = '00.00.00.00'; 
+		if (mb_strlen($ip) > 20 || !preg_match('#^\d+\.\d+\.\d+\.\d+$#', $ip)) $ip = '00.00.00.00'; 
 		
 		
 		if (!file_exists(ROOT . '/sys/logs/counter_ips' . date("Y-m-d"))) {
@@ -52,6 +52,8 @@ Class StatisticsModule
 			}
 			mkdir(ROOT . '/sys/logs/counter_ips' . date("Y-m-d"), 0777, true);
 		}
+		
+		
 		if (!file_exists(ROOT . '/sys/logs/counter_ips' . date("Y-m-d") . '/' . $ip . '.dat')) {
 			$inc_ip = 1;
 			$file = fopen(ROOT . '/sys/logs/counter_ips' . date("Y-m-d") . '/' . $ip . '.dat', 'w');
@@ -59,6 +61,7 @@ Class StatisticsModule
 		} else {
 			$inc_ip = 0;
 		}
+		
 		
 		//visits from other sites
 		if (!empty($_SERVER['HTTP_REFERER']) 
@@ -291,7 +294,7 @@ Class StatisticsModule
 	/**
 	* update overal all hits value
 	*/
-	private function _updateOveralHits($keys = array(), $values = array()) {
+	public static function _updateOveralHits($keys = array(), $values = array()) {
 		clearstatcache();
 		$overal_file = ROOT . '/sys/logs/overal_stats.dat';
 		

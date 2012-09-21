@@ -67,9 +67,10 @@ Class Pather {
 		$pathParams = array();
 		$url = (!empty($_GET['url'])) ? $this->decodeUrl($_GET['url']) : '';
 		
-		if (!isset($url)) {
+		
+		if (empty($url)) {
 			if ($this->Register['Config']->read('start_mod')) {
-				$url = $this->Register['Config']->read('start_mod');
+				$_GET['url'] = $this->Register['Config']->read('start_mod');
 				$pathParams = $this->parsePath();
 				return $pathParams;
 			}

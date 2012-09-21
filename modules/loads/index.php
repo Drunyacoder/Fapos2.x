@@ -2,7 +2,7 @@
 /*---------------------------------------------\
 |											   |
 | @Author:       Andrey Brykin (Drunya)        |
-| @Version:      1.7.5                         |
+| @Version:      1.7.6                         |
 | @Project:      CMS                           |
 | @package       CMS Fapos                     |
 | @subpackege    Loads Module                  |
@@ -87,7 +87,7 @@ Class LoadsModule extends Module {
 
 
         $total = $this->Model->getTotal($query_params);
-        list ($pages, $page) = pagination( $total, Config::read('per_page', 'loads'), '/loads/s');
+        list ($pages, $page) = pagination( $total, Config::read('per_page', 'loads'), '/loads/');
         $this->Register['pages'] = $pages;
         $this->Register['page'] = $page;
         $this->page_title .= ' (' . $page . ')';
@@ -216,10 +216,10 @@ Class LoadsModule extends Module {
 
         // we need to know whether to show hidden
         $childCats = $SectionsModel->getOneField('id', array('parent_id' => $id));
+        $childCats[] = $id;
         $childCats = implode(', ', $childCats);
         $query_params = array('cond' => array(
-            '`category_id` = ' . $id . ' OR '
-                . '`category_id` IN (' . $childCats . ')'
+			'`category_id` IN (' . $childCats . ')'
         ));
 
         if (!$this->ACL->turn(array('other', 'can_see_hidden'), false)) {

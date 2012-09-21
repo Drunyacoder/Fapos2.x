@@ -2,12 +2,12 @@
 /*-----------------------------------------------\
 | 												 |
 |  @Author:       Andrey Brykin (Drunya)         |
-|  @Version:      1.5.2                          |
+|  @Version:      1.5.3                          |
 |  @Project:      CMS                            |
 |  @package       CMS Fapos                      |
 |  @subpackege    Template redactor              |
 |  @copyright     ©Andrey Brykin 2010-2012       |
-|  @last mod.     2011/07/01                     |
+|  @last mod.     2012/09/19                     |
 \-----------------------------------------------*/
 
 /*-----------------------------------------------\
@@ -133,7 +133,7 @@ if (!array_key_exists($_GET['m'], $allowedFiles)) {
 
 
 $module = (array_key_exists($_GET['m'], $allowedFiles)) ? $_GET['m'] : 'default';
-$file = (in_array($_GET['t'], $allowedFiles[$module])) ? $_GET['t'] : 'main';
+$filename = (in_array($_GET['t'], $allowedFiles[$module])) ? $_GET['t'] : 'main';
 $type = (in_array($_GET['d'], array('css', 'default'))) ? $_GET['d'] : 'default';
 if ('css' == $type) $file = 'style';
 
@@ -149,7 +149,7 @@ if(isset($_POST['send']) && isset($_POST['templ'])) {
 
 
 	} else {
-		$template_file = ROOT . '/template/' . Config::read('template') . '/html/' . $module . '/' . $file . '.html';
+		$template_file = ROOT . '/template/' . Config::read('template') . '/html/' . $module . '/' . $filename . '.html';
 		if (!is_file($template_file . '.stand')) {
 			copy($template_file, $template_file . '.stand');
 		}
@@ -175,9 +175,9 @@ if ($_GET['d'] == 'css') {
     $path = ROOT .'/template/' . Config::read('template') . '/css/style.css';
 } else {
     clearstatcache();
-    $path = ROOT .'/template/' . Config::read('template') . '/html/' . $module . '/' . $file . '.html';
+    $path = ROOT .'/template/' . Config::read('template') . '/html/' . $module . '/' . $filename . '.html';
     if (!file_exists($path)) {
-        $path = ROOT .'/template/' . Config::read('template') . '/html/default/' . $file . '.html';
+        $path = ROOT .'/template/' . Config::read('template') . '/html/default/' . $filename . '.html';
         if (!file_exists($path)) {
             $_SESSION['message'] = 'Запрошеный файл не найден';
             redirect('/admin/design.php');

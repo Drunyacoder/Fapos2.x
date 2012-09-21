@@ -2,12 +2,12 @@
 /*---------------------------------------------\
 |											   |
 | @Author:       Andrey Brykin (Drunya)        |
-| @Version:      1.5.1                         |
+| @Version:      1.5.2                         |
 | @Project:      CMS                           |
 | @package       CMS Fapos                     |
 | @subpackege    Users Module                  |
 | @copyright     ©Andrey Brykin 2010-2012      |
-| @last mod      2012/07/08                    |
+| @last mod      2012/09/17                    |
 |----------------------------------------------|
 |											   |
 | any partial or not partial extension         |
@@ -202,6 +202,8 @@ Class UsersModule extends Module {
         $errors = $this->Parser->getErrors();
         if (isset($_SESSION['FpsForm'])) unset($_SESSION['FpsForm']);
         if (!empty($errors)) $markers['error'] = $errors;
+		else $markers['error'] = '';
+		
 
         $markers['captcha'] = get_url('/sys/inc/kcaptcha/kc.php?'.session_name().'='.session_id());
         $markers['name']    = $data['login'];
@@ -291,7 +293,7 @@ Class UsersModule extends Module {
 		$icq          = mb_substr($icq, 0, 12);
 		$jabber    	  = mb_substr($jabber, 0, 100);
 		$city	      = mb_substr($city, 0, 50);
-		$telephone    = number_format(mb_substr($telephone, 0, 20), 0, '', '');
+		$telephone    = (!empty($telephone)) ? number_format(mb_substr($telephone, 0, 20), 0, '', '') : '';
 		$byear	      = intval(mb_substr($byear, 0, 4));
 		$bmonth	      = intval(mb_substr($bmonth, 0, 2));
 		$bday	      = intval(mb_substr($bday, 0, 2));
@@ -1611,6 +1613,7 @@ Class UsersModule extends Module {
 		$markers['touser'] = $toUser;
 		$markers['subject'] = $subject;
 		$markers['main_text'] = $message;
+		$markers['preview'] = (!empty($prevSource)) ? $prevSource : '';
 		$source = $this->render('sendmessageform.html', array('context' => $markers));
 		
 		
@@ -1695,9 +1698,9 @@ Class UsersModule extends Module {
             );
 
 
-			if (count($res) == 0)
+			if (empty($res))
 				$error = $error.'<li>' . sprintf(__('Not user with this name'), $to) . '</li>'."\n";
-			if ((count($res) == 1 ) && ($res[0]->getId() == $_SESSION['user']['id']) )
+			if ((count($res) && is_array($res) ) && ($res[0]->getId() == $_SESSION['user']['id']) )
 				$error = $error.'<li>' . __('You can not send message to you') . '</li>'."\n";
 
 
@@ -1872,6 +1875,7 @@ Class UsersModule extends Module {
 
         $markers = array('error' => '');
         $messages = $this->Model->getInputMessages();
+
         if (count($messages) == 0) {
             $markers['messages'] = array();
             $markers['error'] = __('This dir is empty');

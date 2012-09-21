@@ -2,12 +2,12 @@
 /*---------------------------------------------\
 |											   |
 | @Author:       Andrey Brykin (Drunya)        |
-| @Version:      1.7.5                         |
+| @Version:      1.7.7                         |
 | @Project:      CMS                           |
 | @package       CMS Fapos                     |
 | @subpackege    News Module                   |
 | @copyright     ©Andrey Brykin 2010-2012      |
-| @last mod      2012/07/08                    |
+| @last mod      2012/09/18                    |
 |----------------------------------------------|
 |											   |
 | any partial or not partial extension         |
@@ -208,10 +208,10 @@ Class NewsModule extends Module {
 	
 		// we need to know whether to show hidden
 		$childCats = $SectionsModel->getOneField('id', array('parent_id' => $id));
+		$childCats[] = $id;
 		$childCats = implode(', ', $childCats);
 		$query_params = array('cond' => array(
-			'`category_id` = ' . $id . ' OR '
-			. '`category_id` IN (' . $childCats . ')'
+			'`category_id` IN (' . $childCats . ')'
 		));
 		
 		if (!$this->ACL->turn(array('other', 'can_see_hidden'), false)) {
@@ -413,7 +413,7 @@ Class NewsModule extends Module {
 			}
 		}
 		$announce = $this->Textarier->print_page($announce, $entity->getAuthor()->getStatus(), $entity->getTitle());
-		$markers['main_text'] = $announce;
+		$markers['mainText'] = $announce;
 		$entity->setAdd_markers($markers);
 		$entity->setTags(explode(',', $entity->getTags()));
 		
@@ -455,17 +455,23 @@ Class NewsModule extends Module {
 		
 		
         // Check for preview or errors
-        $data = array('title' => null, 'main_text' => null, 'in_cat' => null, 'description' => null, 'tags' => null, 'sourse' => null, 'sourse_email' => null, 'sourse_site' => null, 'commented' => null, 'available' => null);
+        $data = array('title' => null, 'mainText' => null, 'in_cat' => null, 'description' => null, 'tags' => null, 'sourse' => null, 'sourse_email' => null, 'sourse_site' => null, 'commented' => null, 'available' => null);
 		$data = array_merge($data, $markers);
         $data = Validate::getCurrentInputsValues($data);
-        $add = $data['main_text'];
+        $add = $data['mainText'];
         //$entity = new NewsEntity($data);
 		
 		
-        $data['preview'] = $this->Parser->getPreview($data['main_text']);
+        $data['preview'] = $this->Parser->getPreview($data['mainText']);
         $data['errors'] = $this->Parser->getErrors();
-        if (isset($_SESSION['viewMessage'])) unset($_SESSION['viewMessage']);
-        if (isset($_SESSION['FpsForm'])) unset($_SESSION['FpsForm']);
+        if (isset($_SESSION['viewMessage'])) {
+			$data = array_merge($data, $_SESSION['viewMessage']);
+			unset($_SESSION['viewMessage']);
+		}
+        if (isset($_SESSION['FpsForm'])) {
+			$data = array_merge($data, $_SESSION['FpsForm']);
+			unset($_SESSION['FpsForm']);
+		}
 		
 		
 		$SectionsModel = $this->_loadModel(ucfirst($this->module) . 'Sections');
@@ -491,7 +497,7 @@ Class NewsModule extends Module {
 		$this->_globalize($navi);
 		
 		
-		$source = $this->render('addform.html', $data);
+		$source = $this->render('addform.html', array('context' => $data));
 		return $this->_view($source);
 	}
 
@@ -507,7 +513,6 @@ Class NewsModule extends Module {
 	 */
 	public function add()
     {
-		
 		//turn access
 		$this->ACL->turn(array('news', 'add_materials'));
 		if (!isset($_POST['title']) 
@@ -787,7 +792,7 @@ Class NewsModule extends Module {
 
 
 		setReferer();
-		$source = $this->render('editform.html', array('data' => $markers));
+		$source = $this->render('editform.html', array('context' => $markers));
 		return $this->_view($source);
 	}
 

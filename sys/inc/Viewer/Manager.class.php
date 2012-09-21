@@ -35,6 +35,11 @@ class Fps_Viewer_Manager
 	public function view($fileName, $context = array())
 	{
 		$fileSource = $this->getTemplateFile($fileName);
+		
+		// TODO
+		$Register = Register::getInstance();
+		$fileSource = $Register['DocParser']->parseSnippet($fileSource);
+		
 		$data = $this->parseTemplate($fileSource, $context);
 		
 		return $data;

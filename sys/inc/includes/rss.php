@@ -41,7 +41,7 @@ if ($this->Cache->check($cache_key)) {
 	);
 	
 	if (!empty($records) && is_array($records)) {
-		$html .= '<lastBuildDate>' . date('r', strtotime($materials[0]['date'])) . '</lastBuildDate>';
+		$html .= '<lastBuildDate>' . date('r', strtotime($records[0]->getDate())) . '</lastBuildDate>';
 		foreach ($records as $record) { 
 			$html .= '<item>';
 			$html .= '<link>' . $sitename . get_url(entryUrl($record, $this->module)) . '</link>';

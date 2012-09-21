@@ -93,7 +93,8 @@ class UsersModel extends FpsModel
         $Register = Register::getInstance();
         $messagesModel = $Register['ModManager']->getModelName('Messages');
         $messagesModel = new $messagesModel;
-        $messagesModel->bindModel('Users');
+        $messagesModel->bindModel('fromuser');
+        $messagesModel->bindModel('touser');
 
         $messages = $messagesModel->getCollection(array(
             'to_user' => $_SESSION['user']['id'],
@@ -117,7 +118,8 @@ class UsersModel extends FpsModel
         $Register = Register::getInstance();
         $messagesModel = $Register['ModManager']->getModelName('Messages');
         $messagesModel = new $messagesModel;
-        $messagesModel->bindModel('Users');
+        $messagesModel->bindModel('touser');
+        $messagesModel->bindModel('fromuser');
 
         $messages = $messagesModel->getCollection(array(
             'from_user' => $_SESSION['user']['id'],

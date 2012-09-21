@@ -2,12 +2,12 @@
 /*-----------------------------------------------\
 | 												 |
 |  @Author:       Andrey Brykin (Drunya)         |
-|  @Version:      1.6                            |
+|  @Version:      1.7                            |
 |  @Project:      CMS                            |
 |  @package       CMS Fapos                      |
 |  @subpackege    Search Module                  |
 |  @copyright     ©Andrey Brykin 2010-2012       |
-|  @last mod.     2012/06/04                     |
+|  @last mod.     2012/09/19                     |
 \-----------------------------------------------*/
 
 /*-----------------------------------------------\
@@ -97,9 +97,7 @@ class SearchModule extends Module {
 			}
 			
 			$results = $this->__search($str);
-			if (count($results) < 1) {
-				$html = __('No results');
-			} else {
+			if (count($results) && is_array($results)) {
 				foreach ($results as $result) {
 					if (preg_match('#(.{0,100}' . $str . '.{0,100})#miu', $result->getIndex(), $match)) {
 						$announce = $match[1];
@@ -119,8 +117,11 @@ class SearchModule extends Module {
 					$result->setTitle($title);
 					$result->setAnnounce($announce);
 				}
+			} else {
+				$error = __('No results'); // TODO
 			}
 		}
+	
 		
 
 		// Nav block
@@ -139,6 +140,7 @@ class SearchModule extends Module {
 		$source = $this->render('search_list.html', array('context' => array(
 			'results' => $results,
 			'form' => $form,
+			'error' => $error,
 		)));
 
 		
@@ -259,7 +261,7 @@ class SearchModule extends Module {
             $records = $Model->getCollection();
 
 
-			if (count($records) > 0) {
+			if (count($records) && is_array($records)) {
 				foreach ($records as $rec) {
 
                     switch ($table) {

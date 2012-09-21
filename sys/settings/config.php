@@ -4,9 +4,9 @@ $set = array (
   'language' => 'russian',
   'cache_querys' => '0',
   'cookie_time' => '30',
-  'start_mod' => '',
+  'start_mod' => 'forum/',
   'open_reg' => '1',
-  'debug_mode' => '1',
+  'debug_mode' => '0',
   'max_file_size' => '15000000',
   'min_password_lenght' => '6',
   'admin_email' => 'test@email.cms',
@@ -164,7 +164,7 @@ $set = array (
   'db' => 
   array (
     'host' => 'localhost',
-    'name' => 'aa',
+    'name' => 'fapos',
     'user' => 'root',
     'pass' => '',
     'prefix' => '',
@@ -194,6 +194,6 @@ $set = array (
   ),
   'auto_sitemap' => '1',
   'allow_smiles' => 1,
-  'cms' => 'C:/work/fapos.loc/www',
+  'cms' => 'Z:/home/fapos.loc/www',
 )
 ?>

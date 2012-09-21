@@ -1,4 +1,4 @@
-﻿{{ context.error }}
+﻿
 
 
 <form name="addNewUserForm" action="{{ context.action }}" method="POST" enctype="multipart/form-data">
@@ -8,6 +8,12 @@
 <tr>
   <td class="title" colspan="2">Регистрация</td>
 </tr>
+
+{% if context.error %}
+<tr>
+	<td colspan="2" align="center">{{ context.error }}</td>
+</tr>
+{% endif %}
 <tr>
   <td class="left"><strong>Имя:<span style="color:#F3191E;">*</span></strong></td>
 

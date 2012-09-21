@@ -64,7 +64,9 @@ class Fps_Viewer_ExpresionParser
 		
 		// This is tmp var seting when foreach array 
 		// (hwere we must use foreach->value, and not variable from current context)
-		$this->parser->setStack($left->getValue());
+		if ('for_body' === $this->parser->getEnv() || 'for' === $this->parser->getEnv()) {
+			$this->parser->setStack($left->getValue());
+		}
 		$right = $this->parsePrimaryExpression();
 		return new $this->binaryOperators[$type]($left, $right);
 	}
@@ -105,7 +107,7 @@ class Fps_Viewer_ExpresionParser
 							// Foreach->value use. Where we create new context, 
 							// which work only inside FOR
                             //pr($this->parser->getEnv());
-                           // pr($token->getValue());
+                            //pr($this->parser->getEnv());
 							if (array_key_exists($token->getValue(), $this->parser->getStack())) {
                                 //if ('for_body' === $this->parser->getEnv() || 'for' === $this->parser->getEnv()) {
 								//    $node->setTmpContext($token->getValue());

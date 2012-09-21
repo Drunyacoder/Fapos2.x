@@ -2,12 +2,12 @@
 /*-----------------------------------------------\
 | 												 |
 |  @Author:       Andrey Brykin (Drunya)         |
-|  @Version:      1.5.1                          |
+|  @Version:      1.5.2                          |
 |  @Project:      CMS                            |
 |  @package       CMS Fapos                      |
 |  @subpackege    Pages Module                   |
 |  @copyright     ©Andrey Brykin 2010-2012       |
-|  @last mod      2012/08/19                     |
+|  @last mod      2012/09/18                     |
 \-----------------------------------------------*/
 
 /*-----------------------------------------------\
@@ -175,7 +175,7 @@ Class PagesModule extends Module {
                             $attModelClassName = $this->Register['ModManager']->getModelNameFromModule($module . 'Attaches');
                             $attModel = new  $attModelClassName;
                             $attaches = $attModel->getCollection(array('`entity_id` IN ('.$ids.')'));
-
+							
                             foreach ($mats as $mat) {
                                 if ($attaches) {
                                     foreach ($attaches as $attach) {
@@ -221,10 +221,12 @@ Class PagesModule extends Module {
                         $markers['entry_url'] = $entry_url;
 
 
-                        $matattaches = (!$result->getAttaches() && count($result->getAttaches()))
+                        $matattaches = ($result->getAttaches() && count($result->getAttaches()))
                         ? $result->getAttaches() : array();
                         $announce = $result->getMain();
 
+						
+						
                         if (count($matattaches) > 0) {
                             $attachDir = ROOT . '/sys/files/' . $result->getSkey() . '/';
                             foreach ($matattaches as $attach) {

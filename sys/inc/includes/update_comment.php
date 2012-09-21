@@ -6,7 +6,7 @@ if ($id < 1) redirect('/' . $this->module);
 $error = '';
 
 
-$commClassName = ucfirst($this->module) . 'CommentsName';
+$commClassName = ucfirst($this->module) . 'CommentsModel';
 $commModel = new $commClassName;
 $comment = $commModel->getById($id);
 if (!$comment) return $this->showInfoMessage(__('Comment not found'), $this->module);
@@ -20,8 +20,9 @@ $message = trim($message);
 $name = '';
 $valobj = $this->Register['Validate'];
 if ($comment->getUser_id()) {
-	$name = (!empty($_POST['login'])) ? (string)$_POST['login'] : '';
-	$name = trim(mb_substr($name, 0, 70));
+	//$name = (!empty($_POST['login'])) ? (string)$_POST['login'] : '';
+	//$name = trim(mb_substr($name, 0, 70));
+	$name = $comment->getName();
 	
 	if (empty($name)) {
 		$error = $error . '<li>' . __('Empty field "login"') . '</li>' . "\n";
