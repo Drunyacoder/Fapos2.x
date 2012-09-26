@@ -2,12 +2,12 @@
 /*---------------------------------------------\
 |											   |
 | @Author:       Andrey Brykin (Drunya)        |
-| @Version:      1.5.0                         |
+| @Version:      1.5.1                         |
 | @Project:      CMS                           |
 | @package       CMS Fapos                     |
 | @subpackege    Foto Module                   |
 | @copyright     ©Andrey Brykin 2010-2012      |
-| @last  mod     2012/04/26                    |
+| @last  mod     2012/09/26                    |
 |----------------------------------------------|
 |											   |
 | any partial or not partial extension         |
@@ -665,7 +665,7 @@ Class FotoModule extends Module {
 		$error = '';
 		if (empty($title))                    
 			$error = $error.'<li>'.__('Empty field "title"').'</li>'."\n";
-		if (!$Validate::cha_val($title, V_TITLE))  
+		if (!$Validate->cha_val($title, V_TITLE))  
 			$error = $error.'<li>'.__('Wrong chars in "title"').'</li>'."\n";
 		if (empty($description) && $this->Register['Config']->read('description_requred', 'foto')) 
 			$error = $error.'<li>'.__('Empty field "description"').'</li>'."\n";
