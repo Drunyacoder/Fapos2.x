@@ -2047,16 +2047,14 @@ Class UsersModule extends Module {
 	public function send_mail_form($id = null)
     {
 		if (!isset($_SESSION['user'])) redirect('/');
+		$id = intval($id);
+		if (!$id) redirect('/');
+		
+		$toUser = null;
+		
+		$user = $this->Model->getById($id);
+		if (!empty($user)) $toUser = $user->getName();
 
-		
-		if ( isset( $id ) ) {
-			$id = (int)$id;
-			if ($id > 0) {
-				$user = $this->Model->getById($id);
-				if (!empty($user)) $toUser = $user->getName();
-			}
-		}
-		
 
 		$markers = array(
 			'message' => '',
@@ -2065,6 +2063,8 @@ Class UsersModule extends Module {
 			'to_user' => $toUser,
 			'error' => '',
 		);
+		
+		
 		// Если при заполнении формы были допущены ошибки
 		if (isset($_SESSION['sendMailForm'])) {
 			$markers['error'] = $this->render('infomessage.html', array(
@@ -2076,6 +2076,7 @@ Class UsersModule extends Module {
 			unset($_SESSION['sendMailForm']);
 		}
 
+		
 		$source = $this->render('sendmailform.html', array(
 			'context' => $markers,
 			'user' => $user,
@@ -2107,6 +2108,7 @@ Class UsersModule extends Module {
 		$subject = trim( $subject );
 		$message = trim( $message );
 
+		
 		// Проверяем, заполнены ли обязательные поля
 		$error = '';
 		$valobj = $this->Register['Validate'];
@@ -2140,7 +2142,7 @@ Class UsersModule extends Module {
 			$_SESSION['sendMailForm']['toUser']  = $toUser;
 			$_SESSION['sendMailForm']['subject'] = $subject;
 			$_SESSION['sendMailForm']['message'] = $message;
-			redirect('/users/send_mail_form/' );
+			redirect('/users/send_mail_form/' . $user->getId());
 		}
 		
 		$toUser = $user;
