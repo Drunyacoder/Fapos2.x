@@ -2,12 +2,12 @@
 /*---------------------------------------------\
 |											   |
 | @Author:       Andrey Brykin (Drunya)        |
-| @Version:      1.5.2                         |
+| @Version:      1.5.3                         |
 | @Project:      CMS                           |
 | @package       CMS Fapos                     |
 | @subpackege    Users Module                  |
 | @copyright     ©Andrey Brykin 2010-2012      |
-| @last mod      2012/09/17                    |
+| @last mod      2012/09/25                    |
 |----------------------------------------------|
 |											   |
 | any partial or not partial extension         |
@@ -2041,7 +2041,9 @@ Class UsersModule extends Module {
 
 
 
-	// Функция возвращает html формы для отправки письма через форум
+	/**
+	 *
+	 */
 	public function send_mail_form($id = null)
     {
 		if (!isset($_SESSION['user'])) redirect('/');
@@ -2061,6 +2063,7 @@ Class UsersModule extends Module {
 			'subject' => '',
 			'action' => get_url('/users/send_mail/'),
 			'to_user' => $toUser,
+			'error' => '',
 		);
 		// Если при заполнении формы были допущены ошибки
 		if (isset($_SESSION['sendMailForm'])) {
