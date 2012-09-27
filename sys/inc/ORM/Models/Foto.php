@@ -47,18 +47,13 @@ class FotoModel extends FpsModel
 	{
 		$Register = Register::getInstance();
 
-		$records = array();
-		$records['prev'] = $this->getDbDriver()->select($this->Table, DB_FIRST, array('cond' => array('`id` < ' . $id), 'limit' => 1, 'order' => '`id` DESC'));
-		$records['next'] = $this->getDbDriver()->select($this->Table, DB_FIRST, array('cond' => array('`id` > ' . $id), 'limit' => 1, 'order' => '`id`'));
+		$records = array('prev' => array(), 'next' => array());
+		$prev = $this->getDbDriver()->select($this->Table, DB_FIRST, array('cond' => array('`id` < ' . $id), 'limit' => 1, 'order' => '`id` DESC'));
+		if (!empty($prev[0])) $records['prev'] = new FotoEntity($prev[0]);
+		$next = $this->getDbDriver()->select($this->Table, DB_FIRST, array('cond' => array('`id` > ' . $id), 'limit' => 1, 'order' => '`id`'));
+		if (!empty($next[0])) $records['next'] = new FotoEntity($next[0]);
 		
 
-		if ($records) {
-			foreach ($records as $key => $value) {
-				if (!empty($value['id']))
-					$records[$key] = new FotoEntity($value);
-			}
-		}
-		
 		return $records;
 	}
 }

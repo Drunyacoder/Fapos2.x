@@ -1500,7 +1500,7 @@ Class UsersModule extends Module {
 
 
 		$markers['byear'] 	= ($user->getByear()) ? intval($user->getByear()) : '';
-		$markers['bmonth'] 	= ($user->getBmonth()) ? intval($user-getBmonth()) : '';
+		$markers['bmonth'] 	= ($user->getBmonth()) ? intval($user->getBmonth()) : '';
 		$markers['bday'] 	= ($user->getBday()) ? intval($user->getBday()) : '';
 		if ($user->getByear() && $user->getBmonth() && $user->getBday()) {
 			$markers['age'] = getAge($user->getByear(), $user->getBmonth(), $user->getBday());

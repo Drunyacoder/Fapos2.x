@@ -2,12 +2,12 @@
 /*---------------------------------------------\
 |											   |
 | @Author:       Andrey Brykin (Drunya)        |
-| @Version:      1.7.6                         |
+| @Version:      1.7.7                         |
 | @Project:      CMS                           |
 | @package       CMS Fapos                     |
 | @subpackege    Loads Module                  |
 | @copyright     ©Andrey Brykin 2010-20112     |
-| @last mod.     20112/07/16                   |
+| @last mod.     20112/09/24                   |
 |----------------------------------------------|
 |											   |
 | any partial or not partial extension         |

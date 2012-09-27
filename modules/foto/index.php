@@ -2,12 +2,12 @@
 /*---------------------------------------------\
 |											   |
 | @Author:       Andrey Brykin (Drunya)        |
-| @Version:      1.5.1                         |
+| @Version:      1.5.2                         |
 | @Project:      CMS                           |
 | @package       CMS Fapos                     |
 | @subpackege    Foto Module                   |
 | @copyright     ©Andrey Brykin 2010-2012      |
-| @last  mod     2012/09/26                    |
+| @last  mod     2012/09/27                    |
 |----------------------------------------------|
 |											   |
 | any partial or not partial extension         |
