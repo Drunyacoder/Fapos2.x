@@ -2,12 +2,12 @@
 /*---------------------------------------------\
 |											   |
 | @Author:       Andrey Brykin (Drunya)        |
-| @Version:      1.7.7                         |
+| @Version:      1.7.8                         |
 | @Project:      CMS                           |
 | @package       CMS Fapos                     |
 | @subpackege    Loads Module                  |
 | @copyright     ©Andrey Brykin 2010-20112     |
-| @last mod.     20112/09/24                   |
+| @last mod.     2012/10/03                    |
 |----------------------------------------------|
 |											   |
 | any partial or not partial extension         |
@@ -408,7 +408,7 @@ Class LoadsModule extends Module {
 
 		if($entity->getDownload() && is_file(ROOT . '/sys/files/loads/' . $entity->getDownload())) {
 		  $attach_serv = '<a target="_blank" href="' . get_url('/loads/download_file/' 
-		  . $entity->getiId()) . '">' . __('Download from server') . ' ('.
+		  . $entity->getId()) . '">' . __('Download from server') . ' ('.
 		  ( getFileSize( ROOT . '/sys/files/loads/' . $entity->getDownload())) . ' Кб)</a>';
 		} else {
 			$attach_serv  = '';
@@ -1283,7 +1283,7 @@ Class LoadsModule extends Module {
 		$this->Cache->clean(CACHE_MATCHING_TAG, array('record_id_' . $id, 'module_load'));
 
 
-        $entity = $this->Model->getByI($id);
+        $entity = $this->Model->getById($id);
         if (!$entity) return $this->showInfoMessage(__('File not found'), '/loads/' );
 
         $entity->setDownloads($entity->getDownloads() + 1);
