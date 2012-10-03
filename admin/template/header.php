@@ -13,7 +13,8 @@
 	<script language="JavaScript" type="text/javascript" src="../sys/js/jquery-ui-1.8.14.custom.min.js"></script>
 	<script type="text/javascript" src="js/drunya.lib.js"></script>
 
-
+	<script type="text/javascript" src="../sys/js/redactor/redactor.js"></script>
+	<link type="text/css" rel="StyleSheet" href="../sys/js/redactor/css/redactor.css" />
 	
 	
 	<script type="text/javascript" src="../sys/js/jquery.cookie.js"></script>
@@ -23,8 +24,8 @@
 	<link type="text/css" rel="StyleSheet" href="../sys/js/jstree/_docs/!style.css" />
 	<script type="text/javascript" src="../sys/js/jstree/_docs/syntax/!script.js"></script>
 	
-	<script type="text/javascript" src="../sys/js/redactor/redactor.js"></script>
-	<link type="text/css" rel="StyleSheet" href="../sys/js/redactor/css/redactor.css" />
+	
+
 </head>
             
 <body>

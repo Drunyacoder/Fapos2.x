@@ -399,6 +399,65 @@ include_once ROOT . '/admin/template/header.php';
 
 
 <script type="text/javascript">
+$(document).ready(function(){
+	redactor = $('#mainTextarea').redactor({
+		css: 'redactor.css', 
+		cleanup: false,
+		autoclear: false, 
+		autoformat: false, 
+		convert_links: false, 
+		init_clear: false,
+		remove_styles: false,
+		remove_classes: false,
+		image_upload: "/img_uploader.php",
+	});
+	
+	
+	$.validator.addMethod('chars', function(value, element){
+		return value.match(/[ \da-z\-_]*/i);
+	}, "Don't use special chars");
+	$("#FpsForm").validate({
+		submitHandler: function(){
+			submitForm();
+		},
+		rules: {
+			title: {
+				required: true,
+				chars: true,
+				maxlength: 50,
+				minlength: 3,
+			},
+			url: {
+				chars: true,
+				maxlength: 30,
+				minlength: 2,
+			},
+			meta_keywords: {
+				maxlength: 250,
+				minlength: 5,
+			},
+			meta_description: {
+				maxlength: 250,
+				minlength: 5,
+				chars: true
+			},
+			template: {
+				maxlength: 30,
+				minlength: 3,
+				chars: true
+			},
+			content: {
+				required: true,
+				minlength: 10
+			},
+		}
+	});
+});
+
+
+
+
+
 $(function () {
 $("#pageTree")
 	// Write log
@@ -414,7 +473,7 @@ $("#pageTree")
 			"url" : "../sys/js/jstree/themes/classic/style.css"
 		},
 		"plugins" : [ 
-			"themes","json_data","ui","crrm","cookies","dnd","search","types","hotkeys","contextmenu" 
+			"themes","json_data","ui","crrm","cookies","dnd","search","types","contextmenu" 
 		],
 
 		// I usually configure the plugin that handles the data first
@@ -603,58 +662,6 @@ $("#pageTree")
 
 
 
-$(document).ready(function(){
-	redactor = $('#mainTextarea').redactor({
-		css: 'redactor.css', 
-		autoclear: false, 
-		autoformat: false, 
-		convert_links: false, 
-		init_clear: false,
-		remove_styles: false,
-		remove_classes: false,
-		image_upload: "/img_uploader.php",
-	});
-	
-	$.validator.addMethod('chars', function(value, element){
-		return value.match(/[ \da-z\-_]*/i);
-	}, "Don't use special chars");
-	$("#FpsForm").validate({
-		submitHandler: function(){
-			submitForm();
-		},
-		rules: {
-			title: {
-				required: true,
-				chars: true,
-				maxlength: 50,
-				minlength: 3,
-			},
-			url: {
-				chars: true,
-				maxlength: 30,
-				minlength: 2,
-			},
-			meta_keywords: {
-				maxlength: 250,
-				minlength: 5,
-			},
-			meta_description: {
-				maxlength: 250,
-				minlength: 5,
-				chars: true
-			},
-			template: {
-				maxlength: 30,
-				minlength: 3,
-				chars: true
-			},
-			content: {
-				required: true,
-				minlength: 10
-			},
-		}
-	});
-});
 
 /**
  * Get entity and fill form fields
