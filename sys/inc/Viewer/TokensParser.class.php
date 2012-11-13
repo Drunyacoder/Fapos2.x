@@ -26,17 +26,18 @@ class Fps_Viewer_TokensParser
     const STATE_VAR             = 2;
     const STATE_STRING          = 3;
 
-    const REGEX_NAME            = '/[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*/A';
-    const REGEX_NUMBER          = '/[0-9]+(?:\.[0-9]+)?/A';
-    const REGEX_STRING          = '/"([^#"\\\\]*(?:\\\\.[^#"\\\\]*)*)"|\'([^\'\\\\]*(?:\\\\.[^\'\\\\]*)*)\'/As';
-    const REGEX_DQ_STRING_DELIM = '/"/A';
-    const REGEX_DQ_STRING_PART  = '/[^#"\\\\]*(?:(?:\\\\.|#(?!\{))[^#"\\\\]*)*/As';
+    const REGEX_NAME            = '/[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*/uA';
+    const REGEX_NUMBER          = '/[0-9]+(?:\.[0-9]+)?/uA';
+    const REGEX_STRING          = '/"([^#"\\\\]*(?:\\\\.[^#"\\\\]*)*)"|\'([^\'\\\\]*(?:\\\\.[^\'\\\\]*)*)\'/uAs';
+    const REGEX_DQ_STRING_DELIM = '/"/uA';
+    const REGEX_DQ_STRING_PART  = '/[^#"\\\\]*(?:(?:\\\\.|#(?!\{))[^#"\\\\]*)*/uAs';
     const PUNCTUATION           = '()[]{}?:.,|';
 	
 	
 	public function __construct($code = '')
 	{
 		mb_internal_encoding("ASCII");
+		mb_internal_encoding("UTF-8");
 
 		$this->delimiters = array(
 			'tag_var' => array('{{', '}}'),
@@ -44,10 +45,10 @@ class Fps_Viewer_TokensParser
 		);
 		
 		$this->regexes = array(
-			'lex_var' => '#\s*' . preg_quote($this->delimiters['tag_var'][1], '/') . '\s*#uA',
-			'lex_block' => '#\s*(?:' . preg_quote($this->delimiters['tag_block'][1]) . '\s*|\s*' . preg_quote($this->delimiters['tag_block'][1]) . ')\n?#A',
-			'lex_start' => '#(' . preg_quote($this->delimiters['tag_var'][0]) . '|' . preg_quote($this->delimiters['tag_block'][0]) . ')\s?#s',
-			'operators' => '#not in(?=[\s()])|and(?=[\s()])|not(?=[\s()])|in(?=[\s()])|\<\=|\>\=|\=\=|or(?=[\s()])|\!\=|%|\>|\+|-|\<|\=|\*#A',
+			'lex_var' => '#\s?' . preg_quote($this->delimiters['tag_var'][1], '/') . '\s?#uA',
+			'lex_block' => '#\s?(?:' . preg_quote($this->delimiters['tag_block'][1]) . '\s?|\s?' . preg_quote($this->delimiters['tag_block'][1]) . ')\n?#uA',
+			'lex_start' => '#\s?(' . preg_quote($this->delimiters['tag_var'][0]) . '|' . preg_quote($this->delimiters['tag_block'][0]) . ')\s?#us',
+			'operators' => '#not in(?=[\s()])|and(?=[\s()])|not(?=[\s()])|in(?=[\s()])|\<\=|\>\=|\=\=|or(?=[\s()])|\!\=|%|\>|\+|-|\<|\=|\*#uA',
 		);
 	}
 	
@@ -59,16 +60,18 @@ class Fps_Viewer_TokensParser
 		$this->state = self::STATE_DATA;
 		$this->code = $this->prepareCode($code);
 		$this->linenum = 1;
-		$this->end = mb_strlen($this->code);
+		$this->end = strlen($this->code);
 		$this->tokens = array();
 		$this->position = -1;
 		$this->cursor = 0;
 		
 
+		
+		
+
         // find all token starts in one go
         preg_match_all($this->regexes['lex_start'], $this->code, $matches, PREG_OFFSET_CAPTURE);
         $this->positions = $matches;
-
 
 		while ($this->cursor < $this->end) {
 			switch ($this->state) {
@@ -90,14 +93,13 @@ class Fps_Viewer_TokensParser
 
 			}
 		}
-
         $this->pushToken(Fps_Viewer_Token::EOF_TYPE);
 		
         if (!empty($this->brackets)) {
             list($expect, $lineno) = array_pop($this->brackets);
             throw new Exception(sprintf('Unclosed "%s"', $expect), $lineno, $this->filename);
         }
-
+		
 
         return new Fps_Viewer_TokenStream($this->tokens, $this->filename);
 	}
@@ -113,7 +115,7 @@ class Fps_Viewer_TokensParser
             $this->moveCursor($match[0]);
             $this->pushState(self::STATE_INTERPOLATION);
 
-        } else if (preg_match(self::REGEX_DQ_STRING_PART, $this->code, $match, null, $this->cursor) && mb_strlen($match[0]) > 0) {
+        } else if (preg_match(self::REGEX_DQ_STRING_PART, $this->code, $match, null, $this->cursor) && strlen($match[0]) > 0) {
             $this->pushToken(Fps_Viewer_Token::STRING_TYPE, stripcslashes($match[0]));
             $this->moveCursor($match[0]);
 
@@ -151,7 +153,7 @@ class Fps_Viewer_TokensParser
 	private function lexData()
 	{
 		if ($this->position === count($this->positions[1]) - 1) {
-            $this->pushToken(Fps_Viewer_Token::TEXT_TYPE, mb_substr($this->code, $this->cursor));
+            $this->pushToken(Fps_Viewer_Token::TEXT_TYPE, substr($this->code, $this->cursor));
             $this->cursor = $this->end;
 
             return;
@@ -159,6 +161,8 @@ class Fps_Viewer_TokensParser
 		
         // Find the first token after the current cursor
         $position = $this->positions[0][++$this->position];
+		
+		
         while ($position[1] < $this->cursor) {
             if ($this->position == count($this->positions[0]) - 1) {
                 return;
@@ -168,7 +172,7 @@ class Fps_Viewer_TokensParser
 		
 
         // push the template text first
-        $text = $textContent = mb_substr($this->code, $this->cursor, $position[1] - $this->cursor);
+        $text = $textContent = substr($this->code, $this->cursor, $position[1] - $this->cursor);
         if (isset($this->positions[2][$this->position][0])) {
             $text = rtrim($text);
         }
@@ -210,7 +214,7 @@ class Fps_Viewer_TokensParser
     protected function lexExpression()
     {
         // whitespace
-        if (preg_match('/\s+/A', $this->code, $match, null, $this->cursor)) {
+        if (preg_match('/\s+/uA', $this->code, $match, null, $this->cursor)) {
             $this->moveCursor($match[0]);
 
             if ($this->cursor >= $this->end) {
@@ -238,13 +242,13 @@ class Fps_Viewer_TokensParser
             $this->moveCursor($match[0]);
         }
         // punctuation
-        elseif (false !== strpos(self::PUNCTUATION, $this->code[$this->cursor])) {
+        elseif (false !== mb_strpos(self::PUNCTUATION, $this->code[$this->cursor])) {
             // opening bracket
-            if (false !== strpos('([{', $this->code[$this->cursor])) {
+            if (false !== mb_strpos('([{', $this->code[$this->cursor])) {
                 $this->brackets[] = array($this->code[$this->cursor], $this->lineno);
             }
             // closing bracket
-            elseif (false !== strpos(')]}', $this->code[$this->cursor])) {
+            elseif (false !== mb_strpos(')]}', $this->code[$this->cursor])) {
                 if (empty($this->brackets)) {
                     //throw new Exception(sprintf('Unexpected "%s"', $this->code[$this->cursor]), $this->lineno, $this->filename);
 					die('Error. Line ' . $this->linenum);
@@ -261,7 +265,7 @@ class Fps_Viewer_TokensParser
         }
         // strings
         elseif (preg_match(self::REGEX_STRING, $this->code, $match, null, $this->cursor)) {
-            $this->pushToken(Fps_Viewer_Token::STRING_TYPE, stripcslashes(mb_substr($match[0], 1, -1)));
+            $this->pushToken(Fps_Viewer_Token::STRING_TYPE, stripcslashes(substr($match[0], 1, -1)));
             $this->moveCursor($match[0]);
         }
         // opening double quoted string
@@ -285,7 +289,7 @@ class Fps_Viewer_TokensParser
             return;
         }
 
-        $this->tokens[] = new Fps_Viewer_Token($type, trim($value), $this->linenum);
+        $this->tokens[] = new Fps_Viewer_Token($type, $value, $this->linenum);
 	}
 	
 	
@@ -301,8 +305,8 @@ class Fps_Viewer_TokensParser
 	
     protected function moveCursor($text)
     {
-        $this->cursor += mb_strlen($text);
-        $this->lineno += substr_count($text, "\n");
+        $this->cursor += strlen($text);
+        $this->lineno += mb_substr_count($text, "\n");
     }
 
 	

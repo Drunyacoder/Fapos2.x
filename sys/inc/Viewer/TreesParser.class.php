@@ -30,7 +30,6 @@ class Fps_Viewer_TreesParser
 		$rv = array();
 		
 		
-		
 		while (!$this->stream->isEOF()) {
 			switch ($this->getCurrentToken()->getType()) {
                 case Fps_Viewer_Token::TEXT_TYPE:
@@ -54,8 +53,10 @@ class Fps_Viewer_TreesParser
 						return $rv;
 					}
 					$subparser = $this->getTokenParser($token->getValue());
+					//if (!$subparser) break;
 					
-
+					//pr($this->getCurrentToken()->getType());
+					//pr($this->getCurrentToken());
                     $node = $subparser->parse($token);
                     if (null !== $node) {
                         $rv[] = $node;
@@ -93,9 +94,10 @@ class Fps_Viewer_TreesParser
 	{
 		if (!array_key_exists($value, $this->tokenParsers)) {
 			//TODO
-			//return '';
+			return '';
 		}
-		
+		//echo '>';
+		//var_dump($value);
 		return new $this->tokenParsers[$value]($this);
 	}
 	

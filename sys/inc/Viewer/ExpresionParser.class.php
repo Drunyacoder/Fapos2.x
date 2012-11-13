@@ -217,5 +217,17 @@ class Fps_Viewer_ExpresionParser
         return $node;
     }
 
+
 	
+    public function parseStringExpression()
+    {
+		//$this->parser->getStream()->next();
+		$param = $this->parser->getStream()->getCurrent();
+		$this->parser->getStream()->next();
+		
+		$expr = new Fps_Viewer_Node_Text($param->getValue());
+		
+		//$this->parser->getStream()->next();
+		return $expr;
+    }
 }

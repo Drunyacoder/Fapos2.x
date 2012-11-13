@@ -95,8 +95,9 @@ class Fps_Viewer_Manager
 	public function parseTemplate($code, $context)
 	{
 		$tokens = $this->getTokens($code);
+		//pr($tokens); die();
 		$nodes = $this->getTreeFromTokens($tokens);
-		//pr($nodes); //die();
+		//pr($nodes); die();
 		$this->compileParser->clean();
 		$this->compileParser->setTmpClassName($this->getTmpClassName($code));
 		$this->compile($nodes);
