@@ -11,17 +11,11 @@ $CommentsModel->bindModel('Users');
 if (empty($html)) {
 	/* pages nav */
 	$total = $CommentsModel->getTotal(array('cond' => array('entity_id' => $id)));
-	$per_page = $this->Register['Config']->read('comment_per_page', $this->module);
-    list($pages, $page) = pagination($total, $per_page,  '/users/user_posts/' . $id);
-	$this->_globalize(array('comments_pagination' => $pages));
+	$this->_globalize(array('comments_pagination' => ''));
 	
 	
 	$order_way = ($this->Register['Config']->read('comments_order', $this->module)) ? 'DESC' : 'ASC';
-	$params = array(
-		'page'  => $page,
-		'limit' => $per_page,
-		'order' => 'date ' . $order_way,
-	);
+	$params = array('order' => 'date ' . $order_way,);
 	$comments = $CommentsModel->getCollection(array('entity_id' => $id), $params);
 	if ($comments) {
 		foreach ($comments as $comment) {
@@ -76,7 +70,7 @@ if (empty($html)) {
 		}
 	}
 	$html = $this->render('viewcomment.html', array('commentsr' => $comments));
-	
+
 	
 } else {
 	$html = '';
