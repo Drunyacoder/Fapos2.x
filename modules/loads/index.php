@@ -2,12 +2,12 @@
 /*---------------------------------------------\
 |											   |
 | @Author:       Andrey Brykin (Drunya)        |
-| @Version:      1.7.8                         |
+| @Version:      1.7.9                         |
 | @Project:      CMS                           |
 | @package       CMS Fapos                     |
 | @subpackege    Loads Module                  |
 | @copyright     ©Andrey Brykin 2010-20112     |
-| @last mod.     2012/10/03                    |
+| @last mod.     2012/11/11                    |
 |----------------------------------------------|
 |											   |
 | any partial or not partial extension         |
@@ -228,7 +228,7 @@ Class LoadsModule extends Module {
 
 
         $total = $this->Model->getTotal($query_params);
-        list ($pages, $page) = pagination( $total, Config::read('per_page', 'loads'), '/loads');
+        list ($pages, $page) = pagination( $total, $this->Register['Config']->read('per_page', 'loads'), '/loads/category/' . $id);
         $this->Register['pages'] = $pages;
         $this->Register['page'] = $page;
         $this->page_title .= ' (' . $page . ')';
