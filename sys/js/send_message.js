@@ -375,6 +375,35 @@ function addFileField(elementId) {
     }
 }
 
+/* add text field */
+function addTextField(elementId) {
+	var container = document.getElementById(elementId);
+	var fields = [];
+	
+    if (container.getElementsByClassName == undefined) {
+        var myclass = new RegExp('\\b'+elementId+'Field'+'\\b');
+        var elem = container.getElementsByTagName('*');
+        for (var i = 0; i < elem.length; i++) {
+            var classes = elem[i].className;
+            if (myclass.test(classes)) {
+                fields.push(elem[i]);
+            }
+        }
+    } else {
+        fields = container.getElementsByClassName(elementId+'Field');
+    }
+    var cntFields = fields.length + 1;
+    if (cntFields <= maxAttachedFiles) {
+        if (cntFields < 1) {
+            cntFields = 1;
+        }
+        var new_div = document.createElement('div');
+        new_div.innerHTML = ' [' + cntFields + '] ';
+        new_div.innerHTML += '<input type="text" id="' + elementId + cntFields + '" name="' + elementId + cntFields + '" class="' + elementId + 'Field" />';
+        container.appendChild(new_div);
+    }
+}
+
 /* get and identific file */
 function getFile(n){
     var t = document.getElementById('attach'+n);
