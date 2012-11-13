@@ -273,7 +273,7 @@ Class UsersModule extends Module {
 		$fields_settings = (array)$this->Register['Config']->read('fields', 'users');
 		$fields_settings = array_merge($fields_settings, array('email', 'login', 'password', 'confirm'));
 		foreach ($fields as $field) {
-			if (empty($_POST[$field]) && in_array($field, $fields_settings)) {
+			if (empty($_POST[$field]) && '0' != $_POST[$field] && in_array($field, $fields_settings)) {
 				$error = $error.'<li>' . __('Empty field "'.$field.'"') . '</li>'."\n";
 				$$field = null;
 			} else {
@@ -281,10 +281,10 @@ Class UsersModule extends Module {
 			}
 		}
 		if (isset($pol) && $pol == '1') $pol =  'm';
-		else if (!isset($pol) || $pol === '') $pol = '';
+		else if (!isset($pol) || '' === $pol) $pol = '';
 		else $pol = 'f';
 		
-		
+	
 		// Обрезаем переменные до длины, указанной в параметре maxlength тега input
 		$name    	  = mb_substr($login, 0, 30);
 		$password     = mb_substr($password, 0, 30);

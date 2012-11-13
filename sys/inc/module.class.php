@@ -2,12 +2,12 @@
 /*-----------------------------------------------\
 | 												 |
 |  @Author:       Andrey Brykin (Drunya)         |
-|  @Version:      1.5.3                          |
+|  @Version:      1.5.4                          |
 |  @Project:      CMS                            |
 |  @package       CMS Fapos                      |
 |  @subpackege    Module Class                   |
 |  @copyright     ©Andrey Brykin 2010-2012       |
-|  @last mod.     2012/09/17                     |
+|  @last mod.     2012/11/12                     |
 \-----------------------------------------------*/
 
 /*-----------------------------------------------\
@@ -60,10 +60,17 @@ class Module {
 	* @cached   use the cache engine
 	*/
 	protected $cached = true;
+	
 	/**
 	* @var (str)   comments block
 	*/
 	protected $comments = '';
+	
+	/**
+	* @var (str)   add comments form
+	*/
+	protected $comments_form = '';
+	
 	/**
 	* @var    database object
 	*/
@@ -140,6 +147,7 @@ class Module {
 		'add_link' => '',
 		'comments_pagination' => '',
 		'comments' => '',
+        'comments_form' => '',
 		'fps_curr_page' => 1,
 		'fps_pagescnt' => 1,
 	);
@@ -374,6 +382,7 @@ class Module {
             'module_name' => $this->module_title,
             'categories' => $this->categories,
             'comments' => $this->comments,
+			'comments_form' => $this->comments_form,
             'fps_curr_page' => (!empty($Register['page'])) ? intval($Register['page']) : 1,
             'fps_pagescnt' => (!empty($Register['pagescnt'])) ? intval($Register['pagescnt']) : 1,
             'fps_user' => (!empty($_SESSION['user'])) ? $_SESSION['user'] : array(),

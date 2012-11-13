@@ -2,12 +2,12 @@
 /*---------------------------------------------\
 |											   |
 | @Author:       Andrey Brykin (Drunya)        |
-| @Version:      1.7.7                         |
+| @Version:      1.7.8                         |
 | @Project:      CMS                           |
 | @package       CMS Fapos                     |
 | @subpackege    News Module                   |
 | @copyright     ©Andrey Brykin 2010-2012      |
-| @last mod      2012/09/18                    |
+| @last mod      2012/11/12                    |
 |----------------------------------------------|
 |											   |
 | any partial or not partial extension         |
@@ -138,6 +138,8 @@ Class NewsModule extends Module {
 					}
 				}
 			}
+			
+			// Cut announce
 			$announce = $this->Textarier->getAnnounce($announce
 				, $entry_url
 				, 0 
@@ -145,6 +147,7 @@ Class NewsModule extends Module {
 				, $result
 			);
 			$_addParams['announce'] = $announce;
+			
 			
 			$_addParams['category_url'] = get_url('/news/category/' . $result->getCategory_id());
 			$_addParams['profile_url'] = getProfileUrl($result->getAuthor()->getId());
@@ -369,8 +372,8 @@ Class NewsModule extends Module {
 		&& $this->ACL->turn(array('news', 'view_comments'), false) 
 		&& $entity->getCommented() == 1) {
 			if ($this->ACL->turn(array('news', 'add_comments'), false)) 
-				$this->comments  = $this->_add_comment_form($id);
-			$this->comments  = $this->_get_comments($entity) . $this->comments;
+				$this->comments_form  = $this->_add_comment_form($id);
+			$this->comments  = $this->_get_comments($entity);
 		}
 		$this->Register['current_vars'] = $entity;
 		

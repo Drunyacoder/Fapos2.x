@@ -2,12 +2,12 @@
 /*---------------------------------------------\
 |											   |
 | @Author:       Andrey Brykin (Drunya)        |
-| @Version:      1.7.9                         |
+| @Version:      1.7.91                         |
 | @Project:      CMS                           |
 | @package       CMS Fapos                     |
 | @subpackege    Loads Module                  |
 | @copyright     ©Andrey Brykin 2010-20112     |
-| @last mod.     2012/11/11                    |
+| @last mod.     2012/11/12                    |
 |----------------------------------------------|
 |											   |
 | any partial or not partial extension         |
@@ -381,8 +381,8 @@ Class LoadsModule extends Module {
             && $this->ACL->turn(array('loads', 'view_comments'), false)
             && $entity->getCommented() == 1) {
             if ($this->ACL->turn(array('loads', 'add_comments'), false))
-                $this->comments  = $this->_add_comment_form($id);
-            $this->comments  = $this->_get_comments($entity) . $this->comments;
+                $this->comments_form = $this->_add_comment_form($id);
+            $this->comments = $this->_get_comments($entity);
         }
         $this->Register['current_vars'] = $entity;
 
