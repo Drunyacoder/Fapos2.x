@@ -2,12 +2,12 @@
 /*-----------------------------------------------\
 | 												 |
 |  @Author:       Andrey Brykin (Drunya)         |
-|  @Version:      1.5.4                          |
+|  @Version:      1.5.5                          |
 |  @Project:      CMS                            |
 |  @package       CMS Fapos                      |
 |  @subpackege    Module Class                   |
 |  @copyright     ©Andrey Brykin 2010-2012       |
-|  @last mod.     2012/11/12                     |
+|  @last mod.     2012/11/13                     |
 \-----------------------------------------------*/
 
 /*-----------------------------------------------\
@@ -141,6 +141,7 @@ class Module {
 	 * @var array
 	 */
 	protected $globalMarkers = array(
+		'module' => '',
 		'navigation' => '',
 		'pagination' => '',
 		'meta' => '',
@@ -320,7 +321,7 @@ class Module {
 				}
 			}
 			
-
+			
 			$output = $this->render('main.html', $markers);
 		} else {
             $output = $content;
@@ -376,10 +377,11 @@ class Module {
         $Register = Register::getInstance();
 		$markers1 = $this->Parser->getGlobalMarkers($html);
         $markers2 = array(
+            'module' => $this->module,
             'title' => $this->page_title,
             'meta_description' => $this->page_meta_description,
             'meta_keywords' => $this->page_meta_keywords,
-            'module_name' => $this->module_title,
+            'module_title' => $this->module_title,
             'categories' => $this->categories,
             'comments' => $this->comments,
 			'comments_form' => $this->comments_form,
