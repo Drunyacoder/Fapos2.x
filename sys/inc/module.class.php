@@ -2,12 +2,12 @@
 /*-----------------------------------------------\
 | 												 |
 |  @Author:       Andrey Brykin (Drunya)         |
-|  @Version:      1.5.5                          |
+|  @Version:      1.5.6                          |
 |  @Project:      CMS                            |
 |  @package       CMS Fapos                      |
 |  @subpackege    Module Class                   |
 |  @copyright     ©Andrey Brykin 2010-2012       |
-|  @last mod.     2012/11/13                     |
+|  @last mod.     2012/12/06                     |
 \-----------------------------------------------*/
 
 /*-----------------------------------------------\
@@ -297,7 +297,7 @@ class Module {
 	public function _view($content)
     {
         $Register = Register::getInstance();
-
+		
 		if (!empty($this->template) && $this->wrap == true) {
             Plugins::intercept('before_parse_layout', $this);
 			
@@ -322,22 +322,20 @@ class Module {
 			}
 			
 			
+			$boot_time = round(getMicroTime() - $Register['fps_boot_start_time'], 4);
+			$markers = array_merge($markers, array('boot_time' => $boot_time));
+			
 			$output = $this->render('main.html', $markers);
 		} else {
             $output = $content;
 		}
         
-     	
 		
-		$boot_time = round(getMicroTime() - $Register['fps_boot_start_time'], 4);
-		$output = $this->View->parseTemplate($output, array('boot_time' => $boot_time));
-		//$output = str_replace('{BOOT_TIME}', $boot_time, $output);
 		$output = Plugins::intercept('before_view', $output);
 		$this->afterRender();
 		
 		echo $output;
-		//die();
-		
+
 		
 		
 		if (Config::read('debug_mode') == 1 && !empty($_SESSION['db_querys'])) {

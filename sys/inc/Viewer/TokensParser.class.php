@@ -45,9 +45,9 @@ class Fps_Viewer_TokensParser
 		);
 		
 		$this->regexes = array(
-			'lex_var' => '#\s?' . preg_quote($this->delimiters['tag_var'][1], '/') . '\s?#uA',
-			'lex_block' => '#\s?(?:' . preg_quote($this->delimiters['tag_block'][1]) . '\s?|\s?' . preg_quote($this->delimiters['tag_block'][1]) . ')\n?#uA',
-			'lex_start' => '#\s?(' . preg_quote($this->delimiters['tag_var'][0]) . '|' . preg_quote($this->delimiters['tag_block'][0]) . ')\s?#us',
+			'lex_var' => '#\s' . preg_quote($this->delimiters['tag_var'][1], '/') . '#uA',
+			'lex_block' => '#\s(?:' . preg_quote($this->delimiters['tag_block'][1]) . '|' . preg_quote($this->delimiters['tag_block'][1]) . ')#uA',
+			'lex_start' => '#\s?(' . preg_quote($this->delimiters['tag_var'][0]) . '|' . preg_quote($this->delimiters['tag_block'][0]) . ')\s#us',
 			'operators' => '#not in(?=[\s()])|and(?=[\s()])|not(?=[\s()])|in(?=[\s()])|\<\=|\>\=|\=\=|or(?=[\s()])|\!\=|%|\>|\+|-|\<|\=|\*#uA',
 		);
 	}
@@ -72,7 +72,6 @@ class Fps_Viewer_TokensParser
         // find all token starts in one go
         preg_match_all($this->regexes['lex_start'], $this->code, $matches, PREG_OFFSET_CAPTURE);
         $this->positions = $matches;
-
 		while ($this->cursor < $this->end) {
 			switch ($this->state) {
 				case self::STATE_DATA:
