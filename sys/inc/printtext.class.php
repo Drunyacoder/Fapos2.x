@@ -2,12 +2,12 @@
 /*---------------------------------------------\
 |											   |
 | @Author:       Andrey Brykin (Drunya)        |
-| @Version:      1.3.0                         |
+| @Version:      1.3.1                         |
 | @Project:      CMS                           |
 | @package       CMS Fapos                     |
 | @subpackege    Print lobrary                 |
-| @copyright     ©Andrey Brykin 2010-2011      |
-| @last mod      2012/07/16                    |
+| @copyright     ©Andrey Brykin 2010-2012      |
+| @last mod      2012/11/13                    |
 |----------------------------------------------|
 |											   |
 | any partial or not partial extension         |
@@ -66,7 +66,7 @@ class PrintText {
 			$announce = mb_substr($str, $start, $length);
 			//if (!preg_match('#[a-zа-я]$#ui', $announce)) $announce = mb_substr($announce, 0, -1);
 		}
-
+		
 		
 		if (is_object($material)) {
 			$ustatus = $material->getAuthor()->getStatus();
@@ -76,9 +76,9 @@ class PrintText {
 			$title = false;
 		}
 		
-		
-		$announce = $this->closeOpenTags($announce);
-		$announce = $this->print_page($announce, $ustatus, $title);
+		//pr($announce);
+		$announce = $this->closeOpenTags($announce); 
+		$announce = $this->print_page($announce, $ustatus, $title); 
 		$announce .= ' ... <br /><div style="clear:both;"></div> <a class="fps-show-mat" href="' . get_url($url) . '">'.__('Show material').'</a>';
 		return $announce;
 	}
@@ -173,17 +173,17 @@ class PrintText {
 	
 		
 		// Разрезаем слишком длинные слова
-		/*$message = wordwrap($message, 70, ' ', 1); */
-		$message = preg_replace("#([^\s/\]\[]{100})#ui", "\\1 ", $message);	  
+		$message = wordwrap($message, 70, ' ', 1); 
+		//$message = preg_replace("#([^\s/\]\[]{100})#ui", "\\1 ", $message);	  
 				  
 
 		// Тэги - [code], [php], [sql]
-		preg_match_all( "#\[php\](.+)\[\/php\]#isU", $message, $matches );
+		preg_match_all( "#\[php\](.+)\[\/php\]#uisU", $message, $matches );
 		$cnt = count( $matches[0] );
 		for ( $i = 0; $i < $cnt; $i++ ) {
 			
-			$matches[1][$i] = preg_replace('#^\s*<\?php(.*)\?>\s*$#is', '$1', $matches[1][$i]);
-			$matches[1][$i] = preg_replace('#^\s*<\?(.*)\?>\s*$#is', '$1', $matches[1][$i]);
+			$matches[1][$i] = preg_replace('#^\s*<\?php(.*)\?>\s*$#uis', '$1', $matches[1][$i]);
+			$matches[1][$i] = preg_replace('#^\s*<\?(.*)\?>\s*$#uis', '$1', $matches[1][$i]);
 			$phpBlocks[] = '<div class="codePHP">' . $this->highlight_php_string('<?php ' . $matches[1][$i] . '?>', true ) . '</div>';
 			
 			/*
@@ -199,10 +199,10 @@ class PrintText {
 		$spaces = array( ' ', "\t" );
 		$entities = array( '&nbsp;', '&nbsp;&nbsp;&nbsp;&nbsp;' );
 
+	
 		
 		
-		
-		preg_match_all( "#\[code\](.+)\[\/code\]#isU", $message, $matches );
+		preg_match_all( "#\[code\](.+)\[\/code\]#uisU", $message, $matches );
 		$cnt = count( $matches[0] );
 		for ( $i = 0; $i < $cnt; $i++ ) {
 			$codeBlocks[] = '<div class="bbCodeBlock"><div class="bbCodeName" style="padding-left: 5px; font-weight: bold; font-size: 7pt;"><b>Code:</b></div><div class="codeMessage" style="border: 1px inset ; overflow: auto; max-height: 200px;">'.nl2br(str_replace($spaces, $entities, htmlspecialchars($matches[1][$i]))).'</div></div>';
@@ -226,7 +226,7 @@ class PrintText {
 			$message = str_replace( $matches[0][$i], $uniqidSQL, $message ); 
 		}
 
-		
+			
 		
 		preg_match_all( "#\[js\](.+)\[\/js\]#isU", $message, $matches );
 		$cnt = count( $matches[0] );
@@ -291,26 +291,26 @@ class PrintText {
 		$message = $this->parseSBb($message);
 		$message = $this->parseUBb($message);
 		
-		$message = preg_replace("#\[quote\](.+)\[\/quote\]#isU",'<div class="bbQuoteBlock"><div class="bbQuoteName" style="padding-left: 5px; font-size: 7pt;"><b></b>Цитата</div><div class="quoteMessage" style="border: 2px inset ; overflow: auto; max-height: 200px;">\\1</div></div>',$message);
-		$message = preg_replace("#\[quote=&quot;([-_ 0-9a-zа-я]{1,30})&quot;\](.+)\[\/quote\]#isuU", '<div class="bbQuoteBlock"><div class="bbQuoteName" style="padding-left: 5px; font-size: 7pt;"><b>\\1 пишет:</b></div><div class="quoteMessage" style="border: 2px inset ; overflow: auto; max-height: 200px;">\\2</div></div>', $message);
+		$message = preg_replace("#\[quote\](.+)\[\/quote\]#uisU",'<div class="bbQuoteBlock"><div class="bbQuoteName" style=""><b></b>Цитата</div><div class="quoteMessage" style="">\\1</div></div>',$message);
+		$message = preg_replace("#\[quote=&quot;([-_ 0-9a-zа-я]{1,30})&quot;\](.+)\[\/quote\]#isuU", '<div class="bbQuoteBlock"><div class="bbQuoteName" style=""><b>\\1 пишет:</b></div><div class="quoteMessage" style="">\\2</div></div>', $message);
 		$message = $this->parseImgBb($message, $title);
 		
 		
-		$message = preg_replace("#\[color=red\](.+)\[\/color\]#isU",'<span style="color:#FF0000">\\1</span>',$message);
-		$message = preg_replace("#\[color=green\](.+)\[\/color\]#isU",'<span style="color:#008000">\\1</span>',$message);
-		$message = preg_replace("#\[color=blue\](.+)\[\/color\]#isU",'<span style="color:#0000FF">\\1</span>',$message);
-		$message = preg_replace("#\[color=([0-9a-z]{6})\](.+)\[\/color\]#isU",'<span style="color:#\\1">\\2</span>',$message);
+		$message = preg_replace("#\[color=red\](.+)\[\/color\]#uisU",'<span style="color:#FF0000">\\1</span>',$message);
+		$message = preg_replace("#\[color=green\](.+)\[\/color\]#uisU",'<span style="color:#008000">\\1</span>',$message);
+		$message = preg_replace("#\[color=blue\](.+)\[\/color\]#uisU",'<span style="color:#0000FF">\\1</span>',$message);
+		$message = preg_replace("#\[color=([0-9a-z]{6})\](.+)\[\/color\]#uisU",'<span style="color:#\\1">\\2</span>',$message);
 		
 		
-		$message = preg_replace_callback("#\[list\]\s*((?:\[\*\].+)+)\[\/list\]#siU",'getUnorderedList',$message);
-		$message = preg_replace_callback("#\[list=([a|1])\]\s*((?:\[\*\].+)+)\[\/list\]#siU", 'getOrderedList',$message);
+		$message = preg_replace_callback("#\[list\]\s*((?:\[\*\].+)+)\[\/list\]#usiU",'getUnorderedList',$message);
+		$message = preg_replace_callback("#\[list=([a|1])\]\s*((?:\[\*\].+)+)\[\/list\]#usiU", 'getOrderedList',$message);
 		$message = $this->parseUrlBb($message);
 		
 		
-		$message = preg_replace("#\[size=(10|15|20|25)\]([^\[]*)\[/size\]#isU", '<span style="font-size:\\1px;">\\2</span>', $message);
-		$message = preg_replace("#\[center\]([^\[]*)\[/center\]#isU", '<span style="display:block;width:100%;text-align:center;">\\1</span>', $message);
-		$message = preg_replace("#\[right\]([^\[]*)\[/right\]#isU", '<span style="display:block;width:100%;text-align:right;">\\1</span>', $message);
-		$message = preg_replace("#\[left\]([^\[]*)\[/left\]#isU", '<span style="display:block;width:100%;text-align:left;">\\1</span>', $message);
+		$message = preg_replace("#\[size=(10|15|20|25)\]([^\[]*)\[/size\]#uisU", '<span style="font-size:\\1px;">\\2</span>', $message);
+		$message = preg_replace("#\[center\]([^\[]*)\[/center\]#uisU", '<span style="display:block;width:100%;text-align:center;">\\1</span>', $message);
+		$message = preg_replace("#\[right\]([^\[]*)\[/right\]#uisU", '<span style="display:block;width:100%;text-align:right;">\\1</span>', $message);
+		$message = preg_replace("#\[left\]([^\[]*)\[/left\]#uisU", '<span style="display:block;width:100%;text-align:left;">\\1</span>', $message);
 		
 		
 		$message = preg_replace("#\[spoiler\](.+)\[/spoiler\]#suU", '<div onClick="if ($(this).next().css(\'display\') == \'none\') { $(this).next().toggle(1000); } else { $(this).next().toggle(1000); }" class="spoiler-open">' . __('Bb-spoiler open') . '</div><div class="spoiler-win">\\1</div>', $message);

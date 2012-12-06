@@ -1141,6 +1141,10 @@ span.quoteAuthorOver {color : #5C9F00;cursor: pointer;font-size : 15px;}
 .codeMessage {max-width:530px; overflow:auto;}
 .quoteMessage {border:1px solid !important; background:#FEB; max-width:580px; overflow:auto;}
 
+.bbQuoteBlock
+.bbQuoteBlock .bbQuoteName {padding-left: 5px; font-size: 7pt;}
+.bbQuoteBlock .quoteMessage {border: 2px inset ; overflow: auto; max-height: 200px;}
+
 /* ----------------- SEARCH ---------- */
 .search-row {margin-bottom:10px;}
 /* ----------------------------------- */
