@@ -216,7 +216,7 @@ $(document).ready(function() {
 			<div class="conmenu2">
 				<div class="topbo">
 					<div style="text-align:center;">
-						<img src="/{COUNTER}" /><br />
+						<img src="{{ counter }}" /><br />
 						Сейчас online: {{ all_online }}<br />
 						Юзеров: {{ users_online }}<br />
 						Гостей: {{ guests_online }}<br />
@@ -264,8 +264,8 @@ $(document).ready(function() {
 						<div style="clear:both;"></div>
 					</div>
 					{{ content }}
-					{{ comments_form }}
-					{{ comments }}
+					{{ comments_form }} 
+
 					<div style="clear:both;"></div>
 					
 					
