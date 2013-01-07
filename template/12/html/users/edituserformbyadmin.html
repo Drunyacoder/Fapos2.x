@@ -4,7 +4,11 @@
 <tr>
   <td class="title" colspan="2">Изменение профиля</td>
 </tr>
-
+{% if context.error %}
+<tr>
+	<td colspan="2" align="center">{{ context.error }}</td>
+</tr>
+{% endif %}
 <tr>
   <td class="left"><strong>Имя:</strong></td>
   <td class="right"><input type="text" name="name" maxlength="30" value="{{ context.login }}" readonly /></td>
@@ -12,7 +16,7 @@
 
 <tr>
   <td class="left"><strong>Статус:</strong></td>
-  <td class="right">{{ context.STATUS }}</td>
+  <td class="right">{{ context.status }}</td>
 </tr>
 
 <tr>
@@ -52,7 +56,7 @@
 	<td class="left"><strong>Пол:</strong></td>
 	<td class="right">
 		Мужской<input type="radio" name="pol" value="1"{{ context.mpol }} />
-		Женский<input type="radio" name="pol" value="0"{{ context.fpol }} />
+		Женский<input type="radio" name="pol" value="2"{{ context.fpol }} />
 	</td>
 </tr>
 <tr>
