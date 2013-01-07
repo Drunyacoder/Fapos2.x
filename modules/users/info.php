@@ -101,13 +101,12 @@ $settingsInfo = array(
             'checked' => 'checked',
         ),
     ),
-    'fields_capcha' => array(
+    'sub_keystring' => array(
         'type' => 'checkbox',
         'title' => 'Код(каптча)',
-        'attr' => array(
-            'disabled' => 'disabled',
-            'checked' => 'checked',
-        ),
+        'fields' => 'fields',
+        'value' => 'keystring',
+        'checked' => '1',
     ),
     'sub_icq' => array(
         'type' => 'checkbox',
