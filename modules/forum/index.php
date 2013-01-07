@@ -760,21 +760,47 @@ Class ForumModule extends Module {
 				// Если автор сообщения (поста) - зарегистрированный пользователь
 				$email = '';
 				$privat_message = '';
+				$author_site = '';
+				$icon_params = array('class' => 'user-details');
 				if ($post->getId_author()) {
-					$user_profile = '&nbsp;' . get_link(get_img('/sys/img/icon_profile.gif', array('alt' => __('View profile'), 
-						'title' => __('View profile'))), '/users/info/' . $post->getId_author());
+					$user_profile = '&nbsp;' . get_link(
+						get_img(
+							'/sys/img/icon_profile.gif', 
+							array('alt' => __('View profile'
+						), 
+						'title' => __('View profile'))), 
+						'/users/info/' . $post->getId_author(), 
+						$icon_params
+					);
 					if (isset($_SESSION['user'])) {
-						$email = '&nbsp;' . get_link(get_img('/sys/img/icon_email.gif', 
-							array('alt' => __('Send mail'), 'title' => __('Send mail'))), 
-							'/users/send_mail_form/' . $post->getId_author());
-						$privat_message = '&nbsp;' . get_link(get_img('/sys/img/icon_pm.gif', 
-							array('alt' => __('PM'), 'title' => __('PM'))), 
-							'/users/send_msg_form/' . $post->getId_author());
+						$email = '&nbsp;' . get_link(
+							get_img(
+								'/sys/img/icon_email.gif', 
+								array('alt' => __('Send mail'), 'title' => __('Send mail'))
+							), 
+							'/users/send_mail_form/' . $post->getId_author(), 
+							$icon_params
+						);
+						$privat_message = '&nbsp;' . get_link(
+							get_img(
+								'/sys/img/icon_pm.gif', 
+								array('alt' => __('PM'), 'title' => __('PM'))
+							), 
+							'/users/send_msg_form/' . $post->getId_author(), 
+							$icon_params
+						);
 					}
-					$author_site = ($post->getAuthor()->getUrl()) ? '&nbsp;' . get_link(get_img('/sys/img/icon_www.gif', 
-						array('alt' => __('Author site'), 'title' => __('Author site'))), h($post->getAuthor()->getUrl()), array('target' => '_blank'), true) : '';
+					$author_site = ($post->getAuthor()->getUrl()) 
+						? '&nbsp;' . get_link(
+							get_img(
+								'/sys/img/icon_www.gif', 
+								array('alt' => __('Author site'), 'title' => __('Author site'))
+							), 
+							h($post->getAuthor()->getUrl()), 
+							array_merge($icon_params, array('target' => '_blank')), true) 
+						: '';
 				} else {
-					$user_profile = '<span class="details">' . get_img('/sys/img/noavatar.png') 
+					$user_profile = '<span class="user-details">' . get_img('/sys/img/noavatar.png') 
 						. __('Unregister user') . '</span>';
 				}
 				$post->getAuthor()->setAuthor_site($author_site);
@@ -1379,7 +1405,7 @@ Class ForumModule extends Module {
 		$gr_access = array();
 		$groups = $this->Register['ACL']->getGroups();
 		foreach ($groups as $grid => $grval) {
-			if (!empty($_POST['gr_access_' . $grid])) $gr_access[] = $grid;
+			if (isset($_POST['gr_access_' . $grid])) $gr_access[] = $grid;
 		}
 		
 		
@@ -1659,7 +1685,7 @@ Class ForumModule extends Module {
 		$gr_access = array();
 		$groups = $this->Register['ACL']->getGroups();
 		foreach ($groups as $grid => $grval) {
-			if (!empty($_POST['gr_access_' . $grid])) $gr_access[] = $grid;
+			if (isset($_POST['gr_access_' . $grid])) $gr_access[] = $grid;
 		}
 		
 		
