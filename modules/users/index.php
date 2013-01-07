@@ -207,12 +207,8 @@ Class UsersModule extends Module {
 
         $markers['captcha'] = get_url('/sys/inc/kcaptcha/kc.php?'.session_name().'='.session_id());
         $markers['name']    = $data['login'];
-        $markers['fpol']  	= (isset($data['pol']) && ($data['pol'] === 'f' || $data['pol'] === '0')) ? ' checked="checked"' : '';
-        $markers['mpol']  	= (!empty($data['pol']) && $data['pol'] !== 'f') ? ' checked="checked"' : '';
-        if (!isset($data['pol']) || $data['pol'] === '') {
-            $markers['fpol'] = '';
-            $markers['mpol'] ='';
-        }
+        $markers['fpol']  	= (!empty($data['pol']) && $data['pol'] === 'f') ? ' checked="checked"' : '';
+        $markers['mpol']  	= (!empty($data['pol']) && $data['pol'] === 'm') ? ' checked="checked"' : '';
 
 
 
@@ -269,20 +265,44 @@ Class UsersModule extends Module {
 
 
 		// Обрезаем переменные до длины, указанной в параметре maxlength тега input
-		$fields = array('login', 'password', 'confirm', 'email', 'icq', 'jabber', 'pol', 'city', 'telephone', 'byear', 'bmonth', 'bday', 'url', 'about', 'signature', 'keystring');
+		$fields = array(
+			'login', 
+			'password', 
+			'confirm', 
+			'email', 
+			'icq', 
+			'jabber', 
+			'pol', 
+			'city', 
+			'telephone', 
+			'byear', 
+			'bmonth', 
+			'bday', 
+			'url', 
+			'about', 
+			'signature', 
+			'keystring'
+		);
+		
 		$fields_settings = (array)$this->Register['Config']->read('fields', 'users');
 		$fields_settings = array_merge($fields_settings, array('email', 'login', 'password', 'confirm'));
+
+		
 		foreach ($fields as $field) {
-			if (empty($_POST[$field]) && '0' != $_POST[$field] && in_array($field, $fields_settings)) {
+			if (empty($_POST[$field]) && in_array($field, $fields_settings)) {
 				$error = $error.'<li>' . __('Empty field "'.$field.'"') . '</li>'."\n";
 				$$field = null;
+				
 			} else {
 				$$field = (isset($_POST[$field])) ? trim($_POST[$field]) : '';
 			}
 		}
-		if (isset($pol) && $pol == '1') $pol =  'm';
-		else if (!isset($pol) || '' === $pol) $pol = '';
-		else $pol = 'f';
+		
+		
+		if ('1' === $pol) $pol =  'm';
+		else if ('2' === $pol) $pol = 'f';
+		else $pol = '';
+
 		
 	
 		// Обрезаем переменные до длины, указанной в параметре maxlength тега input
@@ -312,6 +332,8 @@ Class UsersModule extends Module {
 		
 		
 		$valobj = $this->Register['Validate'];
+		
+		/*
 		if ( empty( $name ) )               		
 			$error = $error.'<li>' . __('Empty field "login"') . '</li>'."\n";
 		if ( empty( $password ) )                 
@@ -322,7 +344,7 @@ Class UsersModule extends Module {
 			$error = $error.'<li>' . __('Empty field "email"') . '</li>'."\n";
 		if ( empty( $keystring ) ) 					
 			$error = $error.'<li>' . __('Empty field "code"') . '</li>'."\n";
-		
+		*/
 		
 		// check login
 		if (!empty($name) and mb_strlen($name) < 3 || mb_strlen($name) > 20)
@@ -437,7 +459,6 @@ Class UsersModule extends Module {
 		// Уникальный код для активации учетной записи
 		$email_activate = $this->Register['Config']->read('email_activate');
 		$code = (!empty($email_activate)) ? md5(uniqid(rand(), true)) : '';
-		if ($pol !== 'f' && $pol !== 'm') $pol = '';
 		// Все поля заполнены правильно - продолжаем регистрацию
 		$data = array(
 			'name'  	=> $name,
@@ -538,7 +559,7 @@ Class UsersModule extends Module {
 
 		if (count($res) > 0 ) {
 			$id = $res[0]->getId();
-            $res[0]->setAcdtivation('');
+            $res[0]->setActivation('');
             $res[0]->setLast_visit(new Expr('NOW()'));
             $res[0]->save();
 			if ($this->Log) $this->Log->write('activate user', 'user id(' . $id . ')');
