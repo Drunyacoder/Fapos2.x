@@ -2,12 +2,12 @@
 /*---------------------------------------------\
 |											   |
 | @Author:       Andrey Brykin (Drunya)        |
-| @Version:      1.4.7                         |
+| @Version:      1.4.8                         |
 | @Project:      CMS                           |
 | @package       CMS Fapos                     |
 | @subpackege    Chat Module                   |
-| @copyright     ©Andrey Brykin 2010-2012      |
-| @last mod      2012/04/27                    |
+| @copyright     ©Andrey Brykin 2010-2013      |
+| @last mod      2013/01/07                    |
 |----------------------------------------------|
 |											   |
 | any partial or not partial extension         |
@@ -72,12 +72,15 @@ class ChatModule extends Module {
 				$data = array_reverse($data);
 				
 				
-				foreach ($data as $key => $record) {
+				foreach ($data as $key => &$record) {
+				
+					$record['message'] = $this->Register['PrintText']->smile($record['message']);
+				
 					/* view ip adres if admin */
 					if ($this->ACL->turn(array('chat', 'delete_materials'), false)) {
-						$data[$key]['ip'] = get_img('/sys/img/ip.png', array('title' => h($record['ip'])));
+						$record['ip'] = get_img('/sys/img/ip.png', array('title' => h($record['ip'])));
 					} else {
-						$data[$key]['ip'] = '';
+						$record['ip'] = '';
 					}
 				}
 				
