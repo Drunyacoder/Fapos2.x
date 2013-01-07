@@ -82,7 +82,7 @@ class FpsSitemapGen {
 			//TODO
 		}
 		
-		file_put_contents(R . 'sitemap.xml', $this->output);
+		file_put_contents(ROOT . '/sitemap.xml', $this->output);
 	}
 	
 	
@@ -170,7 +170,7 @@ class FpsSitemapGen {
 				if (count($entities) > 0) {
 					foreach ($entities as $entity) {
 							
-						$hlufile = R . 'sys/tmp/hlu_' . $mkey . '/' . $entity['id'] . '.dat';
+						$hlufile = ROOT . '/sys/tmp/hlu_' . $mkey . '/' . $entity['id'] . '.dat';
 						if ($mkey != 'foto' && $hluactive == 1 && file_exists($hlufile)) {
 							$hludata = file_get_contents($hlufile);
 							if ($hludata) $this->uniqUrl[] = $this->host . $mkey . '/' . $hludata . $hluex;

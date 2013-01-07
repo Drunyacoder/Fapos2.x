@@ -486,20 +486,20 @@ function delete_category($id) {
 			mysql_query("DELETE FROM `" . $FpsDB->getFullTableName(getCurrMod()) . "` WHERE `id`='{$record['id']}'");
 			
 			
-			$hlufile = R . 'sys/tmp/hlu_' . getCurrMod() . '/' . $record['id'] . '.dat';
+			$hlufile = ROOT . '/sys/tmp/hlu_' . getCurrMod() . '/' . $record['id'] . '.dat';
 			if (file_exists($hlufile)) {
 				$fname = file_get_contents($hlufile);
 				_unlink($hlufile);
-				_unlink(R . 'sys/tmp/hlu_' . getCurrMod() . '/' . $fname . '.dat');
+				_unlink(ROOT . '/sys/tmp/hlu_' . getCurrMod() . '/' . $fname . '.dat');
 			}
 			
 			
 			
 			if (getCurrMod() == 'foto') {
-				if (file_exists(R . 'sys/files/foto/full/' . $record['filename'])) 
-					_unlink(R . 'sys/files/foto/full/' . $record['filename']);
-				if (file_exists(R . 'sys/files/foto/preview/' . $record['filename'])) 
-					_unlink(R . 'sys/files/foto/preview/' . $record['filename']);
+				if (file_exists(ROOT . '/sys/files/foto/full/' . $record['filename'])) 
+					_unlink(ROOT . '/sys/files/foto/full/' . $record['filename']);
+				if (file_exists(ROOT . '/sys/files/foto/preview/' . $record['filename'])) 
+					_unlink(ROOT . '/sys/files/foto/preview/' . $record['filename']);
 
 					
 			} else {
@@ -508,14 +508,14 @@ function delete_category($id) {
 					foreach ($attaches as $attach) {
 						mysql_query("DELETE FROM `" . $FpsDB->getFullTableName(getCurrMod() . '_attaches') 
 						. "` WHERE `id`='{$attach['id']}'");
-						if (file_exists(R . 'sys/files/' . getCurrMod() . '/' . $attach['filename']))
-							_unlink(R . 'sys/files/' . getCurrMod() . '/' . $attach['filename']);
+						if (file_exists(ROOT . '/sys/files/' . getCurrMod() . '/' . $attach['filename']))
+							_unlink(ROOT . '/sys/files/' . getCurrMod() . '/' . $attach['filename']);
 					}
 				}
 				
 				if (getCurrMod() == 'loads') {
-					if (file_exists(R . 'sys/files/loads/' . $record['download'])) 
-						_unlink(R . 'sys/files/loads/' . $record['download']);
+					if (file_exists(ROOT . '/sys/files/loads/' . $record['download'])) 
+						_unlink(ROOT . '/sys/files/loads/' . $record['download']);
 				}
 			} 
 		}

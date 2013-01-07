@@ -667,7 +667,7 @@ Class UsersModule extends Module {
                 $id = $user->getId();
 				$newPassword = $this->_getNewPassword();
 				$code = md5($newPassword);
-				// file_put_contents(R . 'sys/tmp/activate/'.$code, $id );
+				// file_put_contents(ROOT . '/sys/tmp/activate/'.$code, $id );
 				$fp = fopen( ROOT . '/sys/tmp/activate/' . $code, "w" );
 				fwrite($fp, $id);
 				fclose($fp);
@@ -1048,7 +1048,7 @@ Class UsersModule extends Module {
 		}
 
 		// Если выставлен флажок "Удалить загруженный ранее файл"
-		if (isset( $_POST['unlink']) and is_file(R . 'sys/avatars/' . $_SESSION['user']['id'] . '.jpg')) {
+		if (isset( $_POST['unlink']) and is_file(ROOT . '/sys/avatars/' . $_SESSION['user']['id'] . '.jpg')) {
 			unlink(ROOT . '/sys/avatars/' . $_SESSION['user']['id'] . '.jpg');
 		}
 		/* copy and delete tmp image */

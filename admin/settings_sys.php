@@ -22,7 +22,7 @@
 ##################################################
 
 include_once '../sys/boot.php';
-include_once R . 'admin/inc/adm_boot.php';
+include_once ROOT . '/admin/inc/adm_boot.php';
 $pageTitle = 'Системные настройки';
 
 function getImgPath($template) {
@@ -81,7 +81,7 @@ if (isset($_POST['send'])) {
 	redirect("/admin/settings_sys.php");
 }
 
-$sourse = glob(R . 'template/*', GLOB_ONLYDIR);
+$sourse = glob(ROOT . '/template/*', GLOB_ONLYDIR);
 if (!empty($sourse) && is_array($sourse)) {
 	$templates = array();
 	foreach ($sourse as $dir) {

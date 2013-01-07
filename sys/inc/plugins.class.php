@@ -11,7 +11,7 @@ class Plugins {
 	 * @param mixed $params
 	 */
 	public static function intercept($key, $params = array()) {
-		$plugins = glob(R . 'sys/plugins/' . $key . '*');
+		$plugins = glob(ROOT . '/sys/plugins/' . $key . '*');
 	
 		if (count($plugins) > 0 && is_array($plugins)) {
 			foreach ($plugins as $plugin) {

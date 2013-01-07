@@ -97,7 +97,7 @@ Class Cache {
 	*/
 	
 	public function __construct() {
-		$this->cacheDir = R . 'sys/cache/';
+		$this->cacheDir = ROOT . '/sys/cache/';
 	}
 	
 	/**

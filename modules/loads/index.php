@@ -64,6 +64,9 @@ Class LoadsModule extends Module {
 	 */
 	function index($tag = null)
     {
+		echo $this->render('test.html', array('context' => array('name' => 'Drunya')));
+		die();
+		
 		//turn access
 		$this->ACL->turn(array('loads', 'view_list'));
 		
@@ -287,7 +290,7 @@ Class LoadsModule extends Module {
             // replace image tags in text
             $attaches = $result->getAttaches();
             if (!empty($attaches) && count($attaches) > 0) {
-                $attachDir = R . 'sys/files/' . $this->module . '/';
+                $attachDir = ROOT . '/sys/files/' . $this->module . '/';
                 foreach ($attaches as $attach) {
                     if ($attach->getIs_image() == 1 && file_exists($attachDir . $attach->getFilename())) {
                         $announce = str_replace('{IMAGE'.$attach->getAttach_number().'}'
@@ -385,6 +388,7 @@ Class LoadsModule extends Module {
             $this->comments = $this->_get_comments($entity);
         }
         $this->Register['current_vars'] = $entity;
+		
 
 
         //производим замену соответствующих участков в html шаблоне нужной информацией

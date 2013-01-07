@@ -22,7 +22,7 @@
 ##################################################
 
 include_once '../sys/boot.php';
-include_once R . 'admin/inc/adm_boot.php';
+include_once ROOT . '/admin/inc/adm_boot.php';
 $pageTitle = 'Фотокаталог - Настройки';
 
 
@@ -47,7 +47,7 @@ if (isset($_POST['send'])) {
 		|| $_FILES['watermark_img']['type'] == 'image/png') {
 			//pr($_FILES);
 			$ext = strchr($_FILES['watermark_img']['name'], '.');
-			if (move_uploaded_file($_FILES['watermark_img']['tmp_name'], R . 'sys/img/watermark'.$ext)) {
+			if (move_uploaded_file($_FILES['watermark_img']['tmp_name'], ROOT . '/sys/img/watermark'.$ext)) {
 				$TempSet['foto']['watermark_img'] = 'watermark'.$ext;
 			}
 		}
@@ -111,8 +111,8 @@ include_once ROOT . '/admin/template/header.php';
 <tr><td class="left"> Водяной знак:<br></td>
 <td>
 	<input type="file" name="watermark_img">
-	<?php if (!empty($set['foto']['watermark_img']) && file_exists(R . 'sys/img/'.$set['foto']['watermark_img'])): ?>
-	<img src="<?php echo R . 'sys/img/'.$set['foto']['watermark_img']; ?>" />
+	<?php if (!empty($set['foto']['watermark_img']) && file_exists(ROOT . '/sys/img/'.$set['foto']['watermark_img'])): ?>
+	<img src="<?php echo ROOT . '/sys/img/'.$set['foto']['watermark_img']; ?>" />
 	<?php endif; ?>
 </td></tr>
 

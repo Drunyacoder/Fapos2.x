@@ -28,7 +28,7 @@ include_once ROOT . '/admin/inc/adm_boot.php';
 // Clean chancks Cache
 $cache = new Cache;
 $cache->prefix = 'block';
-$cache->cacheDir = R . 'sys/cache/blocks/';
+$cache->cacheDir = ROOT . '/sys/cache/blocks/';
 $cache->clean();
 
 

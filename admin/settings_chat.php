@@ -21,7 +21,7 @@
 ## без согласия автора, является не законным    ##
 ##################################################
 include_once '../sys/boot.php';
-include_once R . 'admin/inc/adm_boot.php';
+include_once ROOT . '/admin/inc/adm_boot.php';
 $pageTitle = 'Чат - Настройки';
 
 

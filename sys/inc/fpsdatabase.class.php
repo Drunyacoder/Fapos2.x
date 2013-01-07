@@ -752,10 +752,10 @@ class FpsDataBase {
 		/* uniq filename */
 		$cache_file_name = md5(md5($sql) . md5($sql . 'salt')) . '.dat';
 		/* check file */
-		if (!file_exists(R . 'sys/cache/sql/' . $cache_file_name)){
+		if (!file_exists(ROOT . '/sys/cache/sql/' . $cache_file_name)){
 			return false;
 		}
-		if (!is_readable(R . 'sys/cache/sql/' . $cache_file_name)) {
+		if (!is_readable(ROOT . '/sys/cache/sql/' . $cache_file_name)) {
 			return false;
 		}
 		return true;
@@ -772,7 +772,7 @@ class FpsDataBase {
 		/* uniq filename */
 		$cache_file_name = md5(md5($sql) . md5($sql . 'salt')) . '.dat';
 		/* get file data and unserialize */
-		$cache_data = file_get_contents(R . 'sys/cache/sql/' . $cache_file_name);
+		$cache_data = file_get_contents(ROOT . '/sys/cache/sql/' . $cache_file_name);
 		$cache_data = unserialize($cache_data);
 		return $cache_data;
 	}  	
@@ -787,12 +787,12 @@ class FpsDataBase {
 	*/
 	public function writeSqlCache($sql, $data) {
 		/* check and create cache dir  */
-		if (!file_exists(R . 'sys/cache/sql/')) mkdir(R . 'sys/cache/sql/', 0777, true);
+		if (!file_exists(ROOT . '/sys/cache/sql/')) mkdir(ROOT . '/sys/cache/sql/', 0777, true);
 		clearstatcache();
 		/* uniq filename */
 		$cache_file_name = md5(md5($sql) . md5($sql . 'salt')) . '.dat';
 		/* get file data and unserialize */
-		$file = fopen(R . 'sys/cache/sql/' . $cache_file_name, 'w');
+		$file = fopen(ROOT . '/sys/cache/sql/' . $cache_file_name, 'w');
 		fwrite($file, serialize($data));
 		fclose($file);
 		return;
@@ -805,8 +805,8 @@ class FpsDataBase {
 	* @return             none
 	*/
 	public function cleanSqlCache() {
-		if (!file_exists(R . 'sys/cache/sql/')) return;
-		$files = glob(R . 'sys/cache/sql/*');
+		if (!file_exists(ROOT . '/sys/cache/sql/')) return;
+		$files = glob(ROOT . '/sys/cache/sql/*');
 		if (!empty($files)){
 			foreach ($files as $file) {
 				@unlink($file);

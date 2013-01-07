@@ -36,8 +36,8 @@ if (!empty($_GET['ac']) && $_GET['ac'] == 'make_dump') {
 
 	$res = $FpsDB->query("SHOW TABLES");
 	if (!empty($res)) {
-		if (!file_exists(R . 'sys/logs/db_backups/')) mkdir(R . 'sys/logs/db_backups/', 0777);
-		$fp = fopen(R . "sys/logs/db_backups/" . date("Y-m-d-H-i") . ".sql", "a" );
+		if (!file_exists(ROOT . '/sys/logs/db_backups/')) mkdir(ROOT . '/sys/logs/db_backups/', 0777);
+		$fp = fopen(ROOT . "/sys/logs/db_backups/" . date("Y-m-d-H-i") . ".sql", "a" );
 		if ($fp) {
 			foreach ($res as $table) {
 			
@@ -142,7 +142,7 @@ if (!empty($_GET['ac']) && $_GET['ac'] == 'make_dump') {
 
 
 //current dunps
-$current_dumps = glob(R . 'sys/logs/db_backups/*');	
+$current_dumps = glob(ROOT . '/sys/logs/db_backups/*');	
 
 include_once ROOT . '/admin/template/header.php';
 

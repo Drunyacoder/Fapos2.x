@@ -5,8 +5,8 @@ class Protect
 {
     public function checkIpBan()
     {
-        if (file_exists(R . 'sys/logs/ip_ban/baned.dat')) {
-            $data = file(R . 'sys/logs/ip_ban/baned.dat');
+        if (file_exists(ROOT . '/sys/logs/ip_ban/baned.dat')) {
+            $data = file(ROOT . '/sys/logs/ip_ban/baned.dat');
 
             if (!empty($_SERVER['REMOTE_ADDR'])) {
                 $ip = trim(substr($_SERVER['REMOTE_ADDR'], 0, 15));
@@ -29,7 +29,7 @@ class Protect
 
     public function antiDdos()
     {
-        touchDir(R . 'sys/logs/anti_ddos/');
+        touchDir(ROOT . '/sys/logs/anti_ddos/');
         $date = date("Y-m-d");
 
         if (isset($_SERVER['HTTP_X_FORWARDED_FOR'])) {
@@ -45,12 +45,12 @@ class Protect
 
         if (!empty($ip)) {
             /* if current IP is hacked */
-            if (file_exists(R . 'sys/logs/anti_ddos/hack_' . $ip . '.dat')) {
+            if (file_exists(ROOT . '/sys/logs/anti_ddos/hack_' . $ip . '.dat')) {
                 redirect('/error.php?ac=hack');
             }
 
             //clean old files
-            $tmp_files = glob(R . 'sys/logs/anti_ddos/[0-9]*.dat'); //get all except HACK
+            $tmp_files = glob(ROOT . '/sys/logs/anti_ddos/[0-9]*.dat'); //get all except HACK
             if (!empty($tmp_files) && count($tmp_files) > 0) {
                 foreach ($tmp_files as $file) {
                     if (substr(basename($file), 0, 10) != $date) {
@@ -60,14 +60,14 @@ class Protect
             }
 
             /* if not hacked */
-            $file = R . 'sys/logs/anti_ddos/' . $date . '_' . $ip . '.dat';
+            $file = ROOT . '/sys/logs/anti_ddos/' . $date . '_' . $ip . '.dat';
             if (file_exists($file)) {
                 $data = file_get_contents($file);
                 $data = explode('***', $data);
                 if ($data[1] == time()) {
                     if ($data[0] > Config::read('request_per_second', 'secure')) {
                         unlink($file);
-                        $f = fopen(R . 'sys/logs/anti_ddos/hack_' . $ip . '.dat', 'w');
+                        $f = fopen(ROOT . '/sys/logs/anti_ddos/hack_' . $ip . '.dat', 'w');
                         fwrite($f, date("Y-m-d H:i"));
                         fclose($f);
                         redirect('/error.php?ac=hack');
@@ -80,7 +80,7 @@ class Protect
                     unlink($file);
                 }
             } else {
-                $f = fopen(R . 'sys/logs/anti_ddos/' . $date . '_' . $ip . '.dat', 'w');
+                $f = fopen(ROOT . '/sys/logs/anti_ddos/' . $date . '_' . $ip . '.dat', 'w');
                 fwrite($f, '1***' . time());
                 fclose($f);
             }
@@ -102,7 +102,7 @@ class Protect
             $http_client_ip = substr($http_client_ip, 0, 150);
             $_SERVER['REQUEST_URI'] = substr($_SERVER['REQUEST_URI'], 0, 500);
 
-            $logfile = fopen(R.'sys/logs/antisql.dat', 'a');
+            $logfile = fopen(ROOT . '/sys/logs/antisql.dat', 'a');
             $warning = "Попытка SQL-иньекции. ['REMOTE_ADDR'] -> " . $remote_addr . " Дата: " . date("Y-m-d H:i") . "
                 ['HTTP_X_FORWARDED_FOR'] -> " . $http_x_for . "
                 ['HTTP_CLIENT_IP'] -> " . $http_client_ip . "

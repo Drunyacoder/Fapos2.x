@@ -449,8 +449,8 @@ function edit() {
 			'lock_posts' => $lock_posts,
 		));
 		if ($query) {
-			if (move_uploaded_file($_FILES['icon']['tmp_name'], R . 'sys/img/forum_icon_' . $id . '.jpg')) {
-				chmod(R . 'sys/img/forum_icon_' . $id . '.jpg', 0755);
+			if (move_uploaded_file($_FILES['icon']['tmp_name'], ROOT . '/sys/img/forum_icon_' . $id . '.jpg')) {
+				chmod(ROOT . '/sys/img/forum_icon_' . $id . '.jpg', 0755);
 			}
 		}
 	
@@ -587,8 +587,8 @@ function add() {
 		));
 		$id = mysql_insert_id();
 		if (!empty($_FILES['icon']['name'])) {
-			if (move_uploaded_file($_FILES['icon']['tmp_name'], R . 'sys/img/forum_icon_' . $id . '.jpg')) {
-				chmod(R . 'sys/img/forum_icon_' . $id . '.jpg', 0755);
+			if (move_uploaded_file($_FILES['icon']['tmp_name'], ROOT . '/sys/img/forum_icon_' . $id . '.jpg')) {
+				chmod(ROOT . '/sys/img/forum_icon_' . $id . '.jpg', 0755);
 			}
 		}
 	}
@@ -614,8 +614,8 @@ function delete() {
 			}
 		}
 		$FpsDB->query("DELETE FROM `" . $FpsDB->getFullTableName('forums') . "` WHERE `id`='{$id}'");
-		if (file_exists(R . 'sys/img/forum_icon_' . $id . '.jpg')) 
-			unlink(R . 'sys/img/forum_icon_' . $id . '.jpg');
+		if (file_exists(ROOT . '/sys/img/forum_icon_' . $id . '.jpg')) 
+			unlink(ROOT . '/sys/img/forum_icon_' . $id . '.jpg');
 	} else {
 		$sql = $FpsDB->select('forums', DB_ALL, array('cond' => array('in_cat' => $id)));
 		if (count($sql) > 0) {
@@ -626,8 +626,8 @@ function delete() {
 						delete_theme($result['id']);
 					}
 				}
-				if (file_exists(R . 'sys/img/forum_icon_' . $_result['id'] . '.jpg')) 
-					unlink(R . 'sys/img/forum_icon_' . $_result['id'] . '.jpg');
+				if (file_exists(ROOT . '/sys/img/forum_icon_' . $_result['id'] . '.jpg')) 
+					unlink(ROOT . '/sys/img/forum_icon_' . $_result['id'] . '.jpg');
 			}
 		}
 		$FpsDB->query("DELETE FROM `" . $FpsDB->getFullTableName('forums') . "` WHERE `in_cat`='{$id}'");
@@ -663,8 +663,8 @@ function delete_theme($id_theme) {
 			$attach_files = $FpsDB->select('forum_attaches', DB_ALL, array('cond' => array('post_id' => $file['id'])));
 			if (count($attach_files) > 0) {
 				foreach ($attach_files as $attach_file) {
-					if (file_exists(R . 'sys/files/forum/' . $attach_file['filename'])) {
-						if (@unlink(R . 'sys/files/forum/' . $attach_file['filename'])) {
+					if (file_exists(ROOT . '/sys/files/forum/' . $attach_file['filename'])) {
+						if (@unlink(ROOT . '/sys/files/forum/' . $attach_file['filename'])) {
 							$FpsDB->query("DELETE FROM `" . $FpsDB->getFullTableName('forum_attaches') . "` WHERE `id`='" . $attach_file['id'] . "'");
 						}
 					}
@@ -681,8 +681,8 @@ function delete_theme($id_theme) {
 	$attach_files = $FpsDB->select('forum_attaches', DB_ALL, array('cond' => array('theme_id' => $id_theme)));
 	if (count($attach_files) > 0) {
 		foreach ($attach_files as $attach_file) {
-			if (file_exists(R . 'sys/files/forum/' . $attach_file['filename'])) {
-				if (@unlink(R . 'sys/files/forum/' . $attach_file['filename'])) {
+			if (file_exists(ROOT . '/sys/files/forum/' . $attach_file['filename'])) {
+				if (@unlink(ROOT . '/sys/files/forum/' . $attach_file['filename'])) {
 					$FpsDB->query("DELETE FROM `" . $FpsDB->getFullTableName('forum_attaches') . "` WHERE `id`='" . $attach_file['id'] . "'");
 				}
 			}

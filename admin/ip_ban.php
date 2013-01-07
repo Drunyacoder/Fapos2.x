@@ -22,7 +22,7 @@
 ##################################################
 
 include_once '../sys/boot.php';
-include_once R . 'admin/inc/adm_boot.php';
+include_once ROOT . '/admin/inc/adm_boot.php';
 
  
 $pageTitle = 'Баны по IP адресам';
@@ -71,8 +71,8 @@ include_once ROOT . '/admin/template/footer.php';
 	
 function index(&$page_title) {
 	$content = null;
-	if (file_exists(R . 'sys/logs/ip_ban/baned.dat')) {
-		$data = file(R . 'sys/logs/ip_ban/baned.dat');
+	if (file_exists(ROOT . '/sys/logs/ip_ban/baned.dat')) {
+		$data = file(ROOT . '/sys/logs/ip_ban/baned.dat');
 		if (!empty($data)) {
 			foreach($data as $key => $row) {
 				$content .= '<tr><td>' . $row . '</td><td width="30px"><a onClick="return confirm(\'Are you sure?\');" href="ip_ban.php?ac=del&id=' . $key . '">
@@ -129,8 +129,8 @@ function add() {
 	}
 	
 	if (empty($error)) {
-		touchDir(R . 'sys/logs/ip_ban/');
-		$f = fopen(R . 'sys/logs/ip_ban/baned.dat', 'a+');
+		touchDir(ROOT . '/sys/logs/ip_ban/');
+		$f = fopen(ROOT . '/sys/logs/ip_ban/baned.dat', 'a+');
 		fwrite($f, $ip . "\n");
 		fclose($f);
 	}
@@ -145,8 +145,8 @@ function add() {
 */
 function delete() {
 	if (!isset($_GET['id'])) redirect('ip_ban.php');
-	if (file_exists(R . 'sys/logs/ip_ban/baned.dat')) {
-		$data = file(R . 'sys/logs/ip_ban/baned.dat');
+	if (file_exists(ROOT . '/sys/logs/ip_ban/baned.dat')) {
+		$data = file(ROOT . '/sys/logs/ip_ban/baned.dat');
 		if (!empty($data)) {
 
 			if (array_key_exists($_GET['id'], $data)) {
@@ -156,7 +156,7 @@ function delete() {
 					$_data[$key] = $val;
 				}
 				$data = implode("", $_data);
-				file_put_contents(R . 'sys/logs/ip_ban/baned.dat', $data);
+				file_put_contents(ROOT . '/sys/logs/ip_ban/baned.dat', $data);
 			} else {
 				$_SESSION['add']['errors'] = '<ul class="uz_err"><li>Записи с таким ключом не найдено</li></ul>';
 			}

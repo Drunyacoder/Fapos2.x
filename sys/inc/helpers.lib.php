@@ -88,7 +88,7 @@ function cleanAllUsersCount() {
 function getBornTodayUsers() {
 	$Register = Register::getInstance();
     $FpsDB = $Register['DB'];
-	$file = R . 'sys/logs/today_born.dat';
+	$file = ROOT . '/sys/logs/today_born.dat';
 	
 
 	if (!file_exists($file) || (filemtime($file) + 3600) < time()) {
@@ -207,7 +207,7 @@ function getOrderParam($claas_name) {
  * CRON simulyation
  */
 function fpsCron($func, $interval) {
-	$cron_file = R . 'sys/tmp/' . md5($func) . '_cron.dat';
+	$cron_file = ROOT . '/sys/tmp/' . md5($func) . '_cron.dat';
 	if (file_exists($cron_file)) {
 		$extime = file_get_contents($cron_file);
 		if (!empty($extime) && is_numeric($extime) && $extime > time()) {
@@ -228,7 +228,7 @@ function fpsCron($func, $interval) {
  * Launch auto sitemap generator
  */
 function createSitemap() {
-	include_once R . 'sys/inc/sitemap.class.php';
+	include_once ROOT . '/sys/inc/sitemap.class.php';
 	$obj = new FpsSitemapGen;
 	$obj->createMap();
 }
@@ -286,7 +286,7 @@ function entryUrl($material, $module) {
 	
 	// Check tmp file with assocciations and build human like URL
 	clearstatcache();
-	$tmp_dir = R . 'sys/tmp/hlu_' . $module . '/';
+	$tmp_dir = ROOT . '/sys/tmp/hlu_' . $module . '/';
 	$tmp_file = $tmp_dir . $matId . '.dat';
 	touchDir($tmp_dir, 0777);
 	if (file_exists($tmp_file) && is_readable($tmp_file)) {
@@ -346,7 +346,7 @@ function translit($str) {
  */
 function getCaptcha() {
 	$kcaptcha = '/sys/inc/kcaptcha/kc.php?' . session_name() . '=' . session_id();
-	$tpl = file_get_contents(R . 'template/' . Config::read('template') . '/html/default/captcha.html');
+	$tpl = file_get_contents(ROOT . '/template/' . Config::read('template') . '/html/default/captcha.html');
 	return str_replace('{CAPTCHA}', $kcaptcha, $tpl);
 }
 
@@ -366,7 +366,7 @@ function __($key, $module = false) {
 	if (is_numeric($key)) {
 		if ($module === false) $module = 'common';
 		
-		$lan_dir = R . 'sys/settings/languages/' . $module . '.dat';
+		$lan_dir = ROOT . '/sys/settings/languages/' . $module . '.dat';
 		$data = file_get_contents($lan_dir);
 		if (empty($data)) trigger_error('Language file not found!', E_USER_ERROR);
 		$data = explode("=|=", $data);
@@ -375,7 +375,7 @@ function __($key, $module = false) {
 	} else {
 		$language = Config::read('language');
 		if (empty($language) || !is_string($language)) $language = 'russian';
-		$lang_file = R . 'sys/settings/languages/' . $language . '.php';
+		$lang_file = ROOT . '/sys/settings/languages/' . $language . '.php';
 		if (!file_exists($lang_file)) trigger_error('Language file not found', E_USER_ERROR);
 		
 		include $lang_file;
@@ -494,7 +494,7 @@ function createOptionsFromParams($offset, $limit, $selected = false) {
 * also we have analog in statistic module
 */
 function getWhoOnline() {
-	$path = R . 'sys/logs/counter_online/online.dat';
+	$path = ROOT . '/sys/logs/counter_online/online.dat';
 	$users = 0;
 	$quests = 0;
 	$all = 0;
@@ -514,7 +514,7 @@ function getWhoOnline() {
  * Return online users list
  */
 function getOnlineUsers() {
-	$path = R . 'sys/logs/counter_online/online.dat';
+	$path = ROOT . '/sys/logs/counter_online/online.dat';
 	
 	if (file_exists($path) && is_readable($path)) {
 		$data = unserialize(file_get_contents($path));
@@ -529,7 +529,7 @@ function getOnlineUsers() {
  * Get overal stats by key
  */
 function getOveralStat($key = false) {
-	$path = R . 'sys/logs/overal_stats.dat';
+	$path = ROOT . '/sys/logs/overal_stats.dat';
 	
 	if (file_exists($path) && is_readable($path)) {
 		$data = unserialize(file_get_contents($path));
@@ -604,7 +604,7 @@ function getMicroTime() {
 * for tests and dumps
 */
 function dumpVar($var) {
-	$f = fopen(R . 'dump.dat', 'a+');
+	$f = fopen(ROOT . '/dump.dat', 'a+');
 	fwrite($f, $var . "\n");
 	fclose($f);
 }

@@ -314,7 +314,7 @@ class Document_Parser {
 	 */
 	public function builMainMenu()
     {
-		$menu_conf_file = R . 'sys/settings/menu.dat';	
+		$menu_conf_file = ROOT . '/sys/settings/menu.dat';	
 		if (!file_exists($menu_conf_file)) return false;
 		$menudata = unserialize(file_get_contents($menu_conf_file));
 	

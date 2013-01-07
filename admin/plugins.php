@@ -75,7 +75,7 @@ function index(&$page_title) {
 	$content = '';
 
 	
-	$plugs = glob(R . 'sys/plugins/*');
+	$plugs = glob(ROOT . '/sys/plugins/*');
 	if (!empty($plugs) && count($plugs) > 0) {
 		foreach ($plugs as $k => $pl) {
 			if (!is_dir($pl)) unset($plugs[$k]);
@@ -168,7 +168,7 @@ function onPlugin() {
 		if (empty($_GET['dir'])) redirect('/');
 		$dir = $_GET['dir'];
 	
-		$pach = R . 'sys/plugins/' . $dir;
+		$pach = ROOT . '/sys/plugins/' . $dir;
 		$conf_pach = $pach . '/config.dat';
 		$history = (file_exists($conf_pach)) ? unserialize(file_get_contents($conf_pach)) : array();
 		
@@ -183,7 +183,7 @@ function offPlugin() {
 		if (empty($_GET['dir'])) redirect('/');
 		$dir = $_GET['dir'];
 	
-		$pach = R . 'sys/plugins/' . $dir;
+		$pach = ROOT . '/sys/plugins/' . $dir;
 		$conf_pach = $pach . '/config.dat';
 		$history = (file_exists($conf_pach)) ? unserialize(file_get_contents($conf_pach)) : array();
 		

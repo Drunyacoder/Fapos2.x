@@ -24,7 +24,7 @@
 
 
 include_once '../sys/boot.php';
-include_once R . 'admin/inc/adm_boot.php';
+include_once ROOT . '/admin/inc/adm_boot.php';
 
 $Register = Register::getInstance();
 $FpsDB = $Register['DB'];
@@ -66,7 +66,7 @@ $all_hosts = $FpsDB->query("
 	, (SELECT ips FROM `" . $FpsDB->getFullTableName('statistics') . "` WHERE `date` = '" . date("Y-m-d") . "') as today_hosts
 	FROM `" . $FpsDB->getFullTableName('statistics') . "`");
 
-$tmp_datafile = R . 'sys/logs/counter/' . date("Y-m-d") . '.dat';
+$tmp_datafile = ROOT . '/sys/logs/counter/' . date("Y-m-d") . '.dat';
 
 if (file_exists($tmp_datafile) && is_readable($tmp_datafile)) {
 	$stats = unserialize(file_get_contents($tmp_datafile));

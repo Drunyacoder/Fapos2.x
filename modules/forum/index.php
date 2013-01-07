@@ -1501,8 +1501,8 @@ Class ForumModule extends Module {
 					$file = $post_id . '-' . $i . '-' . date("YmdHi") . $ext;
 				$is_image = (in_array(strtolower($ext), $img_extentions)) ? 1 : 0;
 				// Перемещаем файл из временной директории сервера в директорию files
-				if (move_uploaded_file($_FILES[$attach_name]['tmp_name'], R . 'sys/files/forum/' . $file)) {
-					chmod(R . 'sys/files/forum/' . $file, 0644);
+				if (move_uploaded_file($_FILES[$attach_name]['tmp_name'], ROOT . '/sys/files/forum/' . $file)) {
+					chmod(ROOT . '/sys/files/forum/' . $file, 0644);
 					$attach_file_data = array(
 						'post_id'       => $post_id,
 						'theme_id'      => $id_theme,

@@ -34,7 +34,7 @@ $config = $Register['Config']->read('all');
 
 
 // Prepare templates selct list
-$sourse = glob(R . 'template/*', GLOB_ONLYDIR);
+$sourse = glob(ROOT . 'template/*', GLOB_ONLYDIR);
 if (!empty($sourse) && is_array($sourse)) {
 	$templates = array();
 	foreach ($sourse as $dir) {

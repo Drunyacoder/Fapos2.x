@@ -282,7 +282,7 @@ Class NewsModule extends Module {
 			// replace image tags in text
 			$attaches = $result->getAttaches();
 			if (!empty($attaches) && count($attaches) > 0) {
-				$attachDir = R . 'sys/files/' . $this->module . '/';
+				$attachDir = ROOT . '/sys/files/' . $this->module . '/';
 				foreach ($attaches as $attach) {
 					if ($attach->getIs_image() == 1 && file_exists($attachDir . $attach->getFilename())) {
 						$announce = str_replace('{IMAGE'.$attach->getAttach_number().'}'
@@ -1096,7 +1096,7 @@ Class NewsModule extends Module {
 	*/
 	public function delete_comment($id = null)
     {
-		include_once(R . 'sys/inc/includes/delete_comment.php');
+		include_once(ROOT . '/sys/inc/includes/delete_comment.php');
 	}	
 	
 	
@@ -1269,7 +1269,7 @@ Class NewsModule extends Module {
 	 *
      */
     public function rss() {
-		include_once R . 'sys/inc/includes/rss.php';
+		include_once ROOT . '/sys/inc/includes/rss.php';
     }
 	
 	

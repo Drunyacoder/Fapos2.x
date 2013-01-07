@@ -125,7 +125,7 @@ Class StatModule extends Module {
 			// replace image tags in text
 			$attaches = $result->getAttaches();
 			if (!empty($attaches) && count($attaches) > 0) {
-				$attachDir = R . 'sys/files/' . $this->module . '/';
+				$attachDir = ROOT . '/sys/files/' . $this->module . '/';
 				foreach ($attaches as $attach) {
 					if ($attach->getIs_image() == 1 && file_exists($attachDir . $attach->getFilename())) {
 						$announce = str_replace('{IMAGE'.$attach->getAttach_number().'}'
@@ -276,7 +276,7 @@ Class StatModule extends Module {
 			// replace image tags in text
 			$attaches = $result->getAttaches();
 			if (!empty($attaches) && count($attaches) > 0) {
-				$attachDir = R . 'sys/files/' . $this->module . '/';
+				$attachDir = ROOT . '/sys/files/' . $this->module . '/';
 				foreach ($attaches as $attach) {
 					if ($attach->getIs_image() == 1 && file_exists($attachDir . $attach->getFilename())) {
 						$announce = str_replace('{IMAGE'.$attach->getAttach_number().'}'
@@ -1230,7 +1230,7 @@ Class StatModule extends Module {
 	 *
      */
     function rss() {
-		include_once R . 'sys/inc/includes/rss.php';
+		include_once ROOT . '/sys/inc/includes/rss.php';
     }	
 	
 }

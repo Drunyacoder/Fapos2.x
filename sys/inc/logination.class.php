@@ -53,7 +53,7 @@ class Logination {
 		$max_log_size = Config::read('max_log_size', 'secure');
 		/* we must no allow overflow */
 		if ((int)$max_log_size > 0) {
-			$log_files = glob(R . 'sys/logs/' . $this->logDir . '/*.dat');
+			$log_files = glob(ROOT . '/sys/logs/' . $this->logDir . '/*.dat');
 			$log_size = (!empty($log_files)) ? (count($log_files) * $this->maxFileSize) : 0;
 			/* delete files and free space */
 			while ($log_size > $max_log_size) {
@@ -62,7 +62,7 @@ class Logination {
 			}
 		}
 		/* create log dir if !exists */
-		if (!file_exists(R . 'sys/logs/' . $this->logDir)) mkdir(R . 'sys/logs/' . $this->logDir, 0755, true);
+		if (!file_exists(ROOT . '/sys/logs/' . $this->logDir)) mkdir(ROOT . '/sys/logs/' . $this->logDir, 0755, true);
 	}
 	
 	
@@ -92,8 +92,8 @@ class Logination {
 		/* get file name for writing */
 		$file_name = $this->getFileName();
 		/* get records if exists */
-		if (file_exists(R . 'sys/logs/' . $this->logDir . '/' . $file_name)) {
-			$log_data = unserialize(file_get_contents(R . 'sys/logs/' . $this->logDir . '/' . $file_name));
+		if (file_exists(ROOT . '/sys/logs/' . $this->logDir . '/' . $file_name)) {
+			$log_data = unserialize(file_get_contents(ROOT . '/sys/logs/' . $this->logDir . '/' . $file_name));
 			$log_data = array_merge($log_data, array(0 => $param_log));
 		} else {
 			$log_data = array();
@@ -101,7 +101,7 @@ class Logination {
 		}
 		$log_data = serialize($log_data);
 		/* write... */
-		$file = fopen(R . 'sys/logs/' . $this->logDir . '/' . $file_name, 'w+');
+		$file = fopen(ROOT . '/sys/logs/' . $this->logDir . '/' . $file_name, 'w+');
 		fwrite($file, $log_data);
 		fclose($file);
 		return;
@@ -115,7 +115,7 @@ class Logination {
 	*/
 	public function read($filename) {
 		clearstatcache();
-		$filename = R . 'sys/logs/' . $this->logDir . '/' . $filename;
+		$filename = ROOT . '/sys/logs/' . $this->logDir . '/' . $filename;
 		if (file_exists($filename) && is_readable($filename)) {
 			$data = file_get_contents($filename);
 			if (!empty($data)) {
@@ -134,7 +134,7 @@ class Logination {
 	* return      none
 	*/
 	public function clean() {
-		$log_files = glob(R . 'sys/logs/' . $this->logDir . '/*');
+		$log_files = glob(ROOT . '/sys/logs/' . $this->logDir . '/*');
 		if (!empty($log_files)) {
 			foreach ($log_files as $file) {
 				@unlink($file);
@@ -151,8 +151,8 @@ class Logination {
 	private function getFileName($file_num = 1) {
 		clearstatcache();
 		$file_name = date("Y-m-d") . '_' . $file_num . '.dat';
-		if (file_exists(R . 'sys/logs/' . $this->logDir . '/' . $file_name)) {
-			if (filesize(R . 'sys/logs/' . $this->logDir . '/' . $file_name) > $this->maxFileSize) {
+		if (file_exists(ROOT . '/sys/logs/' . $this->logDir . '/' . $file_name)) {
+			if (filesize(ROOT . '/sys/logs/' . $this->logDir . '/' . $file_name) > $this->maxFileSize) {
 				$file_name = $this->getFileName(2);
 			}
 		}

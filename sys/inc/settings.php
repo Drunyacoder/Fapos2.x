@@ -20,7 +20,7 @@
 ## CMS Fapos или ее частей,                     ##
 ## без согласия автора, является не законным    ##
 ##################################################
-if ($fset=@file_get_contents(R.'sys/settings/settings.dat'))
+if ($fset=@file_get_contents(ROOT . '/sys/settings/settings.dat'))
 {
 $set=unserialize($fset);
 

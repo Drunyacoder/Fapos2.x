@@ -344,8 +344,8 @@ class PrintText {
 		if (!empty($_SESSION['user']['id'])) {
 			$message = preg_replace("#\[hide\](.*)\[/hide\]#isU", '\\1', $message);
 		} else {
-			$message = preg_replace("#\[hide\](.*)\[/hide\]#isU", '<div class="hide">Необходима авторизация. <a href="/' . R 
-					. 'users/add_form/">Регистрация</a></div>', $message);
+			$message = preg_replace("#\[hide\](.*)\[/hide\]#isU", '<div class="hide">Необходима авторизация. <a href="' . WWW_ROOT 
+					. '/users/add_form/">Регистрация</a></div>', $message);
 		}
 
 		

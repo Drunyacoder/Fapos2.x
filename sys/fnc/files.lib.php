@@ -65,7 +65,7 @@ function downloadAttaches($module, $entity_id) {
 	$attaches = true;
 	if (empty($entity_id) || !is_numeric($entity_id)) return false;
 	$img_extentions = array('.png','.jpg','.gif','.jpeg', '.PNG','.JPG','.GIF','.JPEG');
-	$files_dir = R . 'sys/files/' . $module . '/';
+	$files_dir = ROOT . '/sys/files/' . $module . '/';
 	// delete collizions if exists 
 	//$this->deleteCollizions(array('id' => $post_id), true);
 	

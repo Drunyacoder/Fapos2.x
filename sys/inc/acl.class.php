@@ -77,7 +77,7 @@ class ACL {
 	*
 	*/
 	public function save_rules($rules) {
-		if ($fopen = fopen(R . 'sys/settings/acl_rules.php', 'w')) {
+		if ($fopen = fopen(ROOT . '/sys/settings/acl_rules.php', 'w')) {
 			fputs($fopen, '<?php ' . "\n" . '$acl_rules = ' . var_export($rules, true) . "\n" . '?>');
 			fclose($fopen);
 			return true;
@@ -91,7 +91,7 @@ class ACL {
 	*
 	*/
 	public function save_groups($groups) {
-		if ($fopen=@fopen(R . 'sys/settings/acl_groups.php', 'w')) {
+		if ($fopen=@fopen(ROOT . '/sys/settings/acl_groups.php', 'w')) {
 			@fputs($fopen, '<?php ' . "\n" . '$acl_groups = ' . var_export($groups, true) . "\n" . '?>');
 			@fclose($fopen);
 			return true;
