@@ -343,7 +343,7 @@ class Document_Parser {
 			
 			$out .= $point['prefix'];
 			$target = (!empty($point['newwin'])) ? ' target="_blank"' : '';
-			$out .= '<a href="' . $point['url'] . '"' . $target . '>' . $point['title'] . '</a>';
+			$out .= '<a href="' . get_url($point['url']) . '"' . $target . '>' . $point['title'] . '</a>';
 			$out .= $point['sufix'];
 			
 			if (!empty($point['sub']) && count($point['sub']) > 0) {
