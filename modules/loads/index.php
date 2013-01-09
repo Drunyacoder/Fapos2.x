@@ -64,8 +64,6 @@ Class LoadsModule extends Module {
 	 */
 	function index($tag = null)
     {
-		echo $this->render('test.html', array('context' => array('name' => 'Drunya')));
-		die();
 		
 		//turn access
 		$this->ACL->turn(array('loads', 'view_list'));
