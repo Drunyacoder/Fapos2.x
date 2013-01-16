@@ -2,12 +2,14 @@
 /*-----------------------------------------------\
 | 												 |
 |  @Author:       Andrey Brykin (Drunya)         |
-|  @Version:      1.5.6                          |
+|  @Email:        drunyacoder@gmail.com          |
+|  @Site:         http://fapos.net			     |
+|  @Version:      1.5.7                          |
 |  @Project:      CMS                            |
-|  @package       CMS Fapos                      |
-|  @subpackege    Module Class                   |
-|  @copyright     ©Andrey Brykin 2010-2012       |
-|  @last mod.     2012/12/06                     |
+|  @Package       CMS Fapos                      |
+|  @Subpackege    Module Class                   |
+|  @Copyright     ©Andrey Brykin 2010-2013       |
+|  @Last mod.     2013/01/17                     |
 \-----------------------------------------------*/
 
 /*-----------------------------------------------\
@@ -331,7 +333,7 @@ class Module {
 		}
         
 		
-		$output = Plugins::intercept('before_view', $output);
+		//$output = Plugins::intercept('before_view', $output);
 		$this->afterRender();
 		
 		echo $output;

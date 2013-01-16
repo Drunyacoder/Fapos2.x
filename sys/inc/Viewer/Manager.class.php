@@ -38,6 +38,10 @@ class Fps_Viewer_Manager
 		
 		// TODO
 		$Register = Register::getInstance();
+		
+		// Maybe I need upgrade this code (TODO)
+		$fileSource = Plugins::intercept('before_view', $fileSource);
+		
 		$fileSource = $Register['DocParser']->parseSnippet($fileSource);
 		
 		$data = $this->parseTemplate($fileSource, $context);
