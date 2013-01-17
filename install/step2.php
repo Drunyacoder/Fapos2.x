@@ -24,7 +24,7 @@ define ('ROOT', dirname(dirname(__FILE__)));
 
 	<h3>Создание базы данных ...</h3>
 	<img src="img/ajax_loader.gif" style="display:none;" id="ajaxLoader" />
-	<div id="queries"></div>
+	<div style="height:200px; overflow-y:scroll;" id="queries"></div>
 
 
 	<br />
