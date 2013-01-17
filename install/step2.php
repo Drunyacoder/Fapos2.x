@@ -24,16 +24,14 @@ define ('ROOT', dirname(dirname(__FILE__)));
 
 	<h3>Создание базы данных ...</h3>
 	<img src="img/ajax_loader.gif" style="display:none;" id="ajaxLoader" />
-	<div style="height:200px; overflow-y:scroll;" id="queries"></div>
+	<div style="height:250px; overflow-y:scroll;" id="queries"></div>
 
 
 	<br />
 	<br />
 	<br />
 	<br />
-	<br />
-	<br />
-	<br />
+
 
 
 </div>
@@ -47,6 +45,8 @@ function doQueries() {
 		$('#queries').html(data);
 		$('#ajaxLoader').hide();
 		progressBar(3);
+		
+		$('#queries').scrollTop(1500);
 	});
 }
 function progressBar(step) {
