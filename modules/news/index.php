@@ -2,12 +2,14 @@
 /*---------------------------------------------\
 |											   |
 | @Author:       Andrey Brykin (Drunya)        |
+| @Email:        drunyacoder@gmail.com         |
+| @Site:         http://fapos.net              |
 | @Version:      1.7.8                         |
 | @Project:      CMS                           |
-| @package       CMS Fapos                     |
-| @subpackege    News Module                   |
-| @copyright     ©Andrey Brykin 2010-2012      |
-| @last mod      2012/11/12                    |
+| @Package       CMS Fapos                     |
+| @Subpackege    News Module                   |
+| @Copyright     ©Andrey Brykin 2010-2013      |
+| @Last mod      2013/01/17                    |
 |----------------------------------------------|
 |											   |
 | any partial or not partial extension         |
@@ -747,7 +749,7 @@ Class NewsModule extends Module {
 			'available' 	=> '',
 		);
 		$data = Validate::getCurrentInputsValues($entity, $data);
-
+		
 		
         $data->setPreview($this->Parser->getPreview($data->getMain()));
         $data->setErrors($this->Parser->getErrors());
@@ -768,6 +770,10 @@ Class NewsModule extends Module {
 		$available = ($data->getAvailable()) ? 'checked="checked"' : '';
         if (!$this->ACL->turn(array('loads', 'hide_material'), false)) $available .= ' disabled="disabled"';
 		$action = get_url('/news/update/' . $data->getId());
+		
+		
+		$data->setCommented($commented);
+		$data->setAvailable($available);
 		
 		
 		$attaches = $data->getAttaches();
@@ -1017,7 +1023,7 @@ Class NewsModule extends Module {
 		
 		$user_id = (!empty($_SESSION['user']['id'])) ? intval($_SESSION['user']['id']) : 0;
 		if ($this->Log) $this->Log->write('delete new', 'new id(' . $id . ') user id('.$user_id.')');
-		return $this->showInfoMessage(__('Operation is successful'), getReferer());
+		return $this->showInfoMessage(__('Operation is successful'), '/news/');
 	}
 
 	

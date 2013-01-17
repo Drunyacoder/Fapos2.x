@@ -2,12 +2,14 @@
 /*---------------------------------------------\
 |											   |
 | @Author:       Andrey Brykin (Drunya)        |
-| @Version:      1.7.3                         |
+| @Email:        drunyacoder@gmail.com         |
+| @Site:         http://fapos.net              |
+| @Version:      1.7.4                         |
 | @Project:      CMS                           |
-| @package       CMS Fapos                     |
-| @subpackege    Stats Module                  |
-| @copyright     ©Andrey Brykin 2010-2012      |
-| @last mod      2012/11/12                    |
+| @Package       CMS Fapos                     |
+| @Subpackege    Stats Module                  |
+| @Copyright     ©Andrey Brykin 2010-2013      |
+| @Last mod      2013/01/17                    |
 |----------------------------------------------|
 |											   |
 | any partial or not partial extension         |
@@ -762,10 +764,14 @@ Class StatModule extends Module {
 		
 		
 		//comments and hide
-		$commented = (!empty($commented)) ? 'checked="checked"' : '';
+		$commented = ($data->getCommented()) ? 'checked="checked"' : '';
 		if (!$this->ACL->turn(array('stat', 'record_comments_management'), false)) $commented .= ' disabled="disabled"';
-		$available = (!empty($available)) ? 'checked="checked"' : '';
+		$available = ($data->getAvailable()) ? 'checked="checked"' : '';
 		$action = get_url('/stat/update/' . $data->getId());
+		
+		
+		$data->setCommented($commented);
+		$data->setAvailable($available);
 		
 		
 		$attaches = $data->getAttaches();
