@@ -34,7 +34,7 @@ $config = $Register['Config']->read('all');
 
 
 // Prepare templates selct list
-$sourse = glob(ROOT . 'template/*', GLOB_ONLYDIR);
+$sourse = glob(ROOT . '/template/*', GLOB_ONLYDIR);
 if (!empty($sourse) && is_array($sourse)) {
 	$templates = array();
 	foreach ($sourse as $dir) {
@@ -77,7 +77,7 @@ include_once ROOT . '/sys/settings/conf_properties.php';
 
 
 // Get current module(group of settings)
-if (empty($_GET['m']) || !is_string($_GET['m'])) $_GET['m'] = 'system';
+if (empty($_GET['m']) || !is_string($_GET['m'])) $_GET['m'] = 'sys';
 $module = trim($_GET['m']);
 if (in_array($module, $sysMods)) {
 	$settingsInfo = $settingsInfo[$module];

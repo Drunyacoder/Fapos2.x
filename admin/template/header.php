@@ -48,7 +48,7 @@ document.top_menu = new drunyaMenu([
   'sep',
   '<span><?php echo __('Version of Fapos'); ?> [ <b><?php echo FPS_VERSION ?></b> ]</span>',
   'sep',
-  '<a href="/admin/settings_sys.php"><?php echo __('Common settings'); ?></a>',
+  '<a href="/admin/settings.php?m=sys"><?php echo __('Common settings'); ?></a>',
   'sep',
   '<a href="/admin/clean_cache.php"><?php echo __('Clean cache'); ?></a>'
   ]],
