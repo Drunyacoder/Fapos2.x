@@ -25,7 +25,8 @@
 					<td  width="15%" class="postTdInfo" valign="top">
 						
 						<div class="avatar"><img title="{{ post.author.name }}" class="userAvatar" border="0" src="{{ post.author.avatar }}"></div>
-						<div class="miniprofile-cont">
+                        {% if post.id_author != 0 %}
+                        <div class="miniprofile-cont">
 							<div class="userRank">{{ post.author.user_rank }}</div>
 							<div class="info">Статус: <span class="unp">{{ post.author.rank }}</span></div>
 							<div class="info">Группа: <span class="unp">{{ post.author.status_title }}</span></div>
@@ -47,25 +48,39 @@
 								</div>
 							</div>
 						</div>
+                        {% endif %}
 						&nbsp;
 					</td>
 					<td class="posttdMessage" valign="top">{{ post.message }}
 						<div align="left" class="eAttach">{{ post.attachment }}</div>
+                        {% if post.id_author != 0 %}
 						<br><hr size="1" width="150" align="left" class="signatureHr"><span style="clear:both;" class="signatureView">{{ post.author.signature }}</span>
-						<br><br><div class="edited">{{ post.editor_info }}</div>
+						{% endif %}
+                        <br><br><div class="edited">{{ post.editor_info }}</div>
 					</td>
 				</tr>
 				<tr>
 					<td colspan="2" class="meta-b" align="center">
 						<table border="0" width="100%" cellspacing="0" cellpadding="0">
 							<tr>
-								<td width="20%">{{ post.profile_url }}  {{ post.pm_url }}  {{ post.email_url }}  {{ post.author_site }}
-								</td>
+								<td width="20%">
+                                    {% if post.id_author != 0 %}
+										<a href="{{ www_root }}/users/info/{{ post.id_author }}"><img src="{{ template_path }}/img/icon_profile.png" title="View profile" alt="View profile" /></a>
+										{% if fps_user != false %}
+											<a href="{{ www_root }}/users/send_mail_form/{{ post.id_author }}"><img src="{{ template_path }}/img/icon_email.png" title="Send mail" alt="Send mail" /></a>
+											<a href="{{ www_root }}/users/send_msg_form/{{ post.id_author }}"><img src="{{ template_path }}/img/icon_pm.png" title="PM" alt="PM" /></a>
+										{% endif %}
+										{% if post.author.url %}
+											<a href="{{ post.author.url }}" target="_blank"><img src="{{ template_path }}/img/icon_www.png" title="Author site" alt="Author site" /></a>
+										{% endif %}
+								    {% endif %}
+                                </td>
 								<td align="center">
 									<span class="quoteAuthor" onClick="quoteSelection('{{ post.author.name }}');" onMouseOver="catchSelection(); this.className='quoteAuthorOver'"
 									onMouseOut="this.className='quoteAuthor'">Цитировать</span>
 								</td>
-								<td width="2%" nowrap align="right">{{ post.on_top_link }} | {{ post.edit_link }} | {{ post.delete_link }}
+								<td width="2%" nowrap align="right">
+                                    {{ post.on_top_link }} | {{ post.edit_link }} | {{ post.delete_link }}
 								</td>
 							</tr>
 						</table>

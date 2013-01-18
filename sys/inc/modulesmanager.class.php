@@ -98,11 +98,17 @@ class ModulesManager
 
 
 
-    public function getEntityName($modelName)
+    public function getEntityName($entityName)
    	{
-        $entityClassName = $modelName . 'Entity';
-   		return $entityClassName;
+        return ucfirst($entityName) . 'Entity';
    	}
+
+
+    public function getEntityInstance($entityName)
+    {
+        $className = $this->getEntityName($entityName);
+        return new $className;
+    }
 
 
 

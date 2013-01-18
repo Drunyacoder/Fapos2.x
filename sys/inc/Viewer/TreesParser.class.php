@@ -49,13 +49,14 @@ class Fps_Viewer_TreesParser
                     $this->stream->next();
                     $token = $this->getCurrentToken();
 					
+		
 					if (null !== $test && call_user_func($test, $token)) {
 						return $rv;
 					}
 					$subparser = $this->getTokenParser($token->getValue());
 					//if (!$subparser) break;
 					
-					//pr($this->getCurrentToken()->getType());
+					
 					//pr($this->getCurrentToken());
                     $node = $subparser->parse($token);
                     if (null !== $node) {

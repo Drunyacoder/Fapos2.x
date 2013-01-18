@@ -1203,4 +1203,6 @@ div.grippie {background:#EEEEEE url('../img/grippie.png') no-repeat scroll cente
 .errorMsg {color:#D7630B;}
 ul.errorMsg {list-style: circle inside none; margin-left:20px;}
 .errorMsg li {color:#D7630B;}
+
+a.user-details img, span.user-details img {width:24px; height:24px;}
 /* ---------- END FAPOS CMS SYSTEM ---- */

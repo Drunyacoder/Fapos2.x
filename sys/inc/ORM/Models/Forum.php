@@ -143,7 +143,11 @@ class ForumModel extends FpsModel
 		if (!empty($forums)) {
 			foreach ($forums as $forum) {
 				if (!$forum->getLast_theme()) continue;
-				$uids[] = $forum->getLast_theme()->getId_last_author();
+				
+				$uid = $forum->getLast_theme()->getId_last_author();
+				if (0 != $uid) {
+					$uids[] = $uid;
+				}
 			}
 			
 			
@@ -165,6 +169,7 @@ class ForumModel extends FpsModel
 					}
 				}
 			}
+
 		}
 		return $forums;
 	}

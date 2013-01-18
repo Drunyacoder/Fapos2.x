@@ -31,6 +31,7 @@ class Fps_Viewer_Parser_For
 
 		array_pop($this->parser->stack);
         $this->parser->setEnv(false);
+		
 		return new Fps_Viewer_Node_For($expr, $body);
 	}
 	
