@@ -275,7 +275,7 @@ $(document).ready(function() {
 		&nbsp;{{ pagination }} 
 	</div>
 	<div class="ucaza">
-        {% if fps_pagescnt != 1 %}
+        {% if fps_pagescnt >= 1 %}
         <a id="prev_link" href=""><span class="ucaz1"></span></a>
         <script type="text/javascript">
         var page = {{ fps_curr_page }} - 1;
