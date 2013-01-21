@@ -44,6 +44,10 @@ Class PagesModule extends Module {
 	* default action
 	*/
 	function index($id = null, $s =null, $x = null) {
+	
+		//$this->render('main.html', array()); die();
+	
+	
 		//if isset ID - we need load page with this ID
 		if (!empty($id)) {
 			if (is_int($id)) {
@@ -226,19 +230,26 @@ Class PagesModule extends Module {
                         $announce = $result->getMain();
 
 						
+                        $announce = $this->Textarier->getAnnounce($announce, $entry_url, 0,
+                            $this->Register['Config']->read('announce_lenght'), $result);
+						
 						
                         if (count($matattaches) > 0) {
                             $attachDir = ROOT . '/sys/files/' . $result->getSkey() . '/';
                             foreach ($matattaches as $attach) {
+							
                                 if ($attach->getIs_image() == 1 && file_exists($attachDir . $attach->getFilename())) {
-                                    $announce = str_replace('{IMAGE'.$attach->getAttach_number().'}'
-                                    , '[img]' . get_url('/sys/files/'.$result->getSkey().'/'.$attach->getFilename()).'[/img]'
-                                    , $announce);
+								
+									$announce = str_replace('{IMAGE'.$attach->getAttach_number().'}'
+									, '<a class="gallery" href="' . get_url('/sys/files/' . $result->getSkey() . '/' . $attach->getFilename()) 
+									. '"><img src="' . get_url('/image/' . $result->getSkey() . '/' . $attach->getFilename()) . '" /></a>'
+									, $announce);
+										
                                 }
                             }
                         }
-                        $markers['announce'] = $this->Textarier->getAnnounce($announce, $entry_url, 0,
-                            $this->Register['Config']->read('announce_lenght'), $result);
+						
+                        $markers['announce'] = $announce;
 
 						$markers['profile_url'] = get_url('/users/info/' . $result->getAuthor_id());
 
