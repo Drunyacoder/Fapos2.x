@@ -10,11 +10,13 @@ abstract class Fps_Viewer_Template
 		$this->context = $context;
 	}
 
-
+	
 	protected function getValue($context, $need) 
 	{
+		
 		if (is_array($context)) {
 			if (array_key_exists($need, $context)) return $context[$need];
+			//return null;
 			
 		} else if (is_object($context)) {
 			$getter = 'get' . ucfirst(strtolower($need));
@@ -22,6 +24,7 @@ abstract class Fps_Viewer_Template
             return $context->$getter();
 		}
 		
+
 		return '{{ ' . $need . ' }}';
 	}
 

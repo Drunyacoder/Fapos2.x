@@ -21,6 +21,13 @@ class Fps_Viewer_Node_If
     {
 		$compiler->write('// If block node')->raw("\n");
 		
+		/*
+		$compiler->write('var_dump($this->getValue($this->context, \'fps_user_id\'));');
+		$compiler->write('var_dump((');
+		$compiler->subcompile($this->tests[0]);
+		$compiler->write('));')->raw("\n");
+		*/
+		
 		for ($i = 0; $i < count($this->tests); $i += 2) {
 			if ($i > 0) {
 				$compiler->outdent()->write('} else if (');

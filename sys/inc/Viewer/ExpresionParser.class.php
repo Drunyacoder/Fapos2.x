@@ -16,6 +16,8 @@ class Fps_Viewer_ExpresionParser
 		$this->binaryOperators = array(
 			'==' => 'Fps_Viewer_Operator_BinaryEqual',
 			'!=' => 'Fps_Viewer_Operator_BinaryNotEqual',
+			'>=' => 'Fps_Viewer_Operator_BinaryMore',
+			'<=' => 'Fps_Viewer_Operator_BinaryLess',
 			'+' => 'Fps_Viewer_Operator_BinarySumm',
 			'-' => 'Fps_Viewer_Operator_BinarySubtrac',
 			'*' => 'Fps_Viewer_Operator_BinaryMult',
@@ -35,12 +37,14 @@ class Fps_Viewer_ExpresionParser
 		
 		switch ($currToken->getType()) {
 			case Fps_Viewer_Token::OPERATOR_TYPE:
-				$left = $node;
 				if ('for2' === $this->parser->getEnv()) $this->parser->setEnv('for');
-				$node = $this->parseOperatorExpression($left, $currToken->getValue());
+				
+				
+				$node = $this->parseOperatorExpression($node, $currToken->getValue());
 				
 				break;
 			case Fps_Viewer_Token::BLOCK_END_TYPE:
+				$node = $this->parseOperatorExpression($node, NULL);
 				break;
 		}
 		return $node;
@@ -49,13 +53,27 @@ class Fps_Viewer_ExpresionParser
 	
 	public function parseOperatorExpression($left, $type)
 	{
+
+		
 		if (!array_key_exists($type, $this->binaryOperators)) {
 			//TODO
 		}
 		
 		$stream = $this->parser->getStream();
+
+		// if use IF with only one parametr ( if($var) )
+		if ($stream->getCurrent()->getType() == Fps_Viewer_Token::BLOCK_END_TYPE) {
+			$right = $this->parsePrimaryExpression();
+			return new $this->binaryOperators['==']($left, $right);
+		}
+		
 		$stream->next();
 		$token = $stream->getCurrent();
+		
+
+		
+
+		
 		
 		if (!$token->test(array(Fps_Viewer_Token::VAR_START_TYPE, Fps_Viewer_Token::NUMBER_TYPE, Fps_Viewer_Token::STRING_TYPE))) {
 			// TODO
@@ -125,6 +143,10 @@ class Fps_Viewer_ExpresionParser
             case Fps_Viewer_Token::NUMBER_TYPE:
                 $this->parser->getStream()->next();
                 $node = new Fps_Viewer_Node_Const($token->getValue());
+                break;
+				
+            case Fps_Viewer_Token::BLOCK_END_TYPE:
+                $node = new Fps_Viewer_Node_Const(true);
                 break;
 
             case Fps_Viewer_Token::STRING_TYPE:

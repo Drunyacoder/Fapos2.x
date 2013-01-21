@@ -2,8 +2,8 @@
 
 class Fps_Viewer_Operator_BinaryEqual
 {
-	public $left;
-	public $right;
+	private $left;
+	private $right;
 	
 	
 	public function __construct($left, $right)

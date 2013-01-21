@@ -19,12 +19,18 @@ class Fps_Viewer_Parser_If
 	
 	public function parse($token)
 	{
+
 		$this->parser->setEnv('if');
 		$this->parser->getStream()->next();
 		$expr = $this->parser->getExpression()->parseExpression(); // парсинг выражения
+		
+
+		
 		$this->parser->getStream()->expect(Fps_Viewer_Token::BLOCK_END_TYPE); // если не текущий токен не соответствует типу, выполнение прерывается
 		$this->parser->setEnv(false);
 		$body = $this->parser->parse($this->parser->getStream(), array($this, 'continueWork')); // парсинг текста(шаблона)
+		
+		
 		
 		$tests = array($expr, $body);
 		$else = null;

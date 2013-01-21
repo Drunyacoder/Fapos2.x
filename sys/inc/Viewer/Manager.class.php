@@ -55,7 +55,7 @@ class Fps_Viewer_Manager
 	private function executeSource($source, $context)
 	{
 		$context = $this->prepareContext($context);
-	
+		
 		ob_start();
 		eval('?>' . $source);
 		$output = ob_get_clean();
@@ -101,7 +101,7 @@ class Fps_Viewer_Manager
 		$tokens = $this->getTokens($code);
 		//pr($tokens); die();
 		$nodes = $this->getTreeFromTokens($tokens);
-		//pr($nodes); die();
+		//pr($nodes); //die();
 		$this->compileParser->clean();
 		$this->compileParser->setTmpClassName($this->getTmpClassName($code));
 		$this->compile($nodes);
