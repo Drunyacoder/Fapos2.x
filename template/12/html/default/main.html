@@ -45,6 +45,8 @@ $(document).ready(function() {
 <ul>
 	<li>
 		<a href="{{ www_root }}/">Главная</a>
+		{% if fps_user_id != 1 %}
+		{% endif %}
 		{% if fps_user_id %}
 			<a href="{{ www_root }}/users/info/{{ fps_user_id }}">Мой профиль</a>
 			<a href="{{ www_root }}/users/logout">Выход</a>
@@ -275,7 +277,7 @@ $(document).ready(function() {
 		&nbsp;{{ pagination }} 
 	</div>
 	<div class="ucaza">
-        {% if fps_pagescnt >= 1 %}
+        {% if fps_pagescnt >= 2 %}
         <a id="prev_link" href=""><span class="ucaz1"></span></a>
         <script type="text/javascript">
         var page = {{ fps_curr_page }} - 1;
