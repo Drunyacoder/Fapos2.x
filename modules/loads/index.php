@@ -4,12 +4,12 @@
 | @Author:       Andrey Brykin (Drunya)        |
 | @Email:        drunyacoder@gmail.com         |
 | @Site:         http://fapos.net              |
-| @Version:      1.7.95                        |
+| @Version:      1.7.96                        |
 | @Project:      CMS                           |
 | @package       CMS Fapos                     |
 | @subpackege    Loads Module                  |
 | @copyright     ©Andrey Brykin 2010-20113     |
-| @last mod.     2013/01/17                    |
+| @last mod.     2013/01/21                    |
 |----------------------------------------------|
 |											   |
 | any partial or not partial extension         |
@@ -141,20 +141,29 @@ Class LoadsModule extends Module {
 
 
             $announce = $entity->getMain();
+			
+			
+            $announce = $this->Textarier->getAnnounce($announce, $entry_url, 0,
+                $this->Register['Config']->read('announce_lenght', 'loads'), $entity);
+			
+			
             $rec_attaches = $entity->getAttaches();
             // replace image tags in text
             if (!empty($rec_attaches) && is_array($rec_attaches)) {
-                $attachDir = ROOT . 'sys/files/' . $this->module . '/';
+                $attachDir = ROOT . '/sys/files/' . $this->module . '/';
                 foreach ($rec_attaches as $attach) {
+				
                     if ($attach->getIs_image() == 1 && file_exists($attachDir . $attach->getFilename())) {
-                        $announce = str_replace('{IMAGE'.$attach->getAttach_number().'}'
-                            , '[img]' . get_url('/sys/files/'.$this->module.'/'.$attach->getFilename()).'[/img]'
-                            , $announce);
+					
+						$announce = str_replace('{IMAGE'.$attach->getAttach_number().'}'
+						, '<a class="gallery" href="' . get_url('/sys/files/' . $this->module . '/' . $attach->getFilename()) 
+						. '"><img src="' . get_url('/image/' . $this->module . '/' . $attach->getFilename()) . '" /></a>'
+						, $announce);
+						
                     }
                 }
             }
-            $announce = $this->Textarier->getAnnounce($announce, $entry_url, 0,
-                $this->Register['Config']->read('announce_lenght', 'loads'), $entity);
+
             $markers['announce'] = $announce;
 
 
@@ -287,24 +296,33 @@ Class LoadsModule extends Module {
 
 
             $announce = $result->getMain();
-            // replace image tags in text
-            $attaches = $result->getAttaches();
-            if (!empty($attaches) && count($attaches) > 0) {
-                $attachDir = ROOT . '/sys/files/' . $this->module . '/';
-                foreach ($attaches as $attach) {
-                    if ($attach->getIs_image() == 1 && file_exists($attachDir . $attach->getFilename())) {
-                        $announce = str_replace('{IMAGE'.$attach->getAttach_number().'}'
-                            , '[img]' . get_url('/sys/files/'.$this->module.'/'.$attach->getFilename()).'[/img]'
-                            , $announce);
-                    }
-                }
-            }
+			
+			
             $announce = $this->Textarier->getAnnounce($announce
                 , $entry_url
                 , 0
                 , $this->Register['Config']->read('announce_lenght', 'loads')
                 , $result
             );
+			
+			
+            // replace image tags in text
+            $attaches = $result->getAttaches();
+            if (!empty($attaches) && count($attaches) > 0) {
+                $attachDir = ROOT . '/sys/files/' . $this->module . '/';
+                foreach ($attaches as $attach) {
+				
+                    if ($attach->getIs_image() == 1 && file_exists($attachDir . $attach->getFilename())) {
+					
+						$announce = str_replace('{IMAGE'.$attach->getAttach_number().'}'
+						, '<a class="gallery" href="' . get_url('/sys/files/' . $this->module . '/' . $attach->getFilename()) 
+						. '"><img src="' . get_url('/image/' . $this->module . '/' . $attach->getFilename()) . '" /></a>'
+						, $announce);
+						
+                    }
+                }
+            }
+
             $_addParams['announce'] = $announce;
 
 
@@ -435,19 +453,25 @@ Class LoadsModule extends Module {
 
 
         $announce = $entity->getMain();
+        $announce = $this->Textarier->print_page($announce, $entity->getAuthor()->getStatus(), $entity->getTitle());
+		
+
         // replace image tags in text
         $attaches = $entity->getAttaches();
         if (!empty($attaches) && count($attaches) > 0) {
             $attachDir = ROOT . '/sys/files/' . $this->module . '/';
             foreach ($attaches as $attach) {
                 if ($attach->getIs_image() == 1 && file_exists($attachDir . $attach->getFilename())) {
-                    $announce = str_replace('{IMAGE'.$attach->getAttach_number().'}'
-                        , '[img]' . get_url('/sys/files/'.$this->module.'/'.$attach->getFilename()).'[/img]'
-                        , $announce);
+				
+					$announce = str_replace('{IMAGE'.$attach->getAttach_number().'}'
+					, '<a class="gallery" href="' . get_url('/sys/files/' . $this->module . '/' . $attach->getFilename()) 
+					. '"><img src="' . get_url('/image/' . $this->module . '/' . $attach->getFilename()) . '" /></a>'
+					, $announce);
+					
                 }
             }
         }
-        $announce = $this->Textarier->print_page($announce, $entity->getAuthor()->getStatus(), $entity->getTitle());
+
         $markers['main_text'] = $announce;
 
 		

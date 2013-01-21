@@ -4,12 +4,12 @@
 | @Author:       Andrey Brykin (Drunya)        |
 | @Email:        drunyacoder@gmail.com         |
 | @Site:         http://fapos.net              |
-| @Version:      1.7.4                         |
+| @Version:      1.7.5                         |
 | @Project:      CMS                           |
 | @Package       CMS Fapos                     |
 | @Subpackege    Stats Module                  |
 | @Copyright     ©Andrey Brykin 2010-2013      |
-| @Last mod      2013/01/17                    |
+| @Last mod      2013/01/21                    |
 |----------------------------------------------|
 |											   |
 | any partial or not partial extension         |
@@ -124,6 +124,16 @@ Class StatModule extends Module {
 			
 			
 			$announce = $result->getMain();
+			
+			
+			$announce = $this->Textarier->getAnnounce($announce
+				, $entry_url
+				, 0 
+				, $this->Register['Config']->read('announce_lenght', 'stat')
+				, $result
+			);
+			
+			
 			// replace image tags in text
 			$attaches = $result->getAttaches();
 			if (!empty($attaches) && count($attaches) > 0) {
@@ -131,17 +141,13 @@ Class StatModule extends Module {
 				foreach ($attaches as $attach) {
 					if ($attach->getIs_image() == 1 && file_exists($attachDir . $attach->getFilename())) {
 						$announce = str_replace('{IMAGE'.$attach->getAttach_number().'}'
-						, '[img]' . get_url('/sys/files/'.$this->module.'/'.$attach->getFilename()).'[/img]'
+						, '<a class="gallery" href="' . get_url('/sys/files/' . $this->module . '/' . $attach->getFilename()) 
+						. '"><img src="' . get_url('/image/' . $this->module . '/' . $attach->getFilename()) . '" /></a>'
 						, $announce);
 					}
 				}
 			}
-			$announce = $this->Textarier->getAnnounce($announce
-				, $entry_url
-				, 0 
-				, $this->Register['Config']->read('announce_lenght', 'stat')
-				, $result
-			);
+
 			$_addParams['announce'] = $announce;
 			
 			
@@ -275,6 +281,16 @@ Class StatModule extends Module {
 			
 			
 			$announce = $result->getMain();
+			
+			
+			$announce = $this->Textarier->getAnnounce($announce
+				, $entry_url
+				, 0 
+				, $this->Register['Config']->read('announce_lenght', 'stat')
+				, $result
+			);
+			
+			
 			// replace image tags in text
 			$attaches = $result->getAttaches();
 			if (!empty($attaches) && count($attaches) > 0) {
@@ -282,17 +298,13 @@ Class StatModule extends Module {
 				foreach ($attaches as $attach) {
 					if ($attach->getIs_image() == 1 && file_exists($attachDir . $attach->getFilename())) {
 						$announce = str_replace('{IMAGE'.$attach->getAttach_number().'}'
-						, '[img]' . get_url('/sys/files/'.$this->module.'/'.$attach->getFilename()).'[/img]'
+						, '<a class="gallery" href="' . get_url('/sys/files/' . $this->module . '/' . $attach->getFilename()) 
+						. '"><img src="' . get_url('/image/' . $this->module . '/' . $attach->getFilename()) . '" /></a>'
 						, $announce);
 					}
 				}
 			}
-			$announce = $this->Textarier->getAnnounce($announce
-				, $entry_url
-				, 0 
-				, $this->Register['Config']->read('announce_lenght', 'stat')
-				, $result
-			);
+
 			$_addParams['announce'] = $announce;
 			
 			
@@ -396,6 +408,8 @@ Class StatModule extends Module {
 		
 		
 		$announce = $entity->getMain();
+		$announce = $this->Textarier->print_page($announce, $entity->getAuthor()->getStatus(), $entity->getTitle());
+		
 		// replace image tags in text
 		$attaches = $entity->getAttaches();
 		if (!empty($attaches) && count($attaches) > 0) {
@@ -403,12 +417,13 @@ Class StatModule extends Module {
 			foreach ($attaches as $attach) {
 				if ($attach->getIs_image() == 1 && file_exists($attachDir . $attach->getFilename())) {
 					$announce = str_replace('{IMAGE'.$attach->getAttach_number().'}'
-					, '[img]' . get_url('/sys/files/'.$this->module.'/'.$attach->getFilename()).'[/img]'
+					, '<a class="gallery" href="' . get_url('/sys/files/' . $this->module . '/' . $attach->getFilename()) 
+					. '"><img src="' . get_url('/image/' . $this->module . '/' . $attach->getFilename()) . '" /></a>'
 					, $announce);
 				}
 			}
 		}
-		$announce = $this->Textarier->print_page($announce, $entity->getAuthor()->getStatus(), $entity->getTitle());
+
 		$markers['mainText'] = $announce;
 		$entity->setAdd_markers($markers);
 		$entity->setTags(explode(',', $entity->getTags()));

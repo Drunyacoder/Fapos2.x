@@ -746,6 +746,11 @@ Class ForumModule extends Module {
 				}
 				
 				
+                $author_status = ($post->getAuthor()) ? $post->getAuthor()->getStatus() : 0;
+				
+				
+				$message = $this->Textarier->print_page($post->getMessage(), $author_status);
+
 				
 				$attachment = null;
 				if ($post->getAttacheslist()) {
@@ -760,10 +765,18 @@ Class ForumModule extends Module {
 								
 							//if attach is image and isset markets for this image
 							if ($attach->getIs_image() == 1) {
-								$message = str_replace('{IMAGE' . $attach->getAttach_number() . '}', 
-									'[img]' . get_url('/sys/files/forum/' . $attach->getFilename()) . '[/img]',
-									$post->getMessage());
-								$post->setMessage($message);
+							
+							
+								$message = str_replace('{IMAGE'.$attach->getAttach_number().'}'
+								, '<a class="gallery" href="' . get_url('/sys/files/' . $this->module . '/' . $attach->getFilename()) 
+								. '"><img src="' . get_url('/image/' . $this->module . '/' . $attach->getFilename()) . '" /></a>'
+								, $message);
+							
+							
+								//$message = str_replace('{IMAGE' . $attach->getAttach_number() . '}', 
+								//	'[img]' . get_url('/sys/files/forum/' . $attach->getFilename()) . '[/img]',
+								//	$post->getMessage());
+								//$post->setMessage($message);
 							}
 							$collizion = true;
 							continue;
@@ -774,6 +787,8 @@ Class ForumModule extends Module {
 				} else {
 					$this->deleteCollizions($post);
 				}
+				
+				$post->setMessage($message);
 				
 
 				$signature = ($postAuthor->getSignature())
@@ -886,11 +901,6 @@ Class ForumModule extends Module {
 				$post_number_url = 'http://' . $_SERVER['HTTP_HOST'] 
 				. get_url('/forum/view_theme/' . $id_theme . '?page=' . $page . '#post' . $post_num, true);
 				$post->setPost_number_url($post_number_url);
-				
-
-                $author_status = ($post->getAuthor()) ? $post->getAuthor()->getStatus() : 0;
-				$message = $this->Textarier->print_page($post->getMessage(), $author_status);
-				$post->setMessage($message);
 
 				
 
