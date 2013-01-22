@@ -58,7 +58,7 @@ include_once ROOT . '/admin/template/header.php';
 ?>
 
 		<div style="float:right;">
-		<a href="javascript://" onClick="wiOpen(\'addIp\')">Добавить IP</a>
+		<a href="javascript://" onClick="wiOpen('addIp')">Добавить IP</a>
 		</div>
 		<div style="clear:right;"></div>
 		</div></div></div>   <div class="xw-bl"></div> 
