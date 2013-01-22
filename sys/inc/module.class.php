@@ -229,7 +229,9 @@ class Module {
 			$this->page_meta_description = h($this->Register['Config']->read('meta_description'));
 		}
 		
-		$this->Register['GlobalParams'] = $this->getGlobalMarkers();
+		
+		// 
+		//$this->Register['GlobalParams'] = $this->getGlobalMarkers();
 	}
 	
 
