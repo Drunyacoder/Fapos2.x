@@ -11,7 +11,7 @@ enctype="multipart/form-data" onsubmit="return checkForm(this)">
 		<td>Заголовок:<font color="red" class="manStar">*</font></td>
 		<td class="right"><input type="text" name="title" maxlength="128" value="{{ data.title }}"></td>
 	</tr>
-	<tr>
+	<tr class="BB_buttons">
 		<td colspan="2">
 			<input type="button" accesskey="b" name="addbbcode0" value=" b " onClick="bbstyle(0)" 
 			onMouseOver="helpline('b')" onMouseOut="helpline('h')" class="codeButtons" />
@@ -88,7 +88,7 @@ enctype="multipart/form-data" onsubmit="return checkForm(this)">
 
 	<tr>
 		<td colspan="2">
-			<textarea class="text-area" name="mainText" onselect="storeCaret(this);" onclick="storeCaret(this);" onkeyup="storeCaret(this);">{{ data.main_text }}</textarea>
+			<textarea id="editor" class="text-area" name="mainText" onselect="storeCaret(this);" onclick="storeCaret(this);" onkeyup="storeCaret(this);">{{ data.main_text }}</textarea>
 		</td>
 	</tr>
     <tr>
