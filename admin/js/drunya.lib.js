@@ -6,39 +6,12 @@ var openedWindows = new Array();
 //var wObj = document.getElementById('test');
 
 function wiOpen(pref) {
-	prefix = pref;
-	var wObj = document.getElementById(pref + '_dWin');
-	wObj.style.display = 'block';
-	
-	if (wStep == 10 && wLeft == 0) {
-		for (var key in openedWindows) {
-			var toClose = document.getElementById(openedWindows[key]);
-			if (typeof toClose != 'undefined') {
-				toClose.style.display = 'none';
-			}
-		}
-	}
-
-	//if (wStep > 9) {
-	//	if (pref == 'sec') document.getElementById('cat_dWin').style.display = 'none';
-	//	else document.getElementById('sec_dWin').style.display = 'none';
-	//}
-	if (wStep > 0) {
-		 wStep--;
-		 wLeft += 0.1;
-		
-		wObj.style.opacity = wLeft;
-		setTimeout("wiOpen(prefix)", winTimeout);
-	} else {
-		wStep = 10;
-		wLeft = 0;
-		openedWindows[prefix] = prefix + '_dWin';
-	}
+	$('#' + pref + '_dWin').fadeIn(1000);
 }
 
 
 function hideWin(pref) {
-	document.getElementById(pref + '_dWin').style.display = 'none';
+	$('#' + pref + '_dWin').fadeOut(500);
 }
 
 function addWin(prefix) {
