@@ -1,13 +1,14 @@
 <?php
 /*-----------------------------------------------\
 | 												 |
-|  @Author:       Andrey Brykin (Drunya)         |
-|  @Version:      1.2                            |
-|  @Project:      CMS                            |
-|  @package       CMS Fapos                      |
-|  @subpackege    Admin Panel module             |
-|  @copyright     ©Andrey Brykin 2010-2012       |
-|  @last mod.     2012/08/30                     |
+| @Author:       Andrey Brykin (Drunya)          |
+| @Email:        drunyacoder@gmail.com           |
+| @Site:         http://fapos.net                |
+| @Version:      1.4                             |
+| @Project:      CMS                             |
+| @package       CMS Fapos                       |
+| @subpackege    Admin Panel module  			 |
+| @copyright     ©Andrey Brykin 2010-2013        |
 \-----------------------------------------------*/
 
 /*-----------------------------------------------\
@@ -21,13 +22,14 @@
 |  без согласия автора, является не законным     |
 \-----------------------------------------------*/
 
+
 include_once '../sys/boot.php';
 include_once ROOT . '/admin/inc/adm_boot.php';
 
 
 
 
-$pageTitle = 'Форум';
+$pageTitle = __('Forum');
 
 
 
@@ -62,10 +64,9 @@ include_once ROOT . '/admin/template/header.php';
 
 <div class="fps-win">
 <span class="comment">
-Внимание! При удалении категории или раздела, удаляються все материалы, относящиеся к данному разделу или категории.<br />
-Пожалуста, будьте осторожны.<br /><br />
+<?php echo __('If you delete a category, all the materials in it will be removed') ?><br /><br />
 
-Каждая категория должна наследоваться от раздела, по этому, прежде чем создавать категорию, создайте раздел.
+<?php echo __('Each forum should be inherited from the section') ?>
 </span>
 </div>
 
@@ -78,7 +79,7 @@ function index(&$page_title) {
 	global $FpsDB;
 	deleteCollisions();
 
-	$page_title = 'Форум - Редактирование категорий';
+	$page_title = __('Forum - sections editor');
 	
 	$query = $FpsDB->select('forum_cat', DB_ALL, array('order' => 'previev_id'));
 	
@@ -90,7 +91,7 @@ function index(&$page_title) {
 		}
 		$cat_selector .= '</select>';
 	} else {
-		$cat_selector = '<b>Сначала создайте раздел</b>';
+		$cat_selector = '<b>' . __('First, create a section') . '</b>';
 	}
 	
 	$forums = $FpsDB->select('forums', DB_ALL);
@@ -110,9 +111,9 @@ function index(&$page_title) {
 	$html = '';
 
 	$html .= '<table width="100%"><tr><td>
-		<input type="button" name="add" value="Добавить раздел" onClick="wiOpen(\'sec\');" /></td>';
+		<input type="button" name="add" value="' . __('Add section') . '" onClick="wiOpen(\'sec\');" /></td>';
 	$html .= '<td align="right">
-				<div align="right" class="topButtonL" id="cat_view"><input type="button" name="add" value="Добавить форум" onClick="wiOpen(\'cat\');" /></div></td></tr></table>
+				<div align="right" class="topButtonL" id="cat_view"><input type="button" name="add" value="' . __('Create forum') . '" onClick="wiOpen(\'cat\');" /></div></td></tr></table>
 				
 		<div id="cat_dWin" class="fps-win" style="position:absolute;top:100px;left:40%;display:none">
 		<div class="xw-tl"><div class="xw-tr"><div class="xw-tc xw-tsps"></div>
@@ -120,52 +121,52 @@ function index(&$page_title) {
 		<form action="forum_cat.php?ac=add" method="POST" enctype="multipart/form-data">
 		
 		<div class="form-item2">
-		Родительский раздел:<br />
+		' . __('Parent section') . ':<br />
 		' . $cat_selector . '
 		<div style="clear:both;"></div></div>
 		
 		<div class="form-item2">
-		Заголовок форума:<br />
+		' . __('Title of forum') . ':<br />
 		<input type="hidden" name="type" value="forum" />
 		<input type="text" style="width:130px" name="title" />
 		<div style="clear:both;"></div></div>
 		
 		<div class="form-item2">
-		Позиция форума:<br /><span class="comment">Цифрой</span><br />
+		' . __('Forum position') . ':<br /><span class="comment">' . __('Numeric') . '</span><br />
 		<input type="text" name="in_pos" />
 		<div style="clear:both;"></div></div>
 		
 		<div class="form-item2">
-		Родительский форум:<br /><span class="comment">для которого этот будет подфорумом</span><br />
+		' . __('Parent forum') . ':<br /><span class="comment">' . __('For which this will be sub-forum') . '</span><br />
 		' . $sub_selector . '
 		<div style="clear:both;"></div></div>
 		
 		<div class="form-item2">
-		Иконка:<br /> <span class="comment">(пустое поля означает стандартную иконку)<br />
-		Желательный размер 16х16 рх</span><br />
+		' . __('Icon') . ':<br /> <span class="comment">(' . __('Empty field - no icon') . ')<br />
+		' . __('The desired size 16x16 px') . '</span><br />
 		<input type="file" style="margin-right:50px;width:130px" name="icon" />
 		<div style="clear:both;"></div></div>
 		
 		<div class="form-item2">
-		Описание форума:<br />
+		' . __('Description') . ':<br />
 		<textarea name="description" cols="30" rows="3" /></textarea><br />
 		<div style="clear:both;"></div></div>
 		
 		<hr />
 		
 		<div class="form-item2">
-		Закрыть на пароль:<br />
+		' . __('Lock on passwd') . ':<br />
 		<input type="text" name="lock_passwd"/><br />
 		<div style="clear:both;"></div></div>
 		
 		<div class="form-item2">
-		Закрыть на кол-во постов:<br />
+		' . __('Lock on posts count') . ':<br />
 		<input type="text" name="lock_posts"/><br />
 		<div style="clear:both;"></div></div>
 		
 		<div class="form-item2 center">
-		<input type="submit" name="send" value="Сохранить" />
-		<input type="button" onClick="hideWin(\'cat\')" value="Отмена" />
+		<input type="submit" name="send" value="' . __('Save') . '" />
+		<input type="button" onClick="hideWin(\'cat\')" value="' . __('Cancel') . '" />
 		<div style="clear:both;"></div></div>
 		</form>
 		</div></div></div><div class="xw-bl"><div class="xw-br"><div class="xw-bc">
@@ -178,19 +179,19 @@ function index(&$page_title) {
 		<form action="forum_cat.php?ac=add" method="POST">
 		
 		<div class="form-item2">
-		Имя раздела:<br />
+		' . __('Title') . ':<br />
 		<input type="hidden" name="type" value="section" />
 		<input type="text" name="title" />
 		<div style="clear:both;"></div></div>
 		
 		<div class="form-item2">
-		Позиция раздела:<br /><span class="comment">Цифрой</span><br />
+		' . __('Section position') . ':<br /><span class="comment">' . __('Numeric') . '</span><br />
 		<input type="text" name="in_pos" />
 		<div style="clear:both;"></div></div>
 		
 		<div class="form-item2">
-		<input type="submit" name="send" value="Сохранить" />
-		<input type="button" onClick="hideWin(\'sec\')" value="Отмена" />
+		<input type="submit" name="send" value="' . __('Save') . '" />
+		<input type="button" onClick="hideWin(\'sec\')" value="' . __('Cancel') . '" />
 		<div style="clear:both;"></div></div>
 		</form>
 		</div></div></div><div class="xw-bl"><div class="xw-br"><div class="xw-bc">
@@ -223,19 +224,19 @@ function index(&$page_title) {
 				<form action="forum_cat.php?ac=edit&id=' . $result['id'] . '" method="POST">
 				
 				<div class="form-item2">
-				Имя раздела:<br />
+				' . __('Title') . ':<br />
 				<input type="hidden" name="type" value="section" />
 				<input type="text" name="title" value="' . $result['title'] . '" />
 				<div style="clear:both;"></div></div>
 				
 				<div class="form-item2">
-				Позиция раздела:<br /><span class="comment">Цифрой</span><br />
+				' . __('Section position') . ':<br /><span class="comment">' . __('Numeric') . '</span><br />
 				<input type="text" name="in_pos" value="' . $result['previev_id'] . '" />
 				<div style="clear:both;"></div></div>
 				
 				<div class="form-item2 center">
-				<input type="submit" name="send" value="Сохранить" />
-				<input type="button" onClick="hideWin(\'' . $result['id'] . '_section\')" value="Отмена" />
+				<input type="submit" name="send" value="' . __('Save') . '" />
+				<input type="button" onClick="hideWin(\'' . $result['id'] . '_section\')" value="' . __('Cancel') . '" />
 				<div style="clear:both;"></div></div>
 				</form>
 				</div></div></div><div class="xw-bl"><div class="xw-br"><div class="xw-bc">
@@ -277,7 +278,7 @@ function index(&$page_title) {
 					$sub_selector .= '</select>';
 					
 					$issubforum = (!empty($cat['parent_forum_id'])) 
-					? '&nbsp;<span style="color:#0373FE;">Под форумом с ID ' . $cat['parent_forum_id'] . '</span>' : '';
+					? '&nbsp;<span style="color:#0373FE;">' . __('Under forum with ID') . ' ' . $cat['parent_forum_id'] . '</span>' : '';
 					
 					$html .= '<div class="category_row"><div class="category">[' . $cat['id'] . ']&nbsp;<b>' . $cat['title'] 
 					. '</b>&nbsp;( ' . $cat['cnt'] . ' ) ' . $issubforum . ' 
@@ -293,52 +294,52 @@ function index(&$page_title) {
 						<form action="forum_cat.php?ac=edit&id=' . $cat['id'] . '" method="POST" enctype="multipart/form-data">
 						
 						<div class="form-item2">
-						Родительский раздел:<br />
+						' . __('Parent section') . ':<br />
 						' . $cat_selector . '
 						<div style="clear:both;"></div></div>
 						
 						
 						<div class="form-item2">
-						Имя форума:<br />
+						' . __('Title of forum') . ':<br />
 						<input type="hidden" name="type" value="forum" />
 						<input type="text" style="width:130px" name="title" value="' . $cat['title'] . '" />
 						<div style="clear:both;"></div></div>
 						
 						<div class="form-item2">
-						Позиция форума:<br /><span class="comment">Цифрой</span><br />
+						' . __('Forum position') . ':<br /><span class="comment">' . __('Numeric') . '</span><br />
 						<input type="text" name="in_pos" value="' . $cat['pos'] . '" />
 						<div style="clear:both;"></div></div>
 						
 						<div class="form-item2">
-						Родительский форум:<br /><span class="comment">для которого этот будет подфорумом</span><br />
+						' . __('Parent forum') . ':<br /><span class="comment">' . __('For which this will be sub-forum') . '</span><br />
 						' . $sub_selector . '<div style="clear:both;"></div></div>
 						
 						<div class="form-item2">
-						Иконка:<br /> <span class="comment">(оставьте пустым, если не хотите менять)<br />
-						Желательный размер 16х16 рх</span><br />
+						' . __('Icon') . ':<br /> <span class="comment">(' . __('Empty field - no icon') . ')<br />
+						' . __('The desired size 16x16 px') . '</span><br />
 						<input type="file" style="margin-right:50px;width:130px" name="icon" />
 						<div style="clear:both;"></div></div>
 						
 						<div class="form-item2">
-						Описание форума:<br />
+						' . __('Description') . ':<br />
 						<textarea name="description" cols="30" rows="3" />' . $cat['description'] . '</textarea>
 						<div style="clear:both;"></div></div>
 						
 						<hr />
 						
 						<div class="form-item2">
-						Закрыть на пароль:<br />
+						' . __('Lock on passwd') . ':<br />
 						<input type="text" name="lock_passwd" value="' . $cat['lock_passwd'] . '" /><br />
 						<div style="clear:both;"></div></div>
 						
 						<div class="form-item2">
-						Закрыть на кол-во постов:<br />
+						' . __('Lock on posts count') . ':<br />
 						<input type="text" name="lock_posts" value="' . $cat['lock_posts'] . '" /><br />
 						<div style="clear:both;"></div></div>
 						
 						<div class="form-item2 center">
-						<input type="submit" name="send" value="Сохранить" />
-						<input type="button" onClick="hideWin(\'' . $cat['id'] . '_forum\')" value="Отмена" />
+						<input type="submit" name="send" value="' . __('Save') . '" />
+						<input type="button" onClick="hideWin(\'' . $cat['id'] . '_forum\')" value="' . __('Cancel') . '" />
 						<div style="clear:both;"></div></div>
 						</form>
 						</div></div></div><div class="xw-bl"><div class="xw-br"><div class="xw-bc">
@@ -347,13 +348,13 @@ function index(&$page_title) {
 					/* END EDIT FORUM FORM */
 				}
 			} else {
-				$html .= '<div class="category_row"><div>Пусто</div></div>';
+				$html .= '<div class="category_row"><div>' . __('Empty') . '</div></div>';
 			}
 			
 		}
 		$html .= '</div>';
 	} else {
-		$html .= 'Пока ничего нет :(';
+		$html .= __('While empty');
 	}
 	return $html;
 }
@@ -378,7 +379,7 @@ function edit() {
 	if ($in_pos < 1)  redirect('/admin/forum_cat.php');
 	$error = '';
 	$title = $_POST['title'];
-	if (mb_strlen($title) > 200) $error .= '<li>Заголовок раздела больше 200 символов</li>';
+	if (mb_strlen($title) > 200) $error .= '<li>' . __('Title more than 200 symbol') . '</li>';
 	
 	
 	
@@ -386,10 +387,10 @@ function edit() {
 		$in_cat = (int)$_POST['in_cat'];
 		$description = $_POST['description'];
 		if (!empty($_FILES['icon']['name'])) {
-			if ($_FILES['icon']['size'] > 100000) $error = $error . '<li>Размер иконки не должен превышать 100Кб</li>';
+			if ($_FILES['icon']['size'] > 100000) $error = $error . '<li>' . __('Max icon size 100Kb') . '</li>';
 			if ($_FILES['icon']['type'] != 'image/gif'
 			&& $_FILES['icon']['type'] != 'image/jpeg'
-			&& $_FILES['icon']['type'] != 'image/png') $error = $error . '<li>Не допустимый формат иконки</li>';
+			&& $_FILES['icon']['type'] != 'image/png') $error = $error . '<li>' . __('Wrong icon format') . '</li>';
 			if (!empty($error)) {
 				$_SESSION['addErrors'] = $error;
 				redirect('/admin/forum_cat.php');
@@ -403,11 +404,11 @@ function edit() {
 		$lock_posts = 0;
 		if (!empty($_POST['lock_passwd'])) {
 			$lock_passwd = $_POST['lock_passwd'];
-			if (mb_strlen($lock_passwd) > 100) $error = $error . '<li>Пароль для форума превышает 100 символов</li>';
+			if (mb_strlen($lock_passwd) > 100) $error = $error . '<li>' . __('Forum passwd more than 100 sym.') . '</li>';
 		}
 		if (!empty($_POST['lock_posts'])) {
 			$lock_posts = $_POST['lock_posts'];
-			if (mb_strlen($lock_posts) > 100) $error = $error . '<li>Кол-во сообщений должно быть числом</li>';
+			if (mb_strlen($lock_posts) > 100) $error = $error . '<li>' . __('Posts cnt must be numeric') . '</li>';
 		}
 		
 		
@@ -501,11 +502,11 @@ function add() {
 	if ($_POST['type'] == 'forum' && (!isset($_FILES['icon']) || !isset($_POST['in_cat']))) redirect('/admin/forum_cat.php');
 	$title = $_POST['title'];
 	$error = '';
-	if (empty($title)) $error .= '<li>Заголовок пуст</li>';
+	if (empty($title)) $error .= '<li>' . __('Empty field "title"') . '</li>';
 	
 	
 	if ($_POST['type'] == 'section') {
-		if (mb_strlen($title) > 200) $error .= '<li>Заголовок раздела больше 200 символов</li>';
+		if (mb_strlen($title) > 200) $error .= '<li>' . __('Title more than 200 symbol') . '</li>';
 		//if isset errors
 		if (!empty($error)) {
 			$_SESSION['addErrors'] = $error;
@@ -532,10 +533,10 @@ function add() {
 	} elseif ($_POST['type'] == 'forum') {
 		$in_cat = (int)$_POST['in_cat'];
 		if (!empty($_FILES['icon']['name'])) {
-			if ($_FILES['icon']['size'] > 100000) $error = $error . '<li>Размер иконки не должен превышать 100Кб</li>';
+			if ($_FILES['icon']['size'] > 100000) $error = $error . '<li>' . __('Max icon size 100Kb') . '</li>';
 			if ($_FILES['icon']['type'] != 'image/gif'
 			&& $_FILES['icon']['type'] != 'image/jpeg'
-			&& $_FILES['icon']['type'] != 'image/png') $error = $error . '<li>Не допустимый формат иконки</li>';
+			&& $_FILES['icon']['type'] != 'image/png') $error = $error . '<li>' . __('Wrong icon format') . '</li>';
 		}
 		
 		
@@ -544,11 +545,11 @@ function add() {
 		$lock_posts = 0;
 		if (!empty($_POST['lock_passwd'])) {
 			$lock_passwd = $_POST['lock_passwd'];
-			if (mb_strlen($lock_passwd) > 100) $error = $error . '<li>Пароль для форума превышает 100 символов</li>';
+			if (mb_strlen($lock_passwd) > 100) $error = $error . '<li>' . __('Forum passwd more than 100 sym.') . '</li>';
 		}
 		if (!empty($_POST['lock_posts'])) {
 			$lock_posts = $_POST['lock_posts'];
-			if (mb_strlen($lock_posts) > 100) $error = $error . '<li>Кол-во сообщений должно быть числом</li>';
+			if (mb_strlen($lock_posts) > 100) $error = $error . '<li>' . __('Posts cnt must be numeric') . '</li>';
 		}
 		
 		

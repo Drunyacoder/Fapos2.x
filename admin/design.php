@@ -2,12 +2,14 @@
 /*-----------------------------------------------\
 | 												 |
 |  @Author:       Andrey Brykin (Drunya)         |
-|  @Version:      1.5.3                          |
+|  @Email:        drunyacoder@gmail.com          |
+|  @Site:         http://fapos.net               |
+|  @Version:      1.5.4                          |
 |  @Project:      CMS                            |
 |  @package       CMS Fapos                      |
 |  @subpackege    Template redactor              |
-|  @copyright     ©Andrey Brykin 2010-2012       |
-|  @last mod.     2012/09/19                     |
+|  @copyright     ©Andrey Brykin 2010-2013       |
+|  @last mod.     2013/01/20                     |
 \-----------------------------------------------*/
 
 /*-----------------------------------------------\
@@ -25,7 +27,7 @@ include_once '../sys/boot.php';
 include_once ROOT . '/admin/inc/adm_boot.php';
 
 
-$pageTitle = 'Управление дизайном - редактор шаблонов';
+$pageTitle = __('Design - templates');
 $pageNav = $pageTitle;
 $pageNavl = '';
 
@@ -94,26 +96,26 @@ $allowedFiles = array(
 
 
 $entities = array(
-    'addform' => 'Форма добавления',
-    'main' => 'Вид страниц',
-    'editform' => 'Форма редактирования',
-    'material' => 'Полный материал',
-    'list' => 'Список материалов / превью',
-    'addnewuserform' => 'Форма добавления',
-    'edituserform' => 'Форма редактирования',
-    'loginform' => 'Форма входа',
-    'baned' => 'Страница бана',
-    'showuserinfo' => 'Просмотр профиля',
-    'style' => 'Таблица стилей(CSS)',
-    'addthemeform' => 'Форма доб. тем',
-    'editthemeform' => 'Форма ред. тем',
-    'replyform' => 'Форма ответа',
-    'editpostform' => 'Форма ред. ответа',
-    'get_stat' => 'Статистика',
-    'posts_list' => 'Список постов',
-    'themes_list' => 'Список тем',
-    'search_form' => 'Форма поиска',
-    'search_row' => 'Вид результата',
+    'addform' 			=> __('Add form'),
+    'main' 				=> __('Layout'),
+    'editform' 			=> __('Edit form'),
+    'material' 			=> __('Material view'),
+    'list' 				=> __('List of materials'),
+    'addnewuserform' 	=> __('Add form'),
+    'edituserform' 		=> __('Edit form'),
+    'loginform' 		=> __('Login form'),
+    'baned' 			=> __('Ban page'),
+    'showuserinfo' 		=> __('Profile info'),
+    'style' 			=> __('Style(CSS)'),
+    'addthemeform' 		=> __('Add theme form'),
+    'editthemeform' 	=> __('Edit theme form'),
+    'replyform' 		=> __('Reply form'),
+    'editpostform' 		=> __('Edit post form'),
+    'get_stat' 			=> __('Statistic'),
+    'posts_list' 		=> __('Posts list'),
+    'themes_list' 		=> __('Themes list'),
+    'search_form' 		=> __('Search form'),
+    'search_row' 		=> __('Search results'),
 );
 
 if (empty($_GET['m']) || !is_string($_GET['m'])) $_GET['m'] = 'default';
@@ -156,9 +158,9 @@ if(isset($_POST['send']) && isset($_POST['templ'])) {
 		$file = fopen($template_file, 'w+');
 	}
 	if(fputs($file, $_POST['templ'])) {
-		$mess = 'Шаблон успешно сохранен!';
+		$mess = __('Templates is saved');
 	} else {
-		$mess = 'Не удалось сохранить шаблон';
+		$mess = __('Templates is not saved');
 	}
 	fclose($file);
 }
@@ -179,7 +181,7 @@ if ($_GET['d'] == 'css') {
     if (!file_exists($path)) {
         $path = ROOT .'/template/' . Config::read('template') . '/html/default/' . $filename . '.html';
         if (!file_exists($path)) {
-            $_SESSION['message'] = 'Запрошеный файл не найден';
+            $_SESSION['message'] = __('Requested file is not found');
             redirect('/admin/design.php');
         }
     }
@@ -203,7 +205,7 @@ echo '<form action="' . $_SERVER['REQUEST_URI'] . '" method="POST">';
 <td class="dis-list" valign="top" rowspan="3"><div id="listener" class="tmplsuDiv">
 
 <?php foreach ($allowedFiles as $mod => $files):
-    $title = ('default' == $mod) ? 'Стандартный' : Config::read('title', $mod);
+    $title = ('default' == $mod) ? __('Default') : Config::read('title', $mod);
     if (!empty($title)):
 ?>
 
@@ -215,7 +217,7 @@ echo '<form action="' . $_SERVER['REQUEST_URI'] . '" method="POST">';
         <?php endforeach; ?>
         <?php if ('default' == $mod): ?>
             <div class="tba1">
-            <a href="design.php?d=css&t=style">Таблица стилей(CSS)</a>
+            <a href="design.php?d=css&t=style"><?php echo __('Style(CSS)') ?></a>
             </div>
         <?php endif; ?>
         <br />
@@ -226,9 +228,9 @@ echo '<form action="' . $_SERVER['REQUEST_URI'] . '" method="POST">';
 </td>
 <td colspan="2" valign="top"><div style="float:right">
 <div>
-<a href="set_default_dis.php" onClick="return confirm('Система востановит стандартный шаблон. Вы уверенны?')">Восстановить стандартный шаблон</a>
+<a href="set_default_dis.php" onClick="return confirm('Система востановит стандартный шаблон. Вы уверенны?')"><?php echo __('Return to default template') ?></a>
 &nbsp;|&nbsp;
-<a href="backup_dis.php" onClick="return confirm('Система сделает резервную копию шаблона. Вы уверенны?')">Резервная копия шаблона</a>
+<a href="backup_dis.php" onClick="return confirm('Система сделает резервную копию шаблона. Вы уверенны?')"><?php echo __('Save current state of template') ?></a>
 </div>
       </div></td>
 </tr>
@@ -240,7 +242,7 @@ echo '<form action="' . $_SERVER['REQUEST_URI'] . '" method="POST">';
 if(isset($mess) && $mess != NULL) {
 	echo '<b>'.$mess.'</b>';
 } else {
-	echo 'Измените шаблон и нажмите кнопку "Сохранить"';
+	echo __('Change template and save');
 }
 ?>
 
@@ -275,7 +277,7 @@ function(){
 		</td>
 	</tr>
 	<tr>
-		<td align="center"><input type="submit" name="send" value="Сохранить"></td>
+		<td align="center"><input type="submit" name="send" value="<?php echo __('Save') ?>"></td>
 	</tr>
 </table>
 </form>
@@ -283,7 +285,7 @@ function(){
 
 
 
-
+<!--
 <table class="lines">
 	<tr>
 		<td>
@@ -309,14 +311,14 @@ function(){
 		</td>
 	</tr>
 </table>
-
+-->
 
 </div>
 
 <?php
 if (!empty($_SESSION['info_message'])):
 ?>
-<script type="text/javascript">showHelpWin('<?php echo h($_SESSION['info_message']) ?>', 'Сообщение');</script>
+<script type="text/javascript">showHelpWin('<?php echo h($_SESSION['info_message']) ?>', '<?php echo __('Message') ?>');</script>
 <?php
 	unset($_SESSION['info_message']);
 endif;

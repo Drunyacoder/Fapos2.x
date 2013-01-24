@@ -1,23 +1,27 @@
 <?php
-/*---------------------------------------------\
-|											   |
-| @Author:       Andrey Brykin (Drunya)        |
-| @Version:      1.5.2                         |
-| @Project:      CMS                           |
-| @package       CMS Fapos                     |
-| @subpackege    Foto Module                   |
-| @copyright     ©Andrey Brykin 2010-2012      |
-| @last  mod     2012/09/27                    |
-|----------------------------------------------|
-|											   |
-| any partial or not partial extension         |
-| CMS Fapos,without the consent of the         |
-| author, is illegal                           |
-|----------------------------------------------|
-| Любое распространение                        |
-| CMS Fapos или ее частей,                     |
-| без согласия автора, является не законным    |
-\---------------------------------------------*/
+/*-----------------------------------------------\
+| 												 |
+| @Author:       Andrey Brykin (Drunya)          |
+| @Email:        drunyacoder@gmail.com           |
+| @Site:         http://fapos.net                |
+| @Version:      1.5.3                           |
+| @Project:      CMS                             |
+| @package       CMS Fapos                       |
+| @subpackege    Foto Module  			 		 |
+| @copyright     ©Andrey Brykin 2010-2013        |
+| @last  mod     2013/01/22                      |
+\-----------------------------------------------*/
+
+/*-----------------------------------------------\
+| 												 |
+|  any partial or not partial extension          |
+|  CMS Fapos,without the consent of the          |
+|  author, is illegal                            |
+|------------------------------------------------|
+|  Любое распространение                         |
+|  CMS Fapos или ее частей,                      |
+|  без согласия автора, является не законным     |
+\-----------------------------------------------*/
 
 
 
@@ -499,9 +503,14 @@ Class FotoModule extends Module {
 			'category_id'  => $in_cat,
 			'filename'  => '',
 		);
+		
 		$entity = new FotoEntity($res);
 		$entity->save();
+		
+		
 		$id = mysql_insert_id();
+		$entity->setId($id);
+		$entity->save();
  
  
 		/* save full and resample images */

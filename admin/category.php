@@ -1,26 +1,26 @@
 <?php
-##################################################
-##												##
-## Author:       Andrey Brykin (Drunya)         ##
-## Version:      1.1                            ##
-## Project:      CMS                            ##
-## package       CMS Fapos                      ##
-## subpackege    Admin Panel module             ##
-## copyright     ©Andrey Brykin 2010-2011       ##
-## last mod.     2012/02/16                     ##
-##################################################
+/*-----------------------------------------------\
+| 												 |
+| @Author:       Andrey Brykin (Drunya)          |
+| @Email:        drunyacoder@gmail.com           |
+| @Site:         http://fapos.net                |
+| @Version:      1.3                             |
+| @Project:      CMS                             |
+| @package       CMS Fapos                       |
+| @subpackege    Admin Panel module  			 |
+| @copyright     ©Andrey Brykin 2010-2013        |
+\-----------------------------------------------*/
 
-
-##################################################
-##												##
-## any partial or not partial extension         ##
-## CMS Fapos,without the consent of the         ##
-## author, is illegal                           ##
-##################################################
-## Любое распространение                        ##
-## CMS Fapos или ее частей,                     ##
-## без согласия автора, является не законным    ##
-##################################################
+/*-----------------------------------------------\
+| 												 |
+|  any partial or not partial extension          |
+|  CMS Fapos,without the consent of the          |
+|  author, is illegal                            |
+|------------------------------------------------|
+|  Любое распространение                         |
+|  CMS Fapos или ее частей,                      |
+|  без согласия автора, является не законным     |
+\-----------------------------------------------*/
 
 
 include_once '../sys/boot.php';
@@ -87,10 +87,10 @@ deleteCatsCollision();
 
 $head = file_get_contents('template/header.php');
 $ptitles = array(
-	'news' => 'Новости',
-	'stat' => 'Статьи',
-	'loads' => 'Каталог файлов',
-	'foto' => 'Каталог фото',
+	'news' => __('News'),
+	'stat' => __('Article'),
+	'loads' => __('Loads'),
+	'foto' => __('Photo'),
 );
 $page_title = $ptitles[getCurrMod()];
 
@@ -134,10 +134,8 @@ include_once ROOT . '/admin/template/header.php';
 
 
 <div class="fps-win">
-Внимание! При удалении категории или раздела, удаляються все материалы, относящиеся к данному разделу или категории.<br />
-Пожалуста, будьте осторожны.<br /><br />
+<?php echo __('If you delete a category, all the materials in it will be removed') ?><br /><br />
 
-Каждая категория должна наследоваться от раздела, по этому, прежде чем создавать категорию, создайте раздел.
 </div>
 <?php
 echo $content;
@@ -209,10 +207,10 @@ function buildCatsList($catsTree, $catsList, $indent = '') {
 		if (getCurrMod() != 'foto') {
 			if ($cat['view_on_home'] == 1) {
 				$out .=  '<a href="?ac=off_home&id=' . $cat['id'] . '&mod='.getCurrMod().'" onClick="return _confirm();">'
-					. '<img title="На Главной" src="template/img/round_ok.png" /></a>';
+					. '<img title="' . __('On home') . '" src="template/img/round_ok.png" /></a>';
 			} else {
 				$out .=  '<a href="?ac=on_home&id=' . $cat['id'] . '&mod='.getCurrMod().'" onClick="return _confirm();">'
-					. '<img title="На Главной" src="template/img/round_not_ok.png" /></a>';
+					. '<img title="' . __('On home') . '" src="template/img/round_not_ok.png" /></a>';
 			}
 		}
 			  
@@ -222,17 +220,17 @@ function buildCatsList($catsTree, $catsList, $indent = '') {
 			<form action="category.php?mod=' . getCurrMod() . '&ac=edit&id=' . $cat['id'] . '" method="POST">
 			
 			<div class="form-item2">
-			Родительский раздел:<br />
+			' . __('Parent section') . ':<br />
 			' . $cat_selector . '
 			<div style="clear:both;"></div></div>
 			
 			<div class="form-item2">
-			Заголовок:<br />
+			' . __('Title') . ':<br />
 			<input type="text" style="width:130px" name="title" value="' . h($cat['title']) . '" />
 			<div style="clear:both;"></div></div>
 			
 			<div class="form-item2">
-			Доступно:<br /><table><tr>';
+			' . __('Access for') . ':<br /><table><tr>';
 		$n = 1;
 		foreach ($acl_groups as $id => $group) {
 			if (($n % 3) == 0) $out .= '</tr><tr>';
@@ -244,8 +242,8 @@ function buildCatsList($catsTree, $catsList, $indent = '') {
 		$out .= '</tr></table><div style="clear:both;"></div></div>
 			
 			<div class="form-item2 center">
-			<input type="submit" name="send" value="Сохранить" />
-			<input type="button" onClick="hideWin(\'' . $cat['id'] . '_cat\')" value="Отмена" />
+			<input type="submit" name="send" value="' . __('Save') . '" />
+			<input type="button" onClick="hideWin(\'' . $cat['id'] . '_cat\')" value="' . __('Cancel') . '" />
 			<div style="clear:both;"></div></div>
 			</form>
 			</div></div></div><div class="xw-bl"><div class="xw-br"><div class="xw-bc">
@@ -269,7 +267,7 @@ function index(&$page_title) {
     $acl_groups = $Register['ACL']->get_group_info();
 
 
-	$page_title .= ' - Редактирование категорий';
+	$page_title .= ' - ' . __('Sections editor');
 	$cat_selector = '<select style="width:130px;" name="id_sec" id="cat_secId">';
 	$cat_selector .= '<option value="0">&nbsp;</option>';
 	$all_sections = $FpsDB->select(getCurrMod() . '_sections', DB_ALL, array(
@@ -309,7 +307,7 @@ function index(&$page_title) {
 	
 	$html .= '<table width="100%"><tr><td></td>';
 	$html .= '<td align="right">
-				<div align="right" class="topButtonL" id="cat_view"><input type="button" name="add" value="Добавить категорию" onClick="wiOpen(\'cat\');" /></div></td></tr></table>
+				<div align="right" class="topButtonL" id="cat_view"><input type="button" name="add" value="' . __('Add section') . '" onClick="wiOpen(\'cat\');" /></div></td></tr></table>
 				
 		<div id="cat_dWin" class="fps-win" style="position:absolute;top:200px;left:40%;display:none">
 		<div class="xw-tl"><div class="xw-tr"><div class="xw-tc xw-tsps"></div>
@@ -317,12 +315,12 @@ function index(&$page_title) {
 		<form action="category.php?mod=' . getCurrMod() . '&ac=add" method="POST">
 		
 		<div class="form-item2">
-		Родительский раздел:<br />
+		' . __('Parent section') . ':<br />
 		' . $cat_selector . '
 		<div style="clear:both;"></div></div>
 		
 		<div class="form-item2">
-		Имя категории:<br />
+		' . __('Title') . ':<br />
 		<input type="hidden" name="type" value="cat" />
 		<input type="text" style="width:130px" name="title" />
 		<div style="clear:both;"></div></div>
@@ -339,8 +337,8 @@ function index(&$page_title) {
 		$html .= '</tr></table><div style="clear:both;"></div></div>
 		
 		<div class="form-item2 center">
-		<input type="submit" name="send" value="Сохранить" />
-		<input type="button" onClick="hideWin(\'cat\')" value="Отмена" />
+		<input type="submit" name="send" value="' . __('Save') . '" />
+		<input type="button" onClick="hideWin(\'cat\')" value="' . __('Cancel') . '" />
 		<div style="clear:both;"></div></div>
 		</form>
 		</div></div></div><div class="xw-bl"><div class="xw-br"><div class="xw-bc">
@@ -355,7 +353,7 @@ function index(&$page_title) {
 		$html .= buildCatsList($cats_tree, $all_sections); 	
 		$html .= '</div>';
 	} else {
-		$html .= 'Пока ничего нет :(';
+		$html .= __('Sections not found');
 	}
 	return $html;
 }
@@ -371,19 +369,19 @@ function edit() {
 	if ($id < 1) redirect('/admin/category.php?mod=' . getCurrMod());
 	$error = '';
 
-	if (empty($_POST['title'])) $error .= '<li>Не заполненно поле "Заголовок".</li>';
+	if (empty($_POST['title'])) $error .= '<li>' . __('Empty field "title"') . '</li>';
 	
 
 
 	$parent_id = intval($_POST['id_sec']);
 	$changed_cat = $FpsDB->select(getCurrMod() . '_sections', DB_FIRST, array('cond' => array('id' => $id)));
-	if (empty($changed_cat)) $error .= '<li>Редактируемая запись не найдена.</li>';
+	if (empty($changed_cat)) $error .= '<li>' . __('Edited section not found') . '</li>';
 
 	
 	/* we must know changed parent section or not changed her. And check her  */
 	if (!empty($parent_id) && $changed_cat[0]['parent_id'] != $parent_id) {
 		$target_section = $FpsDB->select(getCurrMod() . '_sections', DB_COUNT, array('cond' => array('id' => $parent_id)));
-		if ($target_section < 1) $error .= '<li>Родительский раздел не найден.</li>';
+		if ($target_section < 1) $error .= '<li>' . __('Parent section not found') . '</li>';
 	}
 	/* if errors exists */
 	if (!empty($error)) {
@@ -426,7 +424,7 @@ function add() {
 	if ($in_cat < 0) $in_cat = 0;
 	
 	
-	if (empty($title)) $error .= '<li>Не заполненно поле "Заголовок".</li>';
+	if (empty($title)) $error .= '<li>' . __('Empty field "title"') . '</li>';
 	
 	$no_access = array();
 	foreach ($acl_groups as $id => $group) {
@@ -584,4 +582,3 @@ function off_home($cid = false) {
 
 
 include_once 'template/footer.php';
-?>

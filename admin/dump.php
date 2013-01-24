@@ -1,32 +1,35 @@
 <?php
-##################################################
-##												##
-## Author:       Andrey Brykin (Drunya)         ##
-## Version:      0.7                            ##
-## Project:      CMS                            ##
-## package       CMS Fapos                      ##
-## subpackege    Admin Panel module             ##
-## copyright     ©Andrey Brykin 2010-2011       ##
-##################################################
+/*-----------------------------------------------\
+| 												 |
+| @Author:       Andrey Brykin (Drunya)          |
+| @Email:        drunyacoder@gmail.com           |
+| @Site:         http://fapos.net                |
+| @Version:      1.0                             |
+| @Project:      CMS                             |
+| @package       CMS Fapos                       |
+| @subpackege    Admin Panel module  			 |
+| @copyright     ©Andrey Brykin 2010-2013        |
+\-----------------------------------------------*/
+
+/*-----------------------------------------------\
+| 												 |
+|  any partial or not partial extension          |
+|  CMS Fapos,without the consent of the          |
+|  author, is illegal                            |
+|------------------------------------------------|
+|  Любое распространение                         |
+|  CMS Fapos или ее частей,                      |
+|  без согласия автора, является не законным     |
+\-----------------------------------------------*/
 
 
-##################################################
-##												##
-## any partial or not partial extension         ##
-## CMS Fapos,without the consent of the         ##
-## author, is illegal                           ##
-##################################################
-## Любое распространение                        ##
-## CMS Fapos или ее частей,                     ##
-## без согласия автора, является не законным    ##
-##################################################
 
 include_once '../sys/boot.php';
 include_once ROOT . '/admin/inc/adm_boot.php';
 
 
 
-$pageTitle = 'Панель управления - дамп базы данных';
+$pageTitle = __('Admin panel - DB dump');
 $pageNav = $pageTitle;
 $pageNavl = '';
 
@@ -117,12 +120,12 @@ if (!empty($_GET['ac']) && $_GET['ac'] == 'make_dump') {
 		}
 		fclose ($fp);
 	}
-	$_SESSION['info_message'] = 'Дамп создан';
+	$_SESSION['info_message'] = __('DB backup complete');
 	redirect('/admin/dump.php');
 	
 } else if (!empty($_GET['ac']) && $_GET['ac'] == 'delete' && !empty($_GET['id'])) {
 	@unlink($_GET['id']);
-	$_SESSION['info_message'] = 'Файл удален';
+	$_SESSION['info_message'] = __('Backup file is removed');
 	redirect('/admin/dump.php');
 	
 } else if (!empty($_GET['ac']) && $_GET['ac'] == 'restore' && !empty($_GET['id'])) {
@@ -136,7 +139,7 @@ if (!empty($_GET['ac']) && $_GET['ac'] == 'make_dump') {
 			}
 		}
 	}
-	$_SESSION['info_message'] = 'База востановленна';
+	$_SESSION['info_message'] = __('Database is restored');
 	redirect('/admin/dump.php');
 }
 
@@ -148,7 +151,7 @@ include_once ROOT . '/admin/template/header.php';
 
 ?>
 
-<a href="dump.php?ac=make_dump">Сделать дамп</a>
+<a href="dump.php?ac=make_dump"><?php echo __('Create DB backup') ?></a>
 </div></div></div>   <div class="xw-bl"></div> 
 <div class="xw-tl1"><div class="xw-tr1"><div class="xw-tc1">
 </div></div></div>
@@ -159,7 +162,7 @@ include_once ROOT . '/admin/template/header.php';
 <?php
 if (!empty($_SESSION['info_message'])):
 ?>
-<script type="text/javascript">showHelpWin('<?php echo h($_SESSION['info_message']) ?>', 'Сообщение');</script>
+<script type="text/javascript">showHelpWin('<?php echo h($_SESSION['info_message']) ?>', '<?php echo __('Message') ?>');</script>
 <?php
 	unset($_SESSION['info_message']);
 endif;
@@ -176,8 +179,8 @@ if (!empty($current_dumps)):
 		<td><?php echo round((filesize($dump) / 1024), 1) ?> Kb</td>
 		
 		<td width="40px">
-			<a onClick="return confirm('Are you sure?')" href="dump.php?ac=restore&id=<?php echo $dump ?>"><img src="<?php echo get_url('/sys/img/undo.png'); ?>" title="Востановить" /></a>
-			<a onClick="return confirm('Are you sure?')" href="dump.php?ac=delete&id=<?php echo $dump ?>"><img src="<?php echo get_url('/sys/img/delete_16x16.png'); ?>" title="Удалить" /></a>
+			<a onClick="return confirm('Are you sure?')" href="dump.php?ac=restore&id=<?php echo $dump ?>"><img src="<?php echo get_url('/sys/img/undo.png'); ?>" title="<?php echo __('Restore') ?>" /></a>
+			<a onClick="return confirm('Are you sure?')" href="dump.php?ac=delete&id=<?php echo $dump ?>"><img src="<?php echo get_url('/sys/img/delete_16x16.png'); ?>" title="<?php echo __('Delete') ?>" /></a>
 		</td>
 	</tr>
 
@@ -185,7 +188,7 @@ if (!empty($current_dumps)):
 <?php else: ?> 
 
 	<tr>
-		<td>Готовых дампов нет</td>
+		<td><?php echo __('DB backups not found') ?></td>
 	</tr>
 
 <?php endif; ?>
@@ -195,8 +198,7 @@ if (!empty($current_dumps)):
 
 <br />
 <span class="comment">
-Дамп базы данных позволяет создать копию вашей базы для дальнейшего востановления, которое так же может быть произведенно на другом сервере, допустим при переносе сайта. 
-В зависимости от объема вашей базы, создание бекапа может занять некоторое время. Будьте осторожны, востановив базу из имеющегося бекапа, вы уничтожите существующие данные.
+<?php echo __('DB backup is cool') ?>
 </span>
 
 

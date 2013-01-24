@@ -2,12 +2,12 @@
 /*---------------------------------------------\
 |											   |
 | @Author:       Andrey Brykin (Drunya)        |
-| @Version:      1.4.8                         |
+| @Version:      1.4.9                         |
 | @Project:      CMS                           |
 | @package       CMS Fapos                     |
 | @subpackege    Chat Module                   |
 | @copyright     ©Andrey Brykin 2010-2013      |
-| @last mod      2013/01/07                    |
+| @last mod      2013/01/22                    |
 |----------------------------------------------|
 |											   |
 | any partial or not partial extension         |
@@ -150,12 +150,12 @@ class ChatModule extends Module {
 		if (!$ACL->turn(array('chat', 'add_materials'), false)) {
 			return;
 		}
-		if (!isset($_POST['login']) || !isset($_POST['message'])) {
+		if (!isset($_POST['message'])) {
 			die(__('Needed fields is empty'));
 		}
 		
 		/* cut and trim values */
-		$name    = mb_substr( $_POST['login'], 0, 70 );
+		$name    = (!empty($_SESSION['user'])) ? h($_SESSION['user']['name']) : __('Guest');
 		$message = mb_substr( $_POST['message'], 0, $this->Register['Config']->read('max_lenght', 'chat'));
 		$name    = trim( $name );
 		$message = trim( $message );
@@ -166,9 +166,7 @@ class ChatModule extends Module {
 		// Check fields
 		$error  = '';
 		$valobj = $this->Register['Validate'];
-		if (empty($name))                          
-			$error = $error . '<li>' . __('Empty field "login"') . '</li>' . "\n";
-		elseif (!$valobj->cha_val($name, V_TITLE))  
+		if (!empty($name) && !$valobj->cha_val($name, V_TITLE))  
 			$error = $error . '<li>' . __('Wrong chars in field "login"') . '</li>' . "\n";
 		if (empty($message))                       
 			$error = $error . '<li>' . __('Empty field "text"') . '</li>' . "\n";
@@ -275,7 +273,7 @@ class ChatModule extends Module {
 			$name = (!empty($_SESSION['user']['name'])) ? $_SESSION['user']['name'] : '';
 		}
 		
-		
+
 		$kcaptcha = '';
 		if (!$ACL->turn(array('other', 'no_captcha'), false)) {
 			$kcaptcha = getCaptcha();
