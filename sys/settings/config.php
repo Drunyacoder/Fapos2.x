@@ -4,7 +4,7 @@ $set = array (
   'language' => 'russian',
   'cache_querys' => '0',
   'cookie_time' => '30',
-  'start_mod' => 'forum/',
+  'start_mod' => '',
   'open_reg' => '1',
   'debug_mode' => '0',
   'max_file_size' => '15000000',
@@ -14,7 +14,7 @@ $set = array (
   'redirect_delay' => '1',
   'time_on_line' => '10',
   'template' => '12',
-  'use_additional_fields' => 1,
+  'use_additional_fields' => 0,
   'hlu' => 1,
   'hlu_extention' => '.htm',
   'hlu_understanding' => 0,
@@ -22,6 +22,7 @@ $set = array (
   'autotags_active' => 1,
   'autotags_exception' => 'для,его,при,При,свои,как,все,так,что,это',
   'autotags_priority' => 'fapos cms,fapos,free cms',
+  'img_preview_size' => 200,
   'latest_on_home' => 
   array (
     0 => 'news',
@@ -36,7 +37,7 @@ $set = array (
     'not_reg_user' => 'Гостелло',
     'max_post_lenght' => '3000',
     'themes_per_page' => '20',
-    'posts_per_page' => '3',
+    'posts_per_page' => '10',
     'active' => 1,
   ),
   'news' => 
@@ -45,7 +46,7 @@ $set = array (
     'description' => 'Самые свежие новости',
     'max_lenght' => '15000',
     'announce_lenght' => '700',
-    'per_page' => '3',
+    'per_page' => 10,
     'active' => 1,
     'comment_active' => 1,
     'comment_per_page' => '50',
@@ -89,7 +90,7 @@ $set = array (
     'min_lenght' => '200',
     'max_lenght' => '4500',
     'announce_lenght' => '300',
-    'per_page' => '5',
+    'per_page' => 7,
     'max_file_size' => '15000000',
     'active' => '1',
     'comment_active' => 1,
@@ -106,7 +107,7 @@ $set = array (
   ),
   'secure' => 
   array (
-    'antisql' => 0,
+    'antisql' => 1,
     'anti_ddos' => 0,
     'request_per_second' => '7',
     'system_log' => 1,
@@ -123,13 +124,13 @@ $set = array (
     'title' => 'Пользователи',
     'description' => 'Юзвери',
     'max_mail_lenght' => '20000',
-    'rating_comment_lenght' => '100',
-    'active' => '1',
-    'warnings_by_ban' => 5,
-    'autoban_interval' => 2000000,
+    'rating_comment_lenght' => '200',
+    'active' => 1,
+    'warnings_by_ban' => '5',
+    'autoban_interval' => '2000000',
     'fields' => 
     array (
-      0 => 'pol',
+      'keystring' => 'keystring',
     ),
   ),
   'chat' => 
@@ -148,12 +149,6 @@ $set = array (
     'description' => 'Каталог Фотографий',
     'per_page' => 20,
     'max_file_size' => 5000000,
-    'acl' => 
-    array (
-      0 => 1,
-      1 => 2,
-      2 => 3,
-    ),
     'use_watermarks' => 1,
     'watermark_img' => 'watermark.png',
   ),
@@ -164,7 +159,7 @@ $set = array (
   'db' => 
   array (
     'host' => 'localhost',
-    'name' => 'fapos',
+    'name' => '',
     'user' => 'root',
     'pass' => '',
     'prefix' => '',
@@ -179,7 +174,7 @@ $set = array (
     'title' => 'Поиск',
     'active' => '1',
     'description' => 'Лучший  поиск от Fapos',
-    'min_lenght' => '4',
+    'min_lenght' => '2',
     'per_page' => '20',
     'index_interval' => 2,
   ),
@@ -194,6 +189,5 @@ $set = array (
   ),
   'auto_sitemap' => '1',
   'allow_smiles' => 1,
-  'cms' => 'Z:/home/fapos.loc/www',
 )
 ?>
