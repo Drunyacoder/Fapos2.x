@@ -46,6 +46,7 @@ include_once ROOT . '/admin/template/header.php';
 		<li>
 			<h3 style="padding: 0px; margin:0px;">Programmers</h3>
 			<li class="comment">Andrey Brykin (Drunya)</li>
+			<li class="comment">Danilov Alexandr (modos189)</li>
 		</li>
 		<br />
 		<li>
