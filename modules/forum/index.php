@@ -313,15 +313,28 @@ Class ForumModule extends Module {
 			$themesClass = new $themesClassName;
 			$themesClass->bindModel('author');
 			$themesClass->bindModel('last_author');
-			$themes = $themesClass->getCollection(array('id_forum' => $id_forum));
+			//$themes = $themesClass->getCollection(array('id_forum' => $id_forum));
+			$total = $themesClass->getTotal(array('cond' => array('id_forum' => $id_forum)));
+		
 			
 			
             list($pages, $page) = pagination(
-				count($themes), 
+				$total, 
 				$this->Register['Config']->read('themes_per_page', 'forum'), 
 				'/forum/view_forum/' . $id_forum
 			);
 			$this->page_title .= ' (' . $page . ')';
+			
+			
+			$themes = $themesClass->getCollection(
+				array(
+					'id_forum' => $id_forum
+				), array(
+					'page' => $page,
+					'limit' => $this->Register['Config']->read('themes_per_page', 'forum'),
+					'order' => 'important DESC, last_post DESC',
+				)
+			);
 			
 			
 			// Nav block
@@ -607,9 +620,11 @@ Class ForumModule extends Module {
 		
 		$themeModel = $this->Register['ModManager']->getModelInstance('Themes');
 		$themeModel->bindModel('forum');
+		$themeModel->bindModel('poll');
 		$theme = $themeModel->getById($id_theme);
 		if (!$theme->getForum())  return $this->showInfoMessage(__('Can not find forum'), '/forum/' );
 
+		
 		// Check access to this forum. May be locked by pass or posts count
 		$this->__checkForumAccess($theme->getForum());
 		$id_forum = $theme->getId_forum();
@@ -617,7 +632,7 @@ Class ForumModule extends Module {
 		$this->__checkThemeAccess($theme);
 		
 		
-		//pr($theme); die();
+		
 		if ($this->cached && $this->Cache->check($this->cacheKey)) {
 			$source = $this->Cache->read($this->cacheKey);
 		} else {
@@ -913,6 +928,13 @@ Class ForumModule extends Module {
 			$this->setCacheTag('theme_id_' . $id_theme);
 			
 			
+			// Polls render
+			$polls = $theme->getPoll();
+			if (!empty($polls[0])) {
+				$theme->setPoll($this->_renderPoll($polls[0]));
+			}
+			
+			
 			
 			$markers = array(
 				'reply_form' => $this->add_post_form($theme),
@@ -953,7 +975,175 @@ Class ForumModule extends Module {
 		$this->Cache->clean(CACHE_MATCHING_TAG, array('action_viev_forum', 'theme_id_' . $id_theme));
 		return $this->_view($source);
 	}
+	
+	
+	private function __savePoll($theme) 
+	{
+		if (!empty($_POST['poll']) && !empty($_POST['poll_ansvers'])) {
+			
+			$ansvers = explode("\n", trim($_POST['poll_ansvers']));
+			
+			$variants = array();
+			if (count($ansvers) && is_array($ansvers)) {
+				foreach ($ansvers as $ansver) {
+					$variants[] = array(
+						'ansver' => $ansver,
+						'votes' => 0,
+					);
+				}
+			}
+			
+			
+			$question = (!empty($_POST['poll_question'])) ? trim((string)$_POST['poll_question']) : '';
+			
+			
+			$data = array(
+				'variants' => json_encode($variants),
+				'question' => $question,
+				'theme_id' => $theme->getId(),
+				'voted_users' => '',
+			);
+			
+			
+			$poll = new PollsEntity($data);
+			$poll->save();
+			return true;
+		}
+		return false;
+	}
 
+	
+	protected function _renderPoll($poll) 
+	{
+		if (!$poll) {
+		
+		}
+		
+		
+		$questions = json_decode($poll->getVariants(), true);
+		if (!$questions && !is_array($questions)) {
+		
+		}
+			
+			
+		$all_votes_summ = 0;
+		foreach ($questions as $case) {
+			$all_votes_summ += $case['votes']; 
+		}
+		
+		// Find 1% value
+		$percent = round($all_votes_summ / 100, 2);
+		
+		
+		// Show percentage graph for each variant
+		foreach ($questions as $k => $case) {
+			$questions[$k] = array(
+				'ansver' => h($case['ansver']),
+				'votes'			=> $case['votes'],
+				'percentage'  	=> ($case['votes'] > 0) ? round($case['votes'] / $percent) : 0,
+				'ansver_id'  	=> $k + 1,
+			);
+			
+			//$poll->setPercentage(round($case / $percent)); 
+		}
+		
+		$poll->setVariants($questions);
+		
+		
+		// Did user voted
+		if (!empty($_SESSION['user'])) {
+			$voted_users = explode(',', $poll->getVoted_users());
+			if ($voted_users && is_array($voted_users)) {
+				
+				
+				if (!in_array($_SESSION['user']['id'], $voted_users)) {
+					$poll->setCan_voted(1);
+				}
+			}
+		}
+	
+		
+		return $this->render('polls.html', array('poll' => $poll));
+	}
+	
+	
+	/**
+	 *
+	 */
+	public function vote_poll($id)
+	{	
+		if (empty($_SESSION['user'])) die('ERROR: permission denied');
+	
+		$id = (int)$id;
+		if ($id < 1) die('ERROR: empty ID');
+		
+		
+		$ansver_id = (!empty($_GET['ansver'])) ? (int)$_GET['ansver'] : 0;
+		if ($ansver_id < 1) die('ERROR: empty ANSVER_ID');
+		
+	
+		$pollModel = new PollsModel;
+		$poll = $pollModel->getById($id);
+		
+		if (empty($poll)) die('ERROR: poll not found');
+		
+		$variants = json_decode($poll->getVariants(), true);
+		if ($variants && is_array($variants)) {
+			
+			
+			if (!array_key_exists($ansver_id - 1, $variants)) die('ERROR: wrong ansver');
+			
+			
+			// Check user ability
+			$voted_users = explode(',', $poll->getVoted_users());
+			if (!empty($voted_users)) {
+				if (in_array($_SESSION['user']['id'], $voted_users)) {
+					die('ERROR: you already voted');
+				} else {
+					$voted_users[] = $_SESSION['user']['id'];
+				}
+				
+			} else {
+				$voted_users = array($_SESSION['user']['id']);
+			}
+			
+			$poll->setVoted_users(implode(',', $voted_users));
+			
+			
+			$variants[$ansver_id - 1]['votes']++;
+			
+			$poll->setVariants(json_encode($variants));
+			$poll->save();
+			
+			
+			
+			
+			// Create response data for AJAX request
+			$all_votes_summ = 0;
+			foreach ($variants as $case) {
+				$all_votes_summ += $case['votes']; 
+			}
+			
+			// Find 1% value
+			$percent = round($all_votes_summ / 100, 2);
+			
+			
+			// Show percentage graph for each variant
+			foreach ($variants as $k => $case) {
+				$variants[$k] = array(
+					'ansver' 		=> h($case['ansver']),
+					'votes'			=> $case['votes'],
+					'percentage'  	=> ($case['votes'] > 0) ? round($case['votes'] / $percent) : 0,
+					'ansver_id'  	=> $k + 1,
+				);
+			}
+			
+			die(json_encode($variants));
+		}
+		
+		die('ERROR');
+	}
+	
 	
 	private function __checkThemeAccess($theme)
 	{
@@ -1502,15 +1692,22 @@ Class ForumModule extends Module {
 			'title'          => $theme,
 			'description'    => $description,
 			'id_author'      => $user_id,
-			'time'           => 'NOW()',
+			'time'           => new Expr('NOW()'),
 			'id_last_author' => $user_id,
-			'last_post'      => 'NOW()',
+			'last_post'      => new Expr('NOW()'),
 			'id_forum'       => $id_forum, 
 			'group_access'   => $gr_access, 
 		);
 		$theme = new ThemesEntity($data);
 		$theme->save();
 		$id_theme = mysql_insert_id();
+		$theme->setId($id_theme);
+		
+		
+		
+		// Check poll
+		$this->__savePoll($theme);
+		
 
 		
 		// add first post

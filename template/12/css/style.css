@@ -1205,4 +1205,18 @@ ul.errorMsg {list-style: circle inside none; margin-left:20px;}
 .errorMsg li {color:#D7630B;}
 
 a.user-details img, span.user-details img {width:24px; height:24px;}
+.polls {width:90%; margin:0px auto; padding:10px 30px;}
+.poll2 {width:50%; padding:3px; margin:auto;}
+.poll2 .variant {width:50%; margin:auto;}
+.poll {width:90%; margin:auto;}
+.poll .variant, .poll .cnt, .poll .bar, .poll .percentege, .poll2 .variant, .poll2 .cnt {float:left;}
+.poll .variant {width:100px;}
+.poll .cnt {width:25px;}
+.poll .bar {border:1px solid #687A84; height:10px; margin:5px; border-radius:3px; -moz-border-radius:3px; -webkit-border-radius:3px; 
+background-image: linear-gradient(left , rgb(0,170,43) 0%, rgb(0,255,0) 100%);
+background-image: -o-linear-gradient(left , rgb(0,170,43) 0%, rgb(0,255,0) 100%);
+background-image: -moz-linear-gradient(left , rgb(0,170,43) 0%, rgb(0,255,0) 100%);
+background-image: -webkit-linear-gradient(left , rgb(0,170,43) 0%, rgb(0,255,0) 100%);
+background-image: -ms-linear-gradient(left , rgb(0,170,43) 0%, rgb(0,255,0) 100%);
+background-image: -webkit-gradient(linear,left bottom,right bottom,color-stop(0, rgb(0,170,43)),color-stop(1, rgb(0,255,0))); box-shadow: 0 0 3px #4FFF4F; -moz-box-shadow: 0 0 3px #4FFF4F; -webkit-box-shadow: 0 0 3px #4FFF4F;}
 /* ---------- END FAPOS CMS SYSTEM ---- */

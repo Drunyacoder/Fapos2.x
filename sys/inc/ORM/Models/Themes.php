@@ -34,6 +34,11 @@ class ThemesModel extends FpsModel
             'type' => 'has_one',
             'foreignKey' => 'id_forum',
       	),
+        'poll' => array(
+            'model' => 'Polls',
+            'type' => 'has_many',
+            'foreignKey' => 'theme_id',
+      	),
         'author' => array(
             'model' => 'Users',
             'type' => 'has_one',
