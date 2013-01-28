@@ -2,12 +2,12 @@
 /*-----------------------------------------------\
 | 												 |
 |  @Author:       Andrey Brykin (Drunya)         |
-|  @Version:      1.6.50                         |
+|  @Version:      1.6.55                         |
 |  @Project:      CMS                            |
 |  @package       CMS Fapos                      |
 |  @subpackege    Forum Module                   |
 |  @copyright     ©Andrey Brykin 2010-2013       |
-|  @last mod.     2013/01/10                     |
+|  @last mod.     2013/01/28                     |
 \-----------------------------------------------*/
 
 /*-----------------------------------------------\
@@ -2083,6 +2083,16 @@ Class ForumModule extends Module {
 		//delete info
 		$theme->delete();
 		$postsModel->deleteByTheme($id_theme);
+		
+		
+		// Poll
+		$PollModel = $this->Register['ModManager']->getModelInstance('Polls');
+		$poll = $PollModel->getCollection(array('theme_id' => $id_theme));
+		if (count($poll) && is_array($poll)) {
+			foreach ($poll as $p) {
+				$p->delete();
+			}
+		}
 		
 		
 		//update info
