@@ -4,7 +4,7 @@
 | @Author:       Andrey Brykin (Drunya)          |
 | @Email:        drunyacoder@gmail.com           |
 | @Site:         http://fapos.net                |
-| @Version:      0.4                             |
+| @Version:      0.5                             |
 | @Project:      CMS                             |
 | @package       CMS Fapos                       |
 | @subpackege    Additional Fields (Admin Part)  |
@@ -148,7 +148,7 @@ if ($_GET['ac'] == 'index'):
 				<div class="item"><?php echo __('Max length') ?>: <div><?php echo (!empty($field['size'])) ? h($field['size']) : '-'; ?></div></div>
 				<div class="item"><?php echo __('Params') ?>: <div><?php echo (!empty($values)) ? h($values) : ''; ?></div></div>
 				<div class="item"><?php echo __('Required field') ?>: <div><?php echo $required; ?></div></div>
-				<div class="item"><?php echo __('Marker of field') ?>: <div><?php echo h(strtoupper('{' . $field_market . '}')); ?></div></div>
+				<div class="item"><?php echo __('Marker of field') ?>: <div><?php echo h(strtolower($field_market)); ?></div></div>
 			</div>
 			<div class="textarea-item">
 				<textarea style="width:100%; height:103px;;"><?php echo (!empty($inputs[$field_market])) ? $inputs[$field_market] : ''; ?></textarea>
