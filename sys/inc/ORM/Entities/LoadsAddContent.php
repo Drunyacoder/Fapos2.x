@@ -2,12 +2,12 @@
 /*---------------------------------------------\
 |											   |
 | @Author:       Andrey Brykin (Drunya)        |
-| @Version:      1.1                           |
+| @Version:      1.2                           |
 | @Project:      CMS                           |
 | @package       CMS Fapos                     |
 | @subpackege    LoadsAddContent Entity        |
-| @copyright     ©Andrey Brykin 2010-2012      |
-| @last mod      2012/04/29                    |
+| @copyright     ©Andrey Brykin 2010-2013      |
+| @last mod      2013/01/28                    |
 |----------------------------------------------|
 |											   |
 | any partial or not partial extension         |
@@ -37,13 +37,13 @@ class LoadsAddContentEntity extends FpsEntity
 	public function save()
 	{
 		$params = array(
-			'id' => $this->id,
 			'entity_id' => $this->entity_id,
 			'field_id' => $this->field_id,
 			'content' => $this->content,
 		);
+		if ($this->id) $params['id'] = $this->id;
 		$Register = Register::getInstance();
-		$Register['DB']->save('loads_add_content', $params, array('id' => $this->id));
+		$Register['DB']->save('loads_add_content', $params);
 	}
 	
 	

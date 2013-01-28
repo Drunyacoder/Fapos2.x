@@ -6,7 +6,7 @@
 |  @Project:      CMS                            |
 |  @package       CMS Fapos                      |
 |  @subpackege    Additional Fields              |
-|  @copyright     ©Andrey Brykin 2010-2012       |
+|  @copyright     ©Andrey Brykin 2010-2013       |
 |  @last mod.     2012/03/02                     |
 \-----------------------------------------------*/
 
@@ -62,17 +62,31 @@ class FpsAdditionalFields {
         $where = array('entity_id IN (' . $ids . ')');
 
 
-        $ModelName = $Register['ModManager']->getModelName(ucfirst($module) . 'AddFields');
-        $Model = new $ModelName();
-
-        $Model->bindModel(ucfirst($module) . 'AddContent', $where);
-        $addFields = $Model->getCollection();
+        $FieldsModelName = $Register['ModManager']->getModelInstance(ucfirst($module) . 'AddFields');
+        $ContentModelName = $Register['ModManager']->getModelInstance(ucfirst($module) . 'AddContent');
+   
+		
+        //$Model->bindModel('content');
+        $addFields = $FieldsModelName->getCollection(array());
+        $addContents = $ContentModelName->getCollection(array($where));
+		
 
 
         if (!empty($addFields) && is_array($addFields)) {
             foreach ($records as $k => $entity) {
                 $output = array();
                 foreach ($addFields as $addField) {
+				
+					$fieldContent = array();
+					if (!empty($addContents)) {
+						foreach($addContents as $addCon) {
+							if ($addCon->getField_id() == $addField->getId())
+								$fieldContent[] = $addCon;
+						}
+					}
+					$addField->setContent($fieldContent);
+					
+				
                     $viewData = '';
                     $field = 'add_field_' . $addField->getId();
                     $f_params = $addField->getParams();
@@ -272,6 +286,7 @@ class FpsAdditionalFields {
 	
 		if (empty($fields)) return true;
 		foreach ($fields as $field) {
+
 			$where = array(
 				'entity_id' => $rec_id,
 				'field_id' => $field['field_id'],
@@ -297,4 +312,3 @@ class FpsAdditionalFields {
 	
 	
 }
-?>
