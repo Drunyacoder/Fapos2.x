@@ -2,12 +2,12 @@
 /*---------------------------------------------\
 |											   |
 | @Author:       Andrey Brykin (Drunya)        |
-| @Version:      1.0                           |
+| @Version:      1.1                           |
 | @Project:      CMS                           |
 | @package       CMS Fapos                     |
 | @subpackege    News Entity                   |
-| @copyright     ©Andrey Brykin 2010-2012      |
-| @last mod      2012/02/27                    |
+| @copyright     ©Andrey Brykin 2010-2013      |
+| @last mod      2013/01/30                    |
 |----------------------------------------------|
 |											   |
 | any partial or not partial extension         |
@@ -62,7 +62,7 @@ class NewsEntity extends FpsEntity
 			'category_id' => $this->category_id,
 			'author_id' => $this->author_id,
 			'comments' => (!empty($this->comments)) ? intval($this->comments) : 0,
-			'tags' => $this->tags,
+			'tags' => (is_array($this->tags)) ? implode(',', $this->tags) : $this->tags,
 			'description' => $this->description,
 			'sourse' => $this->sourse,
 			'sourse_email' => $this->sourse_email,

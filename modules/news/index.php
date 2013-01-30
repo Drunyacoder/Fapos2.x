@@ -375,6 +375,7 @@ Class NewsModule extends Module {
 		}
 		
 		
+		
 		$max_attaches = $this->Register['Config']->read('max_attaches', $this->module);
 		if (empty($max_attaches) || !is_numeric($max_attaches)) $max_attaches = 5;
 		
