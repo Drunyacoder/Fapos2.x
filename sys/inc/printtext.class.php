@@ -2,12 +2,12 @@
 /*---------------------------------------------\
 |											   |
 | @Author:       Andrey Brykin (Drunya)        |
-| @Version:      1.3.1                         |
+| @Version:      1.3.2                         |
 | @Project:      CMS                           |
 | @package       CMS Fapos                     |
 | @subpackege    Print lobrary                 |
-| @copyright     ©Andrey Brykin 2010-2012      |
-| @last mod      2012/11/13                    |
+| @copyright     ©Andrey Brykin 2010-2013      |
+| @last mod      2013/01/30                    |
 |----------------------------------------------|
 |											   |
 | any partial or not partial extension         |
@@ -299,7 +299,7 @@ class PrintText {
 		$message = preg_replace("#\[color=red\](.+)\[\/color\]#uisU",'<span style="color:#FF0000">\\1</span>',$message);
 		$message = preg_replace("#\[color=green\](.+)\[\/color\]#uisU",'<span style="color:#008000">\\1</span>',$message);
 		$message = preg_replace("#\[color=blue\](.+)\[\/color\]#uisU",'<span style="color:#0000FF">\\1</span>',$message);
-		$message = preg_replace("#\[color=([0-9a-z]{6})\](.+)\[\/color\]#uisU",'<span style="color:#\\1">\\2</span>',$message);
+		$message = preg_replace("#\[color=\#?([0-9a-z]{3,6})\](.+)\[\/color\]#uisU",'<span style="color:#\\1">\\2</span>',$message);
 		
 		
 		$message = preg_replace_callback("#\[list\]\s*((?:\[\*\].+)+)\[\/list\]#usiU",'getUnorderedList',$message);
