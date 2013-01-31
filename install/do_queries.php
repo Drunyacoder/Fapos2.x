@@ -2,12 +2,12 @@
 ##################################################
 ##												##
 ## Author:       Andrey Brykin (Drunya)         ##
-## Version:      1.2                            ##
+## Version:      1.3                            ##
 ## Project:      CMS                            ##
 ## package       CMS Fapos                      ##
 ## subpackege    Install                        ##
-## copyright     ©Andrey Brykin 2010-2012       ##
-## last mod.     2012/08/15                     ##
+## copyright     ©Andrey Brykin 2010-2013       ##
+## last mod.     2013/01/30                     ##
 ##################################################
 
 
@@ -545,6 +545,16 @@ $array[] = "CREATE TABLE `{$set['db']['prefix']}news_attaches` (
 	`is_image` ENUM( '0', '1' ) DEFAULT '0' NOT NULL ,
 	PRIMARY KEY ( `id` )
 ) ENGINE=MyISAM CHARACTER SET utf8 COLLATE utf8_general_ci;";
+#############################################################################
+$array[] = "DROP TABLE IF EXISTS `{$set['db']['prefix']}polls`";
+$array[] = "CREATE TABLE IF NOT EXISTS `{$set['db']['prefix']}polls` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `theme_id` int(11) NOT NULL,
+  `variants` text NOT NULL,
+  `voted_users` text NOT NULL,
+  `question` text NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=3;";
 #############################################################################
 
 
