@@ -4,12 +4,12 @@
 | @Author:       Andrey Brykin (Drunya)        |
 | @Email:        drunyacoder@gmail.com         |
 | @Site:         http://fapos.net              |
-| @Version:      1.7.96                        |
+| @Version:      1.8.00                        |
 | @Project:      CMS                           |
 | @package       CMS Fapos                     |
 | @subpackege    Loads Module                  |
 | @copyright     ©Andrey Brykin 2010-20113     |
-| @last mod.     2013/01/21                    |
+| @last mod.     2013/02/07                    |
 |----------------------------------------------|
 |											   |
 | any partial or not partial extension         |
@@ -706,10 +706,10 @@ Class LoadsModule extends Module {
 		if (!empty($_FILES['attach']['name'])) {
 			$file = $this->__saveFile($_FILES['attach']);
 		}
-
+		
 		// span protected
 		if ( isset( $_SESSION['unix_last_post'] ) and ( time() - $_SESSION['unix_last_post'] < 30 ) ) {
-			return showInfoMessage(__('Your message has been added'), '/loads/');
+			return $this->showInfoMessage(__('Your message has been added'), '/loads/');
 		}
 		
 		
@@ -1005,7 +1005,7 @@ Class LoadsModule extends Module {
 		if (!empty($_FILES['attach']['name'])) {
 			$file = $this->__saveFile($_FILES['attach']);
 		}
-
+		
 
 
         // Check attaches size and format
@@ -1079,7 +1079,7 @@ Class LoadsModule extends Module {
 			'commented'    => $commented,
 			'available'    => $available,
 		);
-		if (!empty($file)) $saveParams['download'] = $file;
+		if (!empty($file)) $data['download'] = $file;
         $target->__construct($data);
         $target->save();
 
@@ -1455,10 +1455,16 @@ Class LoadsModule extends Module {
 		
 		// Формируем путь к файлу
 		if (in_array(strtolower($ext), $extentions)) {
-			$path = md5(uniqid(rand(), true)) . '-' . date("YmdHis", time()) . '.txt';
+			$path = date("YmdHis", time()) . '.txt';
 		} else {
-			$path = md5(uniqid(rand(), true)) . '-' . date("YmdHis", time()) . $ext;
+			$path = date("YmdHis", time()) . $ext;
 		}
+		
+		
+		$files_dir = ROOT . '/sys/files/' . $this->module . '/';
+		$path = getSecureFilename($file['name'] . '_' . $path, $files_dir);
+		
+		
 		// Перемещаем файл из временной директории сервера в директорию files
 		if (move_uploaded_file($file['tmp_name'], ROOT . '/sys/files/loads/' . $path)) {
 			chmod( ROOT . '/sys/files/loads/' . $path, 0644 );
