@@ -932,6 +932,8 @@ Class ForumModule extends Module {
 			$polls = $theme->getPoll();
 			if (!empty($polls[0])) {
 				$theme->setPoll($this->_renderPoll($polls[0]));
+			} else {
+				$theme->setPoll('');
 			}
 			
 			
