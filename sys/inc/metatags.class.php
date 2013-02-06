@@ -2,12 +2,12 @@
 /*---------------------------------------------\
 |											   |
 | @Author:       Andrey Brykin (Drunya)        |
-| @Version:      1.0.0                         |
+| @Version:      1.0.1                         |
 | @Project:      CMS                           |
 | @package       CMS Fapos                     |
 | @subpackege    Tag generator                 |
-| @copyright     ©Andrey Brykin 2010-2012      |
-| @last mod      2012/07/04                    |
+| @copyright     ©Andrey Brykin 2010-2013      |
+| @last mod      2013/02/07                    |
 |----------------------------------------------|
 |											   |
 | any partial or not partial extension         |
@@ -67,6 +67,8 @@ class MetaTags
 		$text = str_replace("\n", ' ', $text);
 		$text = preg_replace('#([\s]{1,})#Umu', ' ', $text);
 		$text = preg_replace('#([^a-zа-я\d\s]{1,})#Umiu', '', $text);
+		
+		$text = preg_replace('#IMAGE\d+#', '', $text);
 		
 		$text = $this->cleanTwoSimbols($text);
 		$text = $this->cleanExceptions($text);
@@ -134,6 +136,8 @@ class MetaTags
 		if (!empty($this->exceptions) && is_array($this->exceptions)) {
 			$text = str_replace($this->exceptions, '', $text);
 		}
+
+		
 		return $text;
 	}
 
