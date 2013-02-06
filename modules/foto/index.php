@@ -4,7 +4,7 @@
 | @Author:       Andrey Brykin (Drunya)          |
 | @Email:        drunyacoder@gmail.com           |
 | @Site:         http://fapos.net                |
-| @Version:      1.5.3                           |
+| @Version:      1.5.4                           |
 | @Project:      CMS                             |
 | @package       CMS Fapos                       |
 | @subpackege    Foto Module  			 		 |
@@ -553,7 +553,7 @@ Class FotoModule extends Module {
 		$this->Cache->clean(CACHE_MATCHING_TAG, array('module_foto'));
 		$this->Register['DB']->cleanSqlCache();
 		if ($this->Log) $this->Log->write('adding foto', 'foto id(' . $id . ')');
-		return showInfoMessage(__('Material successful added'), '/foto/' );		  
+		return $this->showInfoMessage(__('Material successful added'), '/foto/' );		  
 	}
 
 
