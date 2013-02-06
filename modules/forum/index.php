@@ -2047,7 +2047,7 @@ Class ForumModule extends Module {
 			foreach ($posts as $post) {
 				// Удаляем файл, если он есть
 				$attach_files = $attachModel->getCollection(array('post_id' => $post->getId()));
-				if (count($attach_files) > 0) {
+				if (count($attach_files) && is_array($attach_files)) {
 					foreach ($attach_files as $attach_file) {
 						if (file_exists(ROOT . '/sys/files/forum/' . $attach_file->getFilename())) {
 							if (@unlink(ROOT . '/sys/files/forum/' . $attach_file->getFilename())) {
@@ -2826,7 +2826,10 @@ Class ForumModule extends Module {
 				'order' => 'id DESC'
 			));
 
-			$posts_cnt = $this->DB->select('posts', DB_COUNT, array('cond' => array('id_theme' => $post['id_theme'])));
+			//$posts_cnt = $this->DB->select('posts', DB_COUNT, array('cond' => array('id_theme' => $post['id_theme'])));
+			$posts_cnt = $postsModel->getTotal(array('cond' => array('id_theme' => $post->getId_theme())));
+		
+		
 			$id_last_author = $lastPost[0]->getId_author();
 			$last_post = $lastPost[0]->getTime();
 			$theme->setId_last_author($id_last_author);
@@ -2851,17 +2854,28 @@ Class ForumModule extends Module {
 			'limit' => 1,
 			'order' => '`last_post` DESC',
 		));
+		if (!empty($lastTheme[0])) $lastTheme = $lastTheme[0];
+		
 		$forum = $this->Model->getById($theme->getId_forum());
+		
+		
+		
 		if (isset($deleteTheme)) {
 			$forum->setThemes($forum->getThemes() - 1);
 			$forum->setPosts($forum->getPosts() - 1);
-			$forum->setLast_theme_id($lastTheme->getId());
+			
+			if ($lastTheme) $forum->setLast_theme_id($lastTheme->getId());
+			else $forum->setLast_theme_id(0);
+			
 			$forum->save();
 			return $this->showInfoMessage(__('Operation is successful'), '/forum/view_forum/' . $theme->getId_forum());
 			
 		} else {
 			$forum->setPosts($forum->getPosts() - 1);
-			$forum->setLast_theme_id($lastTheme->getId());
+			
+			if ($lastTheme) $forum->setLast_theme_id($lastTheme->getId());
+			else $forum->setLast_theme_id(0);
+			
 			$forum->save();
 			return $this->showInfoMessage(__('Operation is successful'), getReferer());
 		}
