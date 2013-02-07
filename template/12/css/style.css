@@ -1197,7 +1197,8 @@ table.formtb tr td textarea {width: 500px; height: 200px;}
 
 .fpsMainMenu li:hover ul.fpsMainMenu {display:block;}
 
-div.grippie {background:#EEEEEE url('../img/grippie.png') no-repeat scroll center 2px;border-color:#DDDDDD;border-style:solid;border-width:0pt 1px 1px;cursor:s-resize;height:9px;overflow:hidden;}
+/*div.grippie {background:#EEEEEE url('../img/grippie.png') no-repeat scroll center 2px;border-color:#DDDDDD;border-style:solid;border-width:0pt 1px 1px;cursor:s-resize;height:9px;overflow:hidden;}*/
+div.grippie {}
 .resizable-textarea textarea {display:block;margin-bottom:0pt;width:95%;height: 20%;}
 
 .errorMsg {color:#D7630B;}
