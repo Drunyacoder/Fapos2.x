@@ -7,8 +7,8 @@
 ## Project:      CMS                            ##
 ## package       CMS Fapos                      ##
 ## subpackege    Document parser library        ##
-## copyright     ©Andrey Brykin 2010-2012       ##
-## last mod.     2012/09/17                     ##
+## copyright     ©Andrey Brykin 2010-2013       ##
+## last mod.     2013/02/17                     ##
 ##################################################
 
 
@@ -218,7 +218,7 @@ class Document_Parser {
 		}
 		
 		
-		$markets['counter'] = get_url('/sys/img/counter.png');
+		$markets['counter'] = get_url('/sys/img/counter.png?rand=' . rand(0,999999));
 		$markets['template_path'] = get_url('/template/' . Config::read('template'));
 		$markets['www_root'] = WWW_ROOT;
 		

@@ -2,12 +2,12 @@
 /*---------------------------------------------\
 |											   |
 | Author:       Andrey Brykin (Drunya)         |
-| Version:      1.7.0                          |
+| Version:      1.7.1                          |
 | Project:      CMS                            |
 | package       CMS Fapos                      |
 | subpackege    Helpers library                |
-| copyright     ©Andrey Brykin 2010-2012       |
-| last mod.     2012/06/16                     |
+| copyright     ©Andrey Brykin 2010-2013       |
+| last mod.     2013/01/31                     |
 |----------------------------------------------|
 |											   |
 | any partial or not partial extension         |
@@ -18,6 +18,26 @@
 | CMS Fapos или ее частей,                     |
 | без согласия автора, является не законным    |
 \---------------------------------------------*/
+
+
+
+/**
+ *
+ */
+function show_date($date) {
+	$Register = Register::getInstance();
+	$timestamp = strtotime($date);
+	
+	if (!empty($_SESSION['user']) && !empty($_SESSION['user']['timezone'])) {
+		if ($_SESSION['user']['timezone'] >= -12 && $_SESSION['user']['timezone'] <= 12)
+		$timestamp = $timestamp + intval($_SESSION['user']['timezone']) * 60 * 60;
+	}
+
+	
+	$format = $Register['Config']->read('date_format');
+	$format = (!empty($format)) ? $format : 'Y-m-d H-i-s'; 
+	return date($format, $timestamp);
+}
 
 
 
@@ -345,7 +365,7 @@ function translit($str) {
  *
  */
 function getCaptcha() {
-	$kcaptcha = '/sys/inc/kcaptcha/kc.php?' . session_name() . '=' . session_id();
+	$kcaptcha = '/sys/inc/kcaptcha/kc.php?' . session_name() . '=' . session_id() . '&' . rand(rand(0, 1000), 999999);
 	$tpl = file_get_contents(ROOT . '/template/' . Config::read('template') . '/html/default/captcha.html');
 	return str_replace('{CAPTCHA}', $kcaptcha, $tpl);
 }
