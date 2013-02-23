@@ -2,12 +2,12 @@
 /*-----------------------------------------------\
 | 												 |
 |  @Author:       Andrey Brykin (Drunya)         |
-|  @Version:      1.6.55                         |
+|  @Version:      1.6.58                         |
 |  @Project:      CMS                            |
 |  @package       CMS Fapos                      |
 |  @subpackege    Forum Module                   |
 |  @copyright     ©Andrey Brykin 2010-2013       |
-|  @last mod.     2013/01/28                     |
+|  @last mod.     2013/02/22                     |
 \-----------------------------------------------*/
 
 /*-----------------------------------------------\
@@ -914,7 +914,7 @@ Class ForumModule extends Module {
 				//message number
 				$post_num++; $post->setPost_number($post_num);
 				$post_number_url = 'http://' . $_SERVER['HTTP_HOST'] 
-				. get_url('/forum/view_theme/' . $id_theme . '?page=' . $page . '#post' . $post_num, true);
+				. get_url('/' . $this->module . '/view_post/' . $post->getId(), true);
 				$post->setPost_number_url($post_number_url);
 
 				
@@ -3239,5 +3239,33 @@ Class ForumModule extends Module {
 		$this->Register['DB']->cleanSqlCache();
 		if ($this->Log) $this->Log->write('delete theme(because error uccured)', 'theme id(' . $id_theme . ')');
 	}	
-	
+
+
+
+
+	public function view_post($id_post) {
+		$id_post = intval($id_post);
+		if (empty($id_post) || $id_post < 1) redirect('/' . $this->module);
+
+		$postsModel = $this->Register['ModManager']->getModelInstance('Posts');
+		$post = $postsModel->getById($id_post);
+		if (!$post) return $this->showInfoMessage(__('Some error occurred'), get_url('/' . $this->module));
+
+		
+		$id_theme = $post->getId_theme();
+		$post_num = $postsModel->getTotal(
+			array(
+				'order' => 'id ASC',
+				'cond' => array(
+					'id_theme' => $id_theme,
+					'id < ' . $id_post,
+				),
+			)
+		);
+
+		$page = floor($post_num / $this->Register['Config']->read('posts_per_page', $this->module)) + 1;
+		$post_num++;
+
+		redirect('/' . $this->module . '/view_theme/' . $id_theme . '?page=' . $page . '#post' . $post_num, 302);
+	}	
 }

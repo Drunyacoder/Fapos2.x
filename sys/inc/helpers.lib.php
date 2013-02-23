@@ -2,12 +2,12 @@
 /*---------------------------------------------\
 |											   |
 | Author:       Andrey Brykin (Drunya)         |
-| Version:      1.7.1                          |
+| Version:      1.7.2                          |
 | Project:      CMS                            |
 | package       CMS Fapos                      |
 | subpackege    Helpers library                |
 | copyright     ©Andrey Brykin 2010-2013       |
-| last mod.     2013/01/31                     |
+| last mod.     2013/02/22                     |
 |----------------------------------------------|
 |											   |
 | any partial or not partial extension         |
@@ -491,8 +491,14 @@ function get_link($ankor, $url, $params = array(), $notRoot = false) {
  * user to another page but if can't doing this
  * better stop script.
  */
-function redirect($url) {
-	header('Location: ' . get_url($url));
+function redirect($url, $header = 302) {
+	
+	$allowed_headers = array(301, 302);
+	if (!in_array($header, $allowed_headers)) $header = 301;
+
+
+	header('Location: ' . get_url($url), TRUE, $header);
+	// :)
 	die() or exit();
 }
 
