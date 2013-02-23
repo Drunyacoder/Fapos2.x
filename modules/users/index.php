@@ -2,12 +2,12 @@
 /*---------------------------------------------\
 |											   |
 | @Author:       Andrey Brykin (Drunya)        |
-| @Version:      1.5.4                         |
+| @Version:      1.5.5                         |
 | @Project:      CMS                           |
 | @package       CMS Fapos                     |
 | @subpackege    Users Module                  |
 | @copyright     ©Andrey Brykin 2010-2013      |
-| @last mod      2013/01/07                    |
+| @last mod      2013/02/22                    |
 |----------------------------------------------|
 |											   |
 | any partial or not partial extension         |

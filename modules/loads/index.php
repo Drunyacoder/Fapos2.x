@@ -4,12 +4,12 @@
 | @Author:       Andrey Brykin (Drunya)        |
 | @Email:        drunyacoder@gmail.com         |
 | @Site:         http://fapos.net              |
-| @Version:      1.8.00                        |
+| @Version:      1.8.01                        |
 | @Project:      CMS                           |
 | @package       CMS Fapos                     |
 | @subpackege    Loads Module                  |
-| @copyright     ©Andrey Brykin 2010-20113     |
-| @last mod.     2013/02/07                    |
+| @copyright     ©Andrey Brykin 2010-2013      |
+| @last mod.     2013/02/23                    |
 |----------------------------------------------|
 |											   |
 | any partial or not partial extension         |
@@ -385,9 +385,8 @@ Class LoadsModule extends Module {
 
         // Some gemor with add fields
         if (is_object($this->AddFields)) {
-            $array = array(0 => $entity);
-            $array = $this->AddFields->mergeRecords($array);
-            $entity = $array[0];
+            $entity = $this->AddFields->mergeRecords(array($entity));
+            $entity = $entity[0];
         }
 
 
@@ -787,7 +786,7 @@ Class LoadsModule extends Module {
 
 
         if (is_object($this->AddFields) && count($entity) > 0) {
-            $entity = $this->AddFields->mergeRecords(array(0 => $entity), true);
+            $entity = $this->AddFields->mergeRecords(array($entity), true);
             $entity = $entity[0];
         }
 

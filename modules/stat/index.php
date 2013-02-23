@@ -4,12 +4,12 @@
 | @Author:       Andrey Brykin (Drunya)        |
 | @Email:        drunyacoder@gmail.com         |
 | @Site:         http://fapos.net              |
-| @Version:      1.7.5                         |
+| @Version:      1.7.7                         |
 | @Project:      CMS                           |
 | @Package       CMS Fapos                     |
 | @Subpackege    Stats Module                  |
 | @Copyright     ©Andrey Brykin 2010-2013      |
-| @Last mod      2013/01/21                    |
+| @Last mod      2013/02/22                    |
 |----------------------------------------------|
 |											   |
 | any partial or not partial extension         |
@@ -360,9 +360,8 @@ Class StatModule extends Module {
 		
 		// Some gemor with add fields
 		if (is_object($this->AddFields)) {
-			$array = array(0 => $entity);
-			$array = $this->AddFields->mergeRecords($array);
-			$entity = $array[0];
+			$entity = $this->AddFields->mergeRecords(array($entity));
+			$entity = $entity[0];
 		}
 		
 		
@@ -725,7 +724,7 @@ Class StatModule extends Module {
 		
 		
 		if (is_object($this->AddFields) && count($entity) > 0) {
-			$entity = $this->AddFields->mergeRecords(array(0 => $entity), true);
+			$entity = $this->AddFields->mergeRecords(array($entity), true);
 			$entity = $entity[0];
 		}
 		

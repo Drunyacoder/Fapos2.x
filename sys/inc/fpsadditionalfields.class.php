@@ -2,12 +2,12 @@
 /*-----------------------------------------------\
 | 												 |
 |  @Author:       Andrey Brykin (Drunya)         |
-|  @Version:      0.4                            |
+|  @Version:      0.5                            |
 |  @Project:      CMS                            |
 |  @package       CMS Fapos                      |
 |  @subpackege    Additional Fields              |
 |  @copyright     ©Andrey Brykin 2010-2013       |
-|  @last mod.     2012/03/02                     |
+|  @last mod.     2013/02/22                     |
 \-----------------------------------------------*/
 
 /*-----------------------------------------------\
@@ -62,8 +62,8 @@ class FpsAdditionalFields {
         $where = array('entity_id IN (' . $ids . ')');
 
 
-        $FieldsModelName = $Register['ModManager']->getModelInstance(ucfirst($module) . 'AddFields');
-        $ContentModelName = $Register['ModManager']->getModelInstance(ucfirst($module) . 'AddContent');
+        $FieldsModelName = $Register['ModManager']->getModelInstance($module . 'AddFields');
+        $ContentModelName = $Register['ModManager']->getModelInstance($module . 'AddContent');
    
 		
         //$Model->bindModel('content');
@@ -77,30 +77,26 @@ class FpsAdditionalFields {
                 $output = array();
                 foreach ($addFields as $addField) {
 				
+				
 					$fieldContent = array();
 					if (!empty($addContents)) {
 						foreach($addContents as $addCon) {
-							if ($addCon->getField_id() == $addField->getId())
-								$fieldContent[] = $addCon;
+						
+							// Get current field contents
+							if ($addCon->getField_id() == $addField->getId()
+							&& $entity->getId() === $addContent->getEntity_id()) {
+								$viewData = $addCon->getContent();
+								break;
+							}
 						}
 					}
 					$addField->setContent($fieldContent);
 					
 				
-                    $viewData = '';
+
                     $field = 'add_field_' . $addField->getId();
                     $f_params = $addField->getParams();
                     if (!empty($f_params)) $f_params = unserialize($f_params);
-                    $addFieldContent = $addField->getContent();
-
-
-                    if (count($addFieldContent)) {
-                        foreach ($addFieldContent as $addContent) {
-                            if ($entity->getId() === $addContent->getEntity_id()) {
-                                $viewData = $addContent->getContent();
-                            }
-                        }
-                    }
 
 
 
@@ -130,18 +126,24 @@ class FpsAdditionalFields {
                             break;
 
 
+							
                         case 'checkbox':// CHECKBOX
                             $ans = (!empty($f_params['values'])) ? explode('|', $f_params['values']) : array();
                             $yes = (!empty($ans[0])) ? h($ans[0]) : '';
                             $no = (!empty($ans[1])) ? h($ans[1]) : '';
-                            $viewData = $addContent->getContent() ? $yes : $no;
+                            
+							
                             if ($inputs === true) {
-                                if (!$addContent->getContent())
+                                if (empty($viewData))
                                     $viewData = '<input type="checkbox" name="' . $field . '" value="1" />';
                                 else
                                     $viewData = '<input type="checkbox" name="' . $field . '"'
                                     . 'value="1" checked="checked" />';
-                            }
+                            
+							
+							} else {
+								$viewData = (!empty($viewData)) ? $yes : $no;
+							}
                             break;
 
 
