@@ -2,7 +2,7 @@
 /*-----------------------------------------------\
 | 												 |
 |  @Author:       Andrey Brykin (Drunya)         |
-|  @Version:      1.6.58                         |
+|  @Version:      1.6.59                         |
 |  @Project:      CMS                            |
 |  @package       CMS Fapos                      |
 |  @subpackege    Forum Module                   |
@@ -781,11 +781,8 @@ Class ForumModule extends Module {
 							//if attach is image and isset markets for this image
 							if ($attach->getIs_image() == 1) {
 							
-							
-								$message = str_replace('{IMAGE'.$attach->getAttach_number().'}'
-								, '<a class="gallery" href="' . get_url('/sys/files/' . $this->module . '/' . $attach->getFilename()) 
-								. '"><img src="' . get_url('/image/' . $this->module . '/' . $attach->getFilename()) . '" /></a>'
-								, $message);
+								$message = $this->insertImageAttach($message, $attach->getFilename(), $attach->getAttach_number());
+								
 							
 							
 								//$message = str_replace('{IMAGE' . $attach->getAttach_number() . '}', 

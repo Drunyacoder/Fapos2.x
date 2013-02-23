@@ -145,10 +145,13 @@ Class NewsModule extends Module {
 				$attachDir = ROOT . '/sys/files/' . $this->module . '/';
 				foreach ($attaches as $attach) {
 					if ($attach->getIs_image() == 1 && file_exists($attachDir . $attach->getFilename())) {
-						$announce = str_replace('{IMAGE'.$attach->getAttach_number().'}'
-						, '<a class="gallery" href="' . get_url('/sys/files/' . $this->module . '/' . $attach->getFilename()) 
-						. '"><img src="' . get_url('/image/' . $this->module . '/' . $attach->getFilename()) . '" /></a>'
-						, $announce);
+					
+					
+						$announce = $this->insertImageAttach(
+							$announce, 
+							$attach->getFilename(), 
+							$attach->getAttach_number()
+						);
 					}
 				}
 			}
@@ -303,10 +306,13 @@ Class NewsModule extends Module {
 				$attachDir = ROOT . '/sys/files/' . $this->module . '/';
 				foreach ($attaches as $attach) {
 					if ($attach->getIs_image() == 1 && file_exists($attachDir . $attach->getFilename())) {
-						$announce = str_replace('{IMAGE'.$attach->getAttach_number().'}'
-						, '<a class="gallery" href="' . get_url('/sys/files/' . $this->module . '/' . $attach->getFilename()) 
-						. '"><img src="' . get_url('/image/' . $this->module . '/' . $attach->getFilename()) . '" /></a>'
-						, $announce);
+					
+					
+						$announce = $this->insertImageAttach(
+							$announce, 
+							$attach->getFilename(), 
+							$attach->getAttach_number()
+						);
 					}
 				}
 			}
@@ -428,10 +434,13 @@ Class NewsModule extends Module {
 			$attachDir = ROOT . '/sys/files/' . $this->module . '/';
 			foreach ($attaches as $attach) {
 				if ($attach->getIs_image() == 1 && file_exists($attachDir . $attach->getFilename())) {
-					$announce = str_replace('{IMAGE'.$attach->getAttach_number().'}'
-					, '<a class="gallery" href="' . get_url('/sys/files/' . $this->module . '/' . $attach->getFilename()) 
-					. '"><img src="' . get_url('/image/' . $this->module . '/' . $attach->getFilename()) . '" /></a>'
-					, $announce);
+				
+				
+					$announce = $this->insertImageAttach(
+						$announce, 
+						$attach->getFilename(), 
+						$attach->getAttach_number()
+					);
 				}
 			}
 		}

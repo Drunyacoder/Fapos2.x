@@ -4,7 +4,7 @@
 | @Author:       Andrey Brykin (Drunya)        |
 | @Email:        drunyacoder@gmail.com         |
 | @Site:         http://fapos.net              |
-| @Version:      1.7.7                         |
+| @Version:      1.7.8                         |
 | @Project:      CMS                           |
 | @Package       CMS Fapos                     |
 | @Subpackege    Stats Module                  |
@@ -140,10 +140,13 @@ Class StatModule extends Module {
 				$attachDir = ROOT . '/sys/files/' . $this->module . '/';
 				foreach ($attaches as $attach) {
 					if ($attach->getIs_image() == 1 && file_exists($attachDir . $attach->getFilename())) {
-						$announce = str_replace('{IMAGE'.$attach->getAttach_number().'}'
-						, '<a class="gallery" href="' . get_url('/sys/files/' . $this->module . '/' . $attach->getFilename()) 
-						. '"><img src="' . get_url('/image/' . $this->module . '/' . $attach->getFilename()) . '" /></a>'
-						, $announce);
+						
+						
+						$announce = $this->insertImageAttach(
+							$announce, 
+							$attach->getFilename(), 
+							$attach->getAttach_number()
+						);
 					}
 				}
 			}
@@ -297,10 +300,13 @@ Class StatModule extends Module {
 				$attachDir = ROOT . '/sys/files/' . $this->module . '/';
 				foreach ($attaches as $attach) {
 					if ($attach->getIs_image() == 1 && file_exists($attachDir . $attach->getFilename())) {
-						$announce = str_replace('{IMAGE'.$attach->getAttach_number().'}'
-						, '<a class="gallery" href="' . get_url('/sys/files/' . $this->module . '/' . $attach->getFilename()) 
-						. '"><img src="' . get_url('/image/' . $this->module . '/' . $attach->getFilename()) . '" /></a>'
-						, $announce);
+						
+						
+						$announce = $this->insertImageAttach(
+							$announce, 
+							$attach->getFilename(), 
+							$attach->getAttach_number()
+						);
 					}
 				}
 			}
@@ -415,10 +421,13 @@ Class StatModule extends Module {
 			$attachDir = ROOT . '/sys/files/' . $this->module . '/';
 			foreach ($attaches as $attach) {
 				if ($attach->getIs_image() == 1 && file_exists($attachDir . $attach->getFilename())) {
-					$announce = str_replace('{IMAGE'.$attach->getAttach_number().'}'
-					, '<a class="gallery" href="' . get_url('/sys/files/' . $this->module . '/' . $attach->getFilename()) 
-					. '"><img src="' . get_url('/image/' . $this->module . '/' . $attach->getFilename()) . '" /></a>'
-					, $announce);
+					
+					
+					$announce = $this->insertImageAttach(
+						$announce, 
+						$attach->getFilename(), 
+						$attach->getAttach_number()
+					);
 				}
 			}
 		}
