@@ -84,7 +84,7 @@ class FpsAdditionalFields {
 						
 							// Get current field contents
 							if ($addCon->getField_id() == $addField->getId()
-							&& $entity->getId() === $addContent->getEntity_id()) {
+							&& $entity->getId() === $addCon->getEntity_id()) {
 								$viewData = $addCon->getContent();
 								break;
 							}
