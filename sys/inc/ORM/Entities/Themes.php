@@ -2,12 +2,12 @@
 /*---------------------------------------------\
 |											   |
 | @Author:       Andrey Brykin (Drunya)        |
-| @Version:      1.0                           |
+| @Version:      1.1                           |
 | @Project:      CMS                           |
 | @package       CMS Fapos                     |
 | @subpackege    Themes Entity                 |
-| @copyright     ©Andrey Brykin 2010-2012      |
-| @last mod      2012/05/20                    |
+| @copyright     ©Andrey Brykin 2010-2013      |
+| @last mod      2013/02/25                    |
 |----------------------------------------------|
 |											   |
 | any partial or not partial extension         |
@@ -40,6 +40,7 @@ class ThemesEntity extends FpsEntity
 	protected $important;
 	protected $description;
 	protected $group_access;
+	protected $first_top;
 
 	
 	
@@ -47,18 +48,19 @@ class ThemesEntity extends FpsEntity
 	public function save()
 	{
 		$params = array(
-			'title' => $this->title,
-			'id_author' => $this->id_author,
-			'time' => $this->time,
-			'id_last_author' => $this->id_last_author,
-			'last_post' => $this->last_post,
-			'id_forum' => $this->id_forum,
-			'locked' => $this->locked,
-			'posts' => $this->posts,
-			'views' => $this->views,
-			'important' => $this->important,
-			'description' => $this->description,
-			'group_access' => implode('.', (array)$this->group_access),
+			'title' 			=> $this->title,
+			'id_author' 		=> $this->id_author,
+			'time' 				=> $this->time,
+			'id_last_author' 	=> $this->id_last_author,
+			'last_post' 		=> $this->last_post,
+			'id_forum' 			=> $this->id_forum,
+			'locked' 			=> $this->locked,
+			'posts' 			=> $this->posts,
+			'views' 			=> $this->views,
+			'important' 		=> $this->important,
+			'description' 		=> $this->description,
+			'group_access' 		=> implode('.', (array)$this->group_access),
+			'first_top' 		=> $this->first_top,
 		);
 		if ($this->id) $params['id'] = $this->id;
 		$Register = Register::getInstance();

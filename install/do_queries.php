@@ -2,12 +2,12 @@
 ##################################################
 ##												##
 ## Author:       Andrey Brykin (Drunya)         ##
-## Version:      1.3                            ##
+## Version:      1.4                            ##
 ## Project:      CMS                            ##
 ## package       CMS Fapos                      ##
 ## subpackege    Install                        ##
 ## copyright     ©Andrey Brykin 2010-2013       ##
-## last mod.     2013/01/30                     ##
+## last mod.     2013/02/23                     ##
 ##################################################
 
 
@@ -319,6 +319,7 @@ $array[] = "CREATE TABLE `{$set['db']['prefix']}themes` (
   `important` enum('0','1') NOT NULL default '0',
   `description` TEXT NOT NULL,
   `group_access` varchar(255) default '' NOT NULL,
+  `first_top` ENUM( '0', '1' ) DEFAULT '0' NOT NULL,
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci";
 #####################################################################
