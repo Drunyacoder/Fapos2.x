@@ -1,38 +1,42 @@
 <!doctype html>
 <html>
 <head>
-<title>{{ title }}</title>
-<meta name="description" content="{{ meta_description }}" />
-<meta name="keywords" content="{{ meta_keywords }}" />
-<meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />
+	<title>{{ title }}</title>
+	
+	<meta name="description" content="{{ meta_description }}" />
+	<meta name="keywords" content="{{ meta_keywords }}" />
+	<meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />
 
-<meta name='author' content='Andrey Brykin' />
-<meta name='robots' content='index, follow' />
-<meta name='rating' content='general' />
-<meta name='generator' content='Fapos CMS 1.1' />
+	<meta name='author' content='Andrey Brykin' />
+	<meta name='robots' content='index, follow' />
+	<meta name='rating' content='general' />
+	<meta name='generator' content='Fapos CMS 1.1' />
 
-<link rel="icon" href="{{ www_root }}/sys/img/favicon.ico" type="image/x-icon" />
-<link rel="shortcut icon" href="{{ www_root }}/sys/img/favicon.ico" type="image/x-icon" />
-<link type="text/css" rel="StyleSheet" href="{{ template_path }}/css/style.css" />
-<script language="JavaScript" type="text/javascript" src="{{ www_root }}/sys/js/jquery-1.5.2.min.js"></script>
-<script language="JavaScript" type="text/javascript" src="{{ www_root }}/sys/js/send_message.js"></script>
-<script language="JavaScript" type="text/javascript" src="{{ www_root }}/sys/js/textarearesizer.js"></script>
-<script type="text/javascript">
-check_pm('{{ fps_user.id }}');
+	<link rel="icon" href="{{ www_root }}/sys/img/favicon.ico" type="image/x-icon" />
+	<link rel="shortcut icon" href="{{ www_root }}/sys/img/favicon.ico" type="image/x-icon" />
+	<link type="text/css" rel="StyleSheet" href="{{ template_path }}/css/style.css" />
+	<script language="JavaScript" type="text/javascript" src="{{ www_root }}/sys/js/jquery.js"></script>
+	<script language="JavaScript" type="text/javascript" src="{{ www_root }}/sys/js/send_message.js"></script>
+	<script language="JavaScript" type="text/javascript" src="{{ www_root }}/sys/js/textarearesizer.js"></script>
+	<script type="text/javascript">
+	
+	{% if fps_user_id %}
+		check_pm('{{ fps_user_id }}');
+	{% endif %}
 
-$(document).ready(function() {
-$('textarea.text-area:not(.processed)').TextAreaResizer();
-});
-</script>
-<!-- FancyBOX -->
-<link type="text/css" rel="StyleSheet" href="{{ www_root }}/sys/js/fancybox/css/fancy.css" />
-<script type="text/javascript" src="{{ www_root }}/sys/js/fancybox/jquery.fancybox.js"></script>
-<script type="text/javascript">
-$(document).ready(function() {
-	$("a.gallery").fancybox();
-});
-</script>
-<!--/FancyBOX -->
+	$(document).ready(function() {
+	$('textarea.text-area:not(.processed)').TextAreaResizer();
+	});
+	</script>
+	<!-- FancyBOX -->
+	<link type="text/css" rel="StyleSheet" href="{{ www_root }}/sys/js/fancybox/css/fancy.css" />
+	<script type="text/javascript" src="{{ www_root }}/sys/js/fancybox/jquery.fancybox.js"></script>
+	<script type="text/javascript">
+	$(document).ready(function() {
+		$("a.gallery").fancybox();
+	});
+	</script>
+	<!--/FancyBOX -->
 </head>
 
 
