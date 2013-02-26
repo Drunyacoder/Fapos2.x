@@ -17,16 +17,18 @@
 	<link type="text/css" rel="StyleSheet" href="{{ template_path }}/css/style.css" />
 	<script language="JavaScript" type="text/javascript" src="{{ www_root }}/sys/js/jquery.js"></script>
 	<script language="JavaScript" type="text/javascript" src="{{ www_root }}/sys/js/send_message.js"></script>
-	<script language="JavaScript" type="text/javascript" src="{{ www_root }}/sys/js/textarearesizer.js"></script>
+	<!--<script language="JavaScript" type="text/javascript" src="{{ www_root }}/sys/js/textarearesizer.js"></script>-->
 	<script type="text/javascript">
 	
 	{% if fps_user_id %}
 		check_pm('{{ fps_user_id }}');
 	{% endif %}
 
+	/*
 	$(document).ready(function() {
 	$('textarea.text-area:not(.processed)').TextAreaResizer();
 	});
+	*/
 	</script>
 	<!-- FancyBOX -->
 	<link type="text/css" rel="StyleSheet" href="{{ www_root }}/sys/js/fancybox/css/fancy.css" />

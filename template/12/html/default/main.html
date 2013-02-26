@@ -1,39 +1,44 @@
 <!doctype html>
 <html>
 <head>
-<title>{{ title }}</title>
+	<title>{{ title }}</title>
 
-<meta name="description" content="{{ meta_description }}" />
-<meta name="keywords" content="{{ meta_keywords }}" />
-<meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />
+	<meta name="description" content="{{ meta_description }}" />
+	<meta name="keywords" content="{{ meta_keywords }}" />
+	<meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />
 
-<meta name='author' content='Andrey Brykin' />
-<meta name='robots' content='index, follow' />
-<meta name='rating' content='general' />
-<meta name='generator' content='Fapos CMS 2.1' />
+	<meta name='author' content='Andrey Brykin' />
+	<meta name='robots' content='index, follow' />
+	<meta name='rating' content='general' />
+	<meta name='generator' content='Fapos CMS 2.1' />
 
-<link rel="icon" href="{{ www_root }}/sys/img/favicon.ico" type="image/x-icon" />
-<link rel="shortcut icon" href="{{ www_root }}/sys/img/favicon.ico" type="image/x-icon" />
-<link type="text/css" rel="StyleSheet" href="{{ template_path }}/css/style.css" />
-<script language="JavaScript" type="text/javascript" src="{{ www_root }}/sys/js/jquery-1.5.2.min.js"></script>
-<script language="JavaScript" type="text/javascript" src="{{ www_root }}/sys/js/send_message.js"></script>
-<script language="JavaScript" type="text/javascript" src="{{ www_root }}/sys/js/textarearesizer.js"></script>
-<script type="text/javascript">
-check_pm('{{ fps_user.id }}');
+	<link rel="icon" href="{{ www_root }}/sys/img/favicon.ico" type="image/x-icon" />
+	<link rel="shortcut icon" href="{{ www_root }}/sys/img/favicon.ico" type="image/x-icon" />
+	<link type="text/css" rel="StyleSheet" href="{{ template_path }}/css/style.css" />
+	<script language="JavaScript" type="text/javascript" src="{{ www_root }}/sys/js/jquery.js"></script>
+	<script language="JavaScript" type="text/javascript" src="{{ www_root }}/sys/js/send_message.js"></script>
+	<!--<script language="JavaScript" type="text/javascript" src="{{ www_root }}/sys/js/textarearesizer.js"></script>-->
+	<script type="text/javascript">
+	{% if fps_user_id %}
+		check_pm('{{ fps_user_id }}');
+	{% endif %}
 
-$(document).ready(function() {
-$('textarea.text-area:not(.processed)').TextAreaResizer();
-});
-</script>
-<!-- FancyBOX -->
-<link type="text/css" rel="StyleSheet" href="{{ www_root }}/sys/js/fancybox/css/fancy.css" />
-<script type="text/javascript" src="{{ www_root }}/sys/js/fancybox/jquery.fancybox.js"></script>
-<script type="text/javascript">
-$(document).ready(function() {
-	$("a.gallery").fancybox();
-});
-</script>
-<!--/FancyBOX -->
+	
+	/*
+	$(document).ready(function() {
+	$('textarea.text-area:not(.processed)').TextAreaResizer();
+	});
+	*/
+	</script>
+	<!-- FancyBOX -->
+	<link type="text/css" rel="StyleSheet" href="{{ www_root }}/sys/js/fancybox/css/fancy.css" />
+	<script type="text/javascript" src="{{ www_root }}/sys/js/fancybox/jquery.fancybox.js"></script>
+	<script type="text/javascript">
+	$(document).ready(function() {
+		$("a.gallery").fancybox();
+	});
+	</script>
+	<!--/FancyBOX -->
 </head>
 
 
@@ -45,8 +50,6 @@ $(document).ready(function() {
 <ul>
 	<li>
 		<a href="{{ www_root }}/">Главная</a>
-		{% if fps_user_id != 1 %}
-		{% endif %}
 		{% if fps_user_id %}
 			<a href="{{ www_root }}/users/info/{{ fps_user_id }}">Мой профиль</a>
 			<a href="{{ www_root }}/users/logout">Выход</a>
@@ -366,30 +369,15 @@ $(document).ready(function() {
 	</td>
 
 	<td class="img">
-	<!--<img src="/template/12/img/ucozb.png" alt="" />
-	
-	<ul>
-	Ваш текст
-	</ul>
-	-->
+		<object width="195" height="170" id="yui-gen54" class="restrain" type="application/x-shockwave-flash" data="http://youtube.com/v/MwXgd4_9S-k"><param name="movie" value="http://youtube.com/v/MwXgd4_9S-k"><param name="wmode" value="transparent"><!--[if IE 6]><embed width="400" height="300" type="application/x-shockwave-flash" src="http://youtube.com/v/MwXgd4_9S-k" /><![endif]--></object>
 	</td>
 
 	<td class="img">
-	<!--<img src="/template/12/img/joomlab.png" alt="" />
-	
-	<ul>
-	Ваш текст
-	</ul>
-	-->
+		<object width="195" height="170" id="yui-gen54" class="restrain" type="application/x-shockwave-flash" data="http://youtube.com/v/MwXgd4_9S-k"><param name="movie" value="http://youtube.com/v/MwXgd4_9S-k"><param name="wmode" value="transparent"><!--[if IE 6]><embed width="400" height="300" type="application/x-shockwave-flash" src="http://youtube.com/v/MwXgd4_9S-k" /><![endif]--></object>
 	</td>
 
-	<td class="img">
-	<!--<img src="/template/12/img/otherb.png" alt="" />
-	
-	<ul>
-	Ваш текст
-	</ul>
-	-->
+	<td>
+		<object width="195" height="170" id="yui-gen54" class="restrain" type="application/x-shockwave-flash" data="http://youtube.com/v/MwXgd4_9S-k"><param name="movie" value="http://youtube.com/v/MwXgd4_9S-k"><param name="wmode" value="transparent"><!--[if IE 6]><embed width="400" height="300" type="application/x-shockwave-flash" src="http://youtube.com/v/MwXgd4_9S-k" /><![endif]--></object>
 	</td>
 
 	</tr>
