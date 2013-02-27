@@ -45,9 +45,9 @@ class Fps_Viewer_TokensParser
 		);
 		
 		$this->regexes = array(
-			'lex_var' => '#\s' . preg_quote($this->delimiters['tag_var'][1], '/') . '#uA',
-			'lex_block' => '#\s(?:' . preg_quote($this->delimiters['tag_block'][1]) . '|' . preg_quote($this->delimiters['tag_block'][1]) . ')#uA',
-			'lex_start' => '#\s?(' . preg_quote($this->delimiters['tag_var'][0]) . '|' . preg_quote($this->delimiters['tag_block'][0]) . ')\s#us',
+			'lex_var' => '#\s+' . preg_quote($this->delimiters['tag_var'][1], '/') . '#uA',
+			'lex_block' => '#\s+(?:' . preg_quote($this->delimiters['tag_block'][1]) . '|' . preg_quote($this->delimiters['tag_block'][1]) . ')#uA',
+			'lex_start' => '#(' . preg_quote($this->delimiters['tag_var'][0]) . '|' . preg_quote($this->delimiters['tag_block'][0]) . ')\s#us',
 			'operators' => '#not in(?=[\s()])|and(?=[\s()])|not(?=[\s()])|in(?=[\s()])|\<\=|\>\=|\=\=|or(?=[\s()])|\!\=|%|\>|\+|-|\<|\=|\*#uA',
 		);
 	}
