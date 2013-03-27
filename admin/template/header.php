@@ -55,13 +55,17 @@
 			</div>
 			<div class="userbar">
 				<?php
-				$ava_path = (file_exists(ROOT . '/sys/avatars/' . $_SESSION['user']['id'] . '.jpg'))
-				? WWW_ROOT . '/sys/avatars/' . $_SESSION['user']['id'] . '.jpg'
-				:  WWW_ROOT . '/sys/img/noavatar.png';
+				if (!empty($_SESSION['user'])) {
+					
+					$ava_path = (file_exists(ROOT . '/sys/avatars/' . $_SESSION['user']['id'] . '.jpg'))
+					? WWW_ROOT . '/sys/avatars/' . $_SESSION['user']['id'] . '.jpg'
+					:  WWW_ROOT . '/sys/img/noavatar.png';
+				
+				}
 				?>
 				<div class="ava"><img src="<?php echo $ava_path; ?>" alt="user ava" title="user ava" /></div>
 				<div class="name"><a href="#"><?php echo h($_SESSION['user']['name']); ?></a><span>Admin</span></div>
-				<a href="#" class="exit"></a>
+				<a href="exit.php" class="exit"></a>
 			</div>
 			<div class="clear"></div>
 		</div>

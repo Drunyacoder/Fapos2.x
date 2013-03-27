@@ -52,7 +52,7 @@ if (ADM_REFER_PROTECTED == 1) {
 
 
 ///if (empty($_SESSION['user'])) redirect('/');
-if (!isset($_SESSION['adm_panel_authorize']) || $_SESSION['adm_panel_authorize'] < time()) {
+if (!isset($_SESSION['adm_panel_authorize']) || $_SESSION['adm_panel_authorize'] < time() || empty($_SESSION['user'])) {
 	if (isset($_POST['send']) && isset($_POST['login']) && isset($_POST['passwd'])) {
 		$errors = '';
 		$login = strtolower(trim($_POST['login']));
@@ -76,6 +76,7 @@ if (!isset($_SESSION['adm_panel_authorize']) || $_SESSION['adm_panel_authorize']
 			}
 			
 			if (empty($errors)) {
+				$_SESSION['user'] = $user[0];
 				$_SESSION['adm_panel_authorize'] = (time() + Config::read('session_time', 'secure'));
 				redirect('/admin/');
 			}
@@ -85,7 +86,7 @@ if (!isset($_SESSION['adm_panel_authorize']) || $_SESSION['adm_panel_authorize']
 
     $pageTitle = 'Авторизация в панели Администрирования';
     $pageNav = '';
-    $pageNavк = '';
+    $pageNavr = '';
     //include_once ROOT . '/admin/template/header.php';
 ?>
 
@@ -118,7 +119,7 @@ if (!isset($_SESSION['adm_panel_authorize']) || $_SESSION['adm_panel_authorize']
 					}
 					?>
 					<div class="item"><span>Логин</span><input name="login" type="text" /></div>
-					<div class="item"><span>Пароль</span><input name="passwd" type="text" /></div>
+					<div class="item"><span>Пароль</span><input name="passwd" type="password" /></div>
 				</div>
 				<div class="submit"><input type="submit" name="send" value="" /></div>
 			</form>
