@@ -31,7 +31,7 @@ include_once ROOT . '/admin/inc/adm_boot.php';
 
 $pageTitle = 'Массовая рассылка писем';
 $pageNav = $pageTitle;
-$pageNavl = '';
+$pageNavr = '';
 
 
 
@@ -122,60 +122,90 @@ if (isset($_POST['send'])) {
 include_once ROOT . '/admin/template/header.php';
 ?>
 
-<div class="fps-win">
-<span class="greytxt">Email-ов доступно:</span> <?php echo $all_users_cnt; ?><br /><br />
+<div class="warning">
+	<span class="greytxt">Email-ов доступно:</span> <?php echo $all_users_cnt; ?><br /><br />
 
 
-<span class="greytxt">Максимальный размер письма:</span> 10000 символов<br /><br />
+	<span class="greytxt">Максимальный размер письма:</span> 10000 символов<br /><br />
 
 
-<span class="greytxt"><b>В теле письма доступны следующие метки</b></span><br />
-{USERNAME}<span class="greytxt"> - Имя получателя</span><br />
-{USERMAIL}<span class="greytxt"> - Почтовый адрес получателя</span><br />
-{SITEDOMAIN}<span class="greytxt"> - Домен вашего сайта</span><br />
+	<span class="greytxt"><b>В теле письма доступны следующие метки</b></span><br />
+	{USERNAME}<span class="greytxt"> - Имя получателя</span><br />
+	{USERMAIL}<span class="greytxt"> - Почтовый адрес получателя</span><br />
+	{SITEDOMAIN}<span class="greytxt"> - Домен вашего сайта</span><br />
 </div>
 
+
+
+
+
+
 <form action="" method="POST">
-<table class="settings-tb">
-		<tr>
-			<td class="left">Отправить группам</td>
-			<td class="right">
-				<table>
-					<tr>
-					<?php foreach ($users_groups as $id => $group): ?>
-						<td style="text-align:center;">
-							<input type="checkbox" name="groups[<?php echo (int)$id; ?>]" value="<?php echo (int)$id; ?>" checked="checked" /><br />
-							<?php echo h($group['title']) . ' (' . $group['cnt'] . ')'; ?>
-						</td>
-					<?php endforeach; ?>
-					</tr>
-				</table>
-			</td>
-		</tr>	
-		<tr>
-			<td class="left">Тема</td>
-			<td class="right">
-				<input size="120" type="text" name="subject" />
-			</td>
-		</tr>	
-		<tr>
-			<td class="left">Обратный адрес</td>
-			<td class="right">
-				<input size="120" type="text" name="from" value="<?php 
-				echo (Config::read('admin_email')) ? Config::read('admin_email') : ''; ?>" />
-			</td>
-		</tr>
-		<tr>
-			<td class="left">Текст письма</td>
-			<td class="right">
-				<textarea name="message" cols="100" rows="12"></textarea>
-			</td>
-		</tr>
-		<tr>
-			<td colspan="2" style="text-align:center;"><input type="submit" value="Разослать" name="send" /></td>
-		</tr>
-</table>
+<div class="list">
+	<div class="title">Рассылка</div>
+	<div class="level1">
+		<div class="items">
+			<div class="setting-item">
+				<div class="left">
+					Отправить группам
+				</div>
+				<div class="right">
+					<table>
+						<tr>
+						<?php foreach ($users_groups as $id => $group):  $chb_id = md5(rand(0, 9999) . $id); ?>
+							<td style="text-align:center;">
+								<input id="<?php echo $chb_id; ?>" type="checkbox" name="groups[<?php echo (int)$id; ?>]" value="<?php echo (int)$id; ?>" checked="checked" /><label for="<?php echo $chb_id; ?>"></label><br />
+								<?php echo h($group['title']) . ' (' . $group['cnt'] . ')'; ?>
+							</td>
+						<?php endforeach; ?>
+						</tr>
+					</table>
+				</div>
+				<div class="clear"></div>
+			</div>
+			<div class="setting-item">
+				<div class="left">
+					Тема
+				</div>
+				<div class="right">
+					<input size="120" type="text" name="subject" />
+				</div>
+				<div class="clear"></div>
+			</div>
+			<div class="setting-item">
+				<div class="left">
+					Обратный адрес
+				</div>
+				<div class="right">
+					<input size="120" type="text" name="from" value="<?php 
+					echo (Config::read('admin_email')) ? Config::read('admin_email') : ''; ?>" />
+				</div>
+				<div class="clear"></div>
+			</div>
+			<div class="setting-item">
+				<div class="left">
+					Текст письма
+				</div>
+				<div class="right">
+					<textarea name="message" style="height:200px;"></textarea>
+				</div>
+				<div class="clear"></div>
+			</div>
+			<div class="setting-item">
+				<div class="left">
+				</div>
+				<div class="right">
+					<input class="save-button" type="submit" name="send" value="Сохранить" />
+				</div>
+				<div class="clear"></div>
+			</div>
+		</div>
+	</div>
+</div>
 </form>
+
+
+
 
 <?php
 if (!empty($_SESSION['info_message'])):

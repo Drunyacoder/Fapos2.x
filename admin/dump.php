@@ -31,7 +31,7 @@ include_once ROOT . '/admin/inc/adm_boot.php';
 
 $pageTitle = __('Admin panel - DB dump');
 $pageNav = $pageTitle;
-$pageNavl = '';
+$pageNavr = '';
 
 
 
@@ -151,55 +151,54 @@ include_once ROOT . '/admin/template/header.php';
 
 ?>
 
-<a href="dump.php?ac=make_dump"><?php echo __('Create DB backup') ?></a>
-</div></div></div>   <div class="xw-bl"></div> 
-<div class="xw-tl1"><div class="xw-tr1"><div class="xw-tc1">
-</div></div></div>
-<div class="xw-ml"><div class="xw-mr"><div id="mainContent" class="xw-mc topBlockM">
-
-<table cellspacing="0" class="lines">
-
-<?php
-if (!empty($_SESSION['info_message'])):
-?>
-<script type="text/javascript">showHelpWin('<?php echo h($_SESSION['info_message']) ?>', '<?php echo __('Message') ?>');</script>
-<?php
-	unset($_SESSION['info_message']);
-endif;
-?>
-<?php  
-if (!empty($current_dumps)): 
-  	foreach ($current_dumps as $dump): 
-	
-	
-?>
-
-	<tr>
-		<td><?php echo h(substr(strrchr($dump, '/'), 1, 16)) ?></td>
-		<td><?php echo round((filesize($dump) / 1024), 1) ?> Kb</td>
-		
-		<td width="40px">
-			<a onClick="return confirm('Are you sure?')" href="dump.php?ac=restore&id=<?php echo $dump ?>"><img src="<?php echo get_url('/sys/img/undo.png'); ?>" title="<?php echo __('Restore') ?>" /></a>
-			<a onClick="return confirm('Are you sure?')" href="dump.php?ac=delete&id=<?php echo $dump ?>"><img src="<?php echo get_url('/sys/img/delete_16x16.png'); ?>" title="<?php echo __('Delete') ?>" /></a>
-		</td>
-	</tr>
-
-<?php	endforeach; ?>
-<?php else: ?> 
-
-	<tr>
-		<td><?php echo __('DB backups not found') ?></td>
-	</tr>
-
-<?php endif; ?>
-
-
-</table>
-
-<br />
-<span class="comment">
+<div class="warning">
 <?php echo __('DB backup is cool') ?>
-</span>
+</div>
+
+
+<div class="list">
+	<div class="title"></div>
+	<a href="dump.php?ac=make_dump"><div class="add-cat-butt"><div class="add"></div><?php echo __('Create DB backup') ?></div></a>
+	<table style="width:100%;" cellspacing="0" class="grid">
+
+	<?php
+	if (!empty($_SESSION['info_message'])):
+	?>
+	<script type="text/javascript">showHelpWin('<?php echo h($_SESSION['info_message']) ?>', '<?php echo __('Message') ?>');</script>
+	<?php
+		unset($_SESSION['info_message']);
+	endif;
+	?>
+	<?php  
+	if (!empty($current_dumps)): 
+		foreach ($current_dumps as $dump): 
+		
+		
+	?>
+
+		<tr>
+			<td><?php echo h(substr(strrchr($dump, '/'), 1, 16)) ?></td>
+			<td><?php echo round((filesize($dump) / 1024), 1) ?> Kb</td>
+			
+			<td width="40px">
+				<a onClick="return confirm('Are you sure?')" href="dump.php?ac=restore&id=<?php echo $dump ?>"><img src="<?php echo get_url('/sys/img/undo.png'); ?>" title="<?php echo __('Restore') ?>" /></a>
+				<a onClick="return confirm('Are you sure?')" href="dump.php?ac=delete&id=<?php echo $dump ?>"><img src="<?php echo get_url('/sys/img/delete_16x16.png'); ?>" title="<?php echo __('Delete') ?>" /></a>
+			</td>
+		</tr>
+
+	<?php	endforeach; ?>
+	<?php else: ?> 
+
+		<tr>
+			<td><?php echo __('DB backups not found') ?></td>
+		</tr>
+
+	<?php endif; ?>
+
+
+	</table>
+</div>
+
 
 
 

@@ -57,7 +57,7 @@ switch ( $_GET['ac'] )
 
 
 $pageNav = $pageTitle;
-$pageNavl = '<a href="plugins.php">Список Плагинов</a>';
+$pageNavr = '<a href="plugins.php">Список Плагинов</a>';
 
 $footer = file_get_contents('template/footer.php');
 
@@ -81,19 +81,19 @@ function index(&$page_title) {
 			if (!is_dir($pl)) unset($plugs[$k]);
 		}
 	}
-	if (count($plugs) < 1) return '<table cellspacing="0" class="lines"><tr><td>Плагинов пока нет</td></tr></table>';
+	if (count($plugs) < 1) return '<div class="list"><table cellspacing="0" class="grid"><tr><td>Плагинов пока нет</td></tr></table></div>';
 	
 	
 
 	
 	
-	$content .= "<table cellspacing=\"0\" class=\"lines\">
-		<th width=\"20%\">Название</th>
+	$content .= "<div class=\"list\"><table cellspacing=\"0\" class=\"grid\">
+		<th width=\"\">Название</th>
 		<th width=\"25%\">Путь</th>
 		<th width=\"20%\">Описание</th>
-		<th width=\"15%\">HOOK</th>
+		<th width=\"\">HOOK</th>
 		<th width=\"15%\">Каталог</th>
-		<th width=\"20px\" colspan=\"2\">Действие</th>";
+		<th width=\"30px\" colspan=\"2\">Действие</th>";
 	
 
 	
@@ -126,18 +126,18 @@ function index(&$page_title) {
 			<td><span style=\"color:#\">{$hook}</span></td>
 			<td>{$dir}</td>
 			<td colspan=\"2\">
-				<a href='plugins.php?ac=edit&dir={$dir}'><img title=\"Edit\" src=\"template/img/edit_16x16.png\" /></a>&nbsp;";
+				<a class=\"edit\" href='plugins.php?ac=edit&dir={$dir}'><img title=\"Edit\" src=\"template/img/edit_16x16.png\" /></a>&nbsp;";
 			
 			if (!empty($params['active'])) {
-				$content .= "<a href='plugins.php?ac=off&dir={$dir}'><img title=\"Unactive\" src=\"template/img/er.png\" /></a>
+				$content .= "<a class=\"off\" href='plugins.php?ac=off&dir={$dir}'><img title=\"Unactive\" src=\"template/img/er.png\" /></a>
 				</td>";
 			} else {
-				$content .= "<a href='plugins.php?ac=on&dir={$dir}'><img title=\"Activate\" src=\"template/img/ok.png\" /></a>
+				$content .= "<a class=\"on\" href='plugins.php?ac=on&dir={$dir}'><img title=\"Activate\" src=\"template/img/ok.png\" /></a>
 				</td>";
 
 			}
 	}
-	$content .= '</table>';
+	$content .= '</table></div>';
 
 	
 	return $content;

@@ -97,208 +97,246 @@ if (!empty($_SESSION['clean_cache'])):
 endif;
 ?>
 
-		
-			<div class="iqblock">
-				<!--************ GENERAL **********-->
-				<div class="bef-lines">
-				<table class="lines">
-					<tr>
-						<th><?php echo __('Name'); ?></th>
-						<th><?php echo __('Value'); ?></th>
-					</tr>
-					<tr>	
-						<td width="70%" align="left"><b><?php echo __('Current domain'); ?></b><br />
-						<span class="comment"><?php echo __('Domain is your site address'); ?></span></td>
-						<td width="50%"  align="left"><span style="color:blue;"><?php echo 'http://' . $_SERVER['HTTP_HOST'] . '/' ?></span></td>
-					</tr>
-					
-					<tr>	
-						<td width="70%" align="left"><b><?php echo __('SQL inj state'); ?></b><br />
-						<span class="comment"><?php echo __('Is the controll of SQL inj'); ?></span></td>
-						<td width="50%"  align="left"><span style="color:green;"><?php echo (Config::read('antisql', 'secure') == 1) ? __('Yes') : __('No') ?></span></td>
-					</tr>
-					
-					<tr>	
-						<td width="70%" align="left"><b><?php echo __('Anti DDOS protection'); ?></b><br />
-						<span class="comment"><?php echo __('Is the enable Anti DDOS'); ?></span></td>
-						<td width="50%"  align="left"><span style="color:green;"><?php echo (Config::read('anti_ddos', 'secure') == 1) ? __('Yes') : __('No') ?></span></td>
-					</tr>
-					
-					<tr>	
-						<td width="70%" align="left"><b><?php echo __('Cache'); ?></b><br />
-						<span class="comment"><?php echo __('The site will run faster'); ?></span></td>
-						<td width="50%"  align="left"><span style="color:green;"><?php echo (Config::read('cache')) ? __('Yes') : __('No') ?></span></td>
-					</tr>
-					
-					<tr>	
-						<td width="70%" align="left"><b><?php echo __('SQL cache'); ?></b><br />
-						<span class="comment"><?php echo __('SQL. Site will be run faster'); ?></span></td>
-						<td width="50%"  align="left"><span style="color:green;"><?php echo (Config::read('cache_querys')) ? __('Yes') : __('No') ?></span></td>
-					</tr>
-					
-				</table>
-				</div>
-			
-				<!--************ USERS **********-->
-				<div class="bef-lines">
-				<table class="lines">
-					<tr>	
-						<th>Группа</th>
-						<th>Кол-во</th>
-					</tr>
-					<tr>	
-						<td width="70%" align="left"><b>Всего пользователей:</b></td>
-						<td width="50%"  align="left"><span style="color:blue;"><?php echo $cnt_usrs ?></span></td>
-					</tr>
-					
-				<?php if (!empty($groups_info)):
-						  foreach ($groups_info as $key => $group_info):
-				?>
-				
-					<tr>	
-						<?php if($key === 0): ?>
-						<td width="70%" align="left">
-							<b>Гости:</b>
-							<span class="comment">*Гость - абстрактная группа</span>
-						</td>
-						<td width="50%"  align="left"><span style="color:blue;"></span></td>
-						<?php else: ?>
-						<td width="70%" align="left">
-							<b><?php echo $key ?>:</b>
-						</td>
-						<td width="50%"  align="left"><span style="color:blue;"><?php echo $group_info ?></span></td>
-						<?php endif; ?>
-					</tr>
-				
-				<?php     endforeach;
-					  endif;
-				?>
-					
-				</table>
-				</div>
 
-				<!--************ STATISTIC **********-->
-				<div class="bef-lines">
-				<table class="lines">
-					<tr>
-						<th>Параметр</th>
-						<th>Значение</th>
-					</tr>
-					<tr>	
-						<td width="70%" align="left"><b>Хостов за все время:</b><br />
-						<span class="comment">*Хост - это уникальный посетитель, фактически - это<br />
-						заход на сайт с разных компьютеров или IP адресов</span></td>
-						<td width="50%"  align="left"><span style="color:blue;"><?php echo $all_hosts[0]['hosts_cnt'] ?></span></td>
-					</tr>
-					
-					
-					<tr>	
-						<td width="70%" align="left"><b>Хитов за все время:</b><br />
-						<span class="comment">*Хиты(hits) - это просмотры, фактически - это любой<br />
+
+<!--************ GENERAL **********-->							
+<div class="list">
+	<div class="title">Общие настройки</div>
+	<div class="level1">
+		<div class="head">
+			<div class="title settings"><?php echo __('Name'); ?></div>
+			<div class="title-r"><?php echo __('Value'); ?></div>
+			<div class="clear"></div>
+		</div>
+		<div class="items">
+			<div class="setting-item">
+				<div class="left">
+					<?php echo __('Current domain'); ?>
+					<span class="comment"><?php echo __('Domain is your site address'); ?></span>
+				</div>
+				<div class="right"><?php echo 'http://' . $_SERVER['HTTP_HOST'] . '/' ?></div>
+				<div class="clear"></div>
+			</div>
+			<div class="setting-item">
+				<div class="left">
+					<?php echo __('SQL inj state'); ?>
+					<span class="comment"><?php echo __('Is the controll of SQL inj'); ?></span>
+				</div>
+				<div class="right"><div class="<?php echo (Config::read('antisql', 'secure') == 1) ? 'yes' : 'no' ?>"></div></div>
+				<div class="clear"></div>
+			</div>
+			<div class="setting-item">
+				<div class="left">
+					<?php echo __('Anti DDOS protection'); ?>
+					<span class="comment"><?php echo __('Is the enable Anti DDOS'); ?></span>
+				</div>
+				<div class="right"><div class="<?php echo (Config::read('anti_ddos', 'secure') == 1) ? 'yes' : 'no' ?>"></div></div>
+				<div class="clear"></div>
+			</div>
+			<div class="setting-item">
+				<div class="left">
+					<?php echo __('Cache'); ?>
+					<span class="comment"><?php echo __('The site will run faster'); ?></span>
+				</div>
+				<div class="right"><div class="<?php echo (Config::read('cache') == 1) ? 'yes' : 'no' ?>"></div></div>
+				<div class="clear"></div>
+			</div>
+			<div class="setting-item">
+				<div class="left">
+					<?php echo __('SQL cache'); ?>
+					<span class="comment"><?php echo __('SQL. Site will be run faster'); ?></span>
+				</div>
+				<div class="right"><div class="<?php echo (Config::read('cache_querys') == 1) ? 'yes' : 'no' ?>"></div></div>
+				<div class="clear"></div>
+			</div>
+		</div>
+	</div>
+</div>
+							
+
+<!--************ USERS **********-->							
+<div class="list">
+	<div class="title">Пользователи</div>
+	<div class="level1">
+		<div class="head">
+			<div class="title settings">Группа</div>
+			<div class="title-r">Кол-во</div>
+			<div class="clear"></div>
+		</div>
+		<div class="items">
+			<div class="setting-item">
+				<div class="left">
+					Всего пользователей
+				</div>
+				<div class="right"><?php echo $cnt_usrs ?></div>
+				<div class="clear"></div>
+			</div>
+				
+			<?php if (!empty($groups_info)):
+					  foreach ($groups_info as $key => $group_info):
+			?>
+			<div class="setting-item">
+				<?php if($key === 0): ?>
+				<div class="left">
+					Гости
+					<span class="comment">*Гость - абстрактная группа</span>
+				</div>
+				<div class="right"><div class="<?php echo (Config::read('antisql', 'secure') == 1) ? 'yes' : 'no' ?>"></div></div>
+				<?php else: ?>
+				<div class="left">
+					<?php echo $key ?>
+				</div>
+				<div class="right"><?php echo $group_info ?></div>
+				<?php endif; ?>
+				<div class="clear"></div>
+			</div>
+			<?php     endforeach;
+				  endif;
+			?>
+
+		</div>
+	</div>
+</div>
+
+
+<!--************ STATISTIC **********-->							
+<div class="list">
+	<div class="title">Статистика</div>
+	<div class="level1">
+		<div class="head">
+			<div class="title settings"><?php echo __('Name'); ?></div>
+			<div class="title-r"><?php echo __('Value'); ?></div>
+			<div class="clear"></div>
+		</div>
+		<div class="items">
+			<div class="setting-item">
+				<div class="left">
+					Хостов за все время
+					<span class="comment">*Хост - это уникальный посетитель, фактически - это<br />
+					заход на сайт с разных компьютеров или IP адресов</span>
+				</div>
+				<div class="right"><?php echo $all_hosts[0]['hosts_cnt'] ?></div>
+				<div class="clear"></div>
+			</div>
+			<div class="setting-item">
+				<div class="left">
+					Хитов за все время
+					<span class="comment">*Хиты(hits) - это просмотры, фактически - это любой<br />
 						просмотрт страницы, даже с одного IP. На один хост может приходиться<br />
-						любое кол-во хитов</span></td>
-						<td width="50%"  align="left"><span style="color:green;"><?php echo $all_hosts[0]['hits_cnt'] ?></span></td>
-					</tr>
-					
-					<tr>	
-						<td width="70%" align="left"><b>Хостов сегодня:</b></td>
-						<td width="50%"  align="left"><span style="color:green;"><?php echo $today_hosts ?></span></td>
-					</tr>
-					
-					<tr>	
-						<td width="70%" align="left"><b>Хитов за сегодня:</b></td>
-						<td width="50%"  align="left"><span style="color:green;"><?php echo $today_hits ?></span></td>
-					</tr>
-					
-				</table>
+						любое кол-во хитов</span>
 				</div>
+				<div class="right"><?php echo $all_hosts[0]['hits_cnt'] ?></div>
+				<div class="clear"></div>
 			</div>
-			
-			<div  class="iqblock">
-			
-				<!--************ MODULES **********-->
-				<div class="bef-lines">
-				<?php $modules = glob(ROOT . '/modules/*'); ?>
-				<table class="lines">
-					<tr>
-						<th>Модуль</th>
-						<th>Состояние</th>
-					</tr>
-					<tr>	
-						<td width="70%" align="left"><b>Всего модулей:</b><br />
-						<span class="comment">*Модули, которые присутствуют у Вас на сайте</span></td>
-						<td width="50%"  align="left"><span style="color:blue;"><?php echo count($modules); ?></span></td>
-					</tr>
-					
-					
-					<?php foreach ($modules as $modul): ?>
-					<?php if (preg_match('#/(\w+)$#i', $modul, $modul_name)): ?>
-					<?php if (is_dir($modul)): ?>
-					
-					<tr>	
-						<td width="70%" align="left"><b><?php echo $modul_name[1] ?>:</b></td>
-						<td width="50%"  align="left">
-							<?php echo (Config::read('active', $modul_name[1])) ? '<span style="color:green;">Активен</span>' : '<span style="color:red;">Не активен</span>' ?>
-						</td>
-					</tr>
-					
-					<?php endif; ?>
-					<?php endif; ?>
-					<?php endforeach; ?>
-					
-				</table>
+			<div class="setting-item">
+				<div class="left">
+					Хостов сегодня
 				</div>
-				<div style="height:2px;"></div>
+				<div class="right"><?php echo $today_hosts ?></div>
+				<div class="clear"></div>
+			</div>
+			<div class="setting-item">
+				<div class="left">
+					Хитов за сегодня
+				</div>
+				<div class="right"><?php echo $today_hits ?></div>
+				<div class="clear"></div>
+			</div>
+		</div>
+	</div>
+</div>
 
-				<!--************ MATERIALS **********-->
-				<div class="bef-lines">
-				<table class="lines">
-					<tr>
-						<th>Материал</th>
-						<th>Кол-во</th>
-					</tr>
-				
-					<tr>	
-						<td width="70 align="left"><b>Всего материалов:</b></td>
-						<td width="50%"  align="left"><span style="color:blue;"><?php echo $cnt_mat ?></span></td>
-					</tr>
-					
-					
-					<tr>	
-						<td width="70 align="left"><b>Новостей:</b></td>
-						<td width="50%"  align="left"><span style="color:green;"><?php echo $cnt_news ?></span></td>
-					</tr>
-					
-					<tr>	
-						<td width="70%" align="left"><b>Загрузок:</b></td>
-						<td width="50%"  align="left"><span style="color:green;"><?php echo $cnt_load ?></span></td>
-					</tr>
-					
-					<tr>	
-						<td width="70%" align="left"><b>Статей:</b></td>
-						<td width="50%"  align="left"><span style="color:green;"><?php echo $cnt_stat ?></span></td>
-					</tr>
-					
-					<tr>	
-						<td width="70%" align="left"><b>Тем на форуме:</b></td>
-						<td width="50%"  align="left"><span style="color:green;"><?php echo $cnt_for ?></span></td>
-					</tr>
-					
-				</table>
+
+
+<!--************ MODULES **********-->	
+<?php $modules = glob(ROOT . '/modules/*'); ?>						
+<div class="list">
+	<div class="title">Модули</div>
+	<div class="level1">
+		<div class="head">
+			<div class="title settings">Модуль</div>
+			<div class="title-r">Состояние</div>
+			<div class="clear"></div>
+		</div>
+		<div class="items">
+			<div class="setting-item">
+				<div class="left">
+					Всего модулей
+					<span class="comment">*Модули, которые присутствуют у Вас на сайте</span>
 				</div>
-				<div style="height:2px;"></div>
-			
+				<div class="right"><?php echo count($modules); ?></div>
+				<div class="clear"></div>
 			</div>
-			
-			
-		<div style="clear:both;"></div>
-	
-		<!--
-		<script language="JavaScript" type="text/javascript" src="/sys/js/jquery-1.5.2.min.js"></script>
-		<script type="text/javascript">
-		
-		</script>
-		-->
+			<?php foreach ($modules as $modul): ?>
+			<?php if (preg_match('#/(\w+)$#i', $modul, $modul_name)): ?>
+			<?php if (is_dir($modul)): ?>
+
+			<div class="setting-item">
+				<div class="left">
+					<?php echo $modul_name[1] ?>
+				</div>
+				<div class="right"><div class="<?php echo (Config::read('active', $modul_name[1])) ? 'yes' : 'no' ?>"></div></div>
+				<div class="clear"></div>
+			</div>
+
+			<?php endif; ?>
+			<?php endif; ?>
+			<?php endforeach; ?>
+		</div>
+
+	</div>
+</div>
+
+
+
+<!--************ MATERIALS **********-->							
+<div class="list">
+	<div class="title">Материалы</div>
+	<div class="level1">
+		<div class="head">
+			<div class="title settings">Материал</div>
+			<div class="title-r">Кол-во</div>
+			<div class="clear"></div>
+		</div>
+		<div class="items">
+			<div class="setting-item">
+				<div class="left">
+					Всего материалов
+				</div>
+				<div class="right"><?php echo $cnt_mat ?></div>
+				<div class="clear"></div>
+			</div>
+			<div class="setting-item">
+				<div class="left">
+					Новостей
+				</div>
+				<div class="right"><?php echo $cnt_news ?></div>
+				<div class="clear"></div>
+			</div>
+			<div class="setting-item">
+				<div class="left">
+					Загрузок
+				</div>
+				<div class="right"><?php echo $cnt_load ?></div>
+				<div class="clear"></div>
+			</div>
+			<div class="setting-item">
+				<div class="left">
+					Статей
+				</div>
+				<div class="right"><?php echo $cnt_stat ?></div>
+				<div class="clear"></div>
+			</div>
+			<div class="setting-item">
+				<div class="left">
+					Тем на форуме
+				</div>
+				<div class="right"><?php echo $cnt_for ?></div>
+				<div class="clear"></div>
+			</div>
+		</div>
+	</div>
+</div>
 
 
 

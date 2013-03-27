@@ -104,14 +104,16 @@ function index(&$page_title) {
 	$themes = (!empty($_GET['cond']) && $_GET['cond'] == 'themes') ? '<a href="?cond=themes&value=0">Тем</a>' : '<a href="?cond=themes&value=1">Тем</a>';
 	$posts = (!empty($_GET['cond']) && $_GET['cond'] == 'posts') ? '<a href="?cond=posts&value=0">Постов</a>' : '<a href="?cond=posts&value=1">Постов</a>';
 	
-	
-	$content .= "<table cellspacing=\"0\" class=\"lines\"><th width=\"20%\">{$nick}</th>
-									<th width=\"25%\">{$email}</th>
-									<th width=\"20%\">{$puttime}</th>
-									<th width=\"15%\">{$status}</th>
-									<th width=\"9%\">{$themes}</th>
-									<th width=\"9%\">{$posts}</th>
-									<th width=\"20px\" colspan=\"2\">Действие</th>";
+	$pages = '<div class="pages">' . $pages . '</div>';
+	$content .= "<div class=\"list\">
+			<div class=\"title\">{$pages}</div>
+			<table cellspacing=\"0\" class=\"grid\"><th width=\"20%\">{$nick}</th>
+			<th width=\"25%\">{$email}</th>
+			<th width=\"20%\">{$puttime}</th>
+			<th width=\"15%\">{$status}</th>
+			<th width=\"9%\">{$themes}</th>
+			<th width=\"9%\">{$posts}</th>
+			<th width=\"20px\" colspan=\"2\">Действие</th>";
 	
 
 	
@@ -128,13 +130,14 @@ function index(&$page_title) {
 						<td colspan=\"2\"><a href='users_list.php?ac=ank&id={$result['id']}'><img src=\"template/img/edit_16x16.png\" /></a>
 						</td>";
 	}
-	$content .= '</table>';
+	$content .= '</table></div>';
+	
 	$content .= '<form method="POST" action="users_list.php?ac=index"><table class="metatb"><tr><td>
 				<input type="text" name="search" />
 				<input type="submit" name="send" value="Поиск" />
 				</td></tr></table></form>';
 	
-	return $pages.'<br />'.$content;
+	return $content;
   
 }
 
@@ -169,65 +172,112 @@ function editAnk(&$page_title) {
 	}
 	unset($_SESSION['edit_ank']);
 	$_SESSION['adm_form_key'] = md5(rand() . rand());
-	$content .= '<form action="users_list.php?ac=save&id=' . $_GET['id'] . '" method="POST">
-				<input type="hidden" value="' . $_SESSION['adm_form_key'] . '" name="adm_form_key" />
-				<table class="settings-tb">
-					<tr>
-						<td class="left"><b>Имя:</b></td>
-						<td><input type="text" name="login" value="' . h($name) .'" /></td>
-					</tr>
-
-					<tr>
-						<td class="left"><b>Ранг:</b></td>
-						<td><input type="text" name="state" value="' . h($state) .'" /></td>
-					</tr>
-
-					<tr>
-						<td class="left"><b>Пароль:</b></td>
-						<td><input type="text" name="passw" value="" /></td>
-					</tr>
-
-					<tr>
-						<td class="left"><b>Почта:</b></td>
-						<td><input type="text" name="email" value="' . h($email) .'" /></td>
-					</tr>
-
-					<tr>
-						<td class="left"><b>Сайт:</b></td>
-						<td><input type="text" name="url" value="' . h($url) .'" /></td>
-					</tr>
-
-					<tr>
-						<td class="left"><b>ICQ:</b></td>
-						<td><input type="text" name="icq" value="' . h($icq) .'" /></td>
-					</tr>
-
-					<tr>
-						<td class="left"><b>Jabber:</b></td>
-						<td><input type="text" name="jabber" value="' . h($jabber) .'" /></td>
-					</tr>
-
-					<tr>
-						<td class="left"><b>City:</b></td>
-						<td><input type="text" name="city" value="' . h($city) .'" /></td>
-					</tr>
-
-					<tr>
-						<td class="left"><b>Telephone:</b></td>
-						<td><input type="text" name="telephone" value="' . h($telephone) .'" /></td>
-					</tr>
-
-					<tr>
-						<td class="left"><b>Пол:</b></td>
-						<td>
-							М&nbsp;<input type="radio" name="pol" value="m" '.$mpol.' /><br /><br />
-							Ж&nbsp;<input type="radio" name="pol" value="f" '.$fpol.' />
-						</td>
-					</tr>
-
-					<tr>
-						<td class="left"><b>Дата рождения:</b></td>
-						<td>
+	
+	
+	
+	
+	
+	$content .= '<form action="users_list.php?ac=save&id=' . $_GET['id'] . '" method="POST"><div class="list">
+			<div class="title">Редактирование анкеты (' . h($name) . ')</div>
+			<div class="level1">
+				<div class="items">
+					<div class="setting-item">
+						<div class="left">
+							Имя
+						</div>
+						<div class="right">
+							<input type="hidden" value="' . $_SESSION['adm_form_key'] . '" name="adm_form_key" />
+							<input type="text" name="login" value="' . h($name) .'" />
+						</div>
+						<div class="clear"></div>
+					</div>
+					<div class="setting-item">
+						<div class="left">
+							Ранг
+						</div>
+						<div class="right">
+							<input type="text" name="state" value="' . h($state) .'" />
+						</div>
+						<div class="clear"></div>
+					</div>
+					<div class="setting-item">
+						<div class="left">
+							Пароль
+						</div>
+						<div class="right">
+							<input type="text" name="passw" value="" />
+						</div>
+						<div class="clear"></div>
+					</div>
+					<div class="setting-item">
+						<div class="left">
+							Почта
+						</div>
+						<div class="right">
+							<input type="text" name="email" value="' . h($email) .'" />
+						</div>
+						<div class="clear"></div>
+					</div>
+					<div class="setting-item">
+						<div class="left">
+							Сайт
+						</div>
+						<div class="right">
+							<input type="text" name="url" value="' . h($url) .'" />
+						</div>
+						<div class="clear"></div>
+					</div>
+					<div class="setting-item">
+						<div class="left">
+							ICQ
+						</div>
+						<div class="right">
+							<input type="text" name="icq" value="' . h($icq) .'" />
+						</div>
+						<div class="clear"></div>
+					</div>
+					<div class="setting-item">
+						<div class="left">
+							Jabber
+						</div>
+						<div class="right">
+							<input type="text" name="jabber" value="' . h($jabber) .'" />
+						</div>
+						<div class="clear"></div>
+					</div>
+					<div class="setting-item">
+						<div class="left">
+							City
+						</div>
+						<div class="right">
+							<input type="text" name="city" value="' . h($city) .'" />
+						</div>
+						<div class="clear"></div>
+					</div>
+					<div class="setting-item">
+						<div class="left">
+							Telephone
+						</div>
+						<div class="right">
+							<input type="text" name="telephone" value="' . h($telephone) .'" />
+						</div>
+						<div class="clear"></div>
+					</div>
+					<div class="setting-item">
+						<div class="left">
+							Пол
+						</div>
+						<div class="right">
+							<input type="radio" name="pol" value="m" '.$mpol.' id="polm" /><label for="polm">М</label><br /><br />
+							<input type="radio" name="pol" value="f" '.$fpol.' id="polj" /><label for="polj">Ж</label>
+						</div>
+						<div class="clear"></div>
+					</div>
+					<div class="setting-item">
+						<div class="left">
+							Дата рождения
+						</div>
+						<div class="right">
 							<select style="width:80px;" name="byear">'
 							. createOptionsFromParams(1970, 2008, $byear) . 
 							'</select>
@@ -237,60 +287,85 @@ function editAnk(&$page_title) {
 							<select style="width:50px;" name="bday">'
 							. createOptionsFromParams(1, 31, $bday) . 
 							'</select>
-						</td>
-					</tr>
-
-					<tr>
-						<td class="left"><b>О себе:</b></td>
-						<td><textarea name="about" cols="35" rows="5">' . h($about) .'</textarea></td>
-					</tr>
-
-					<tr>
-						<td class="left"><b>Подпись:</b></td>
-						<td><textarea  cols="35" rows="5" name="signature" />' . h($signature) .'</textarea></td>
-					</tr>
-
-					<tr>
-						<td class="left"><b>Бан:</b></td>
-						<td>
+						</div>
+						<div class="clear"></div>
+					</div>
+					<div class="setting-item">
+						<div class="left">
+							О себе
+						</div>
+						<div class="right">
+							<textarea name="about" style="height:100px;">' . h($about) .'</textarea>
+						</div>
+						<div class="clear"></div>
+					</div>
+					<div class="setting-item">
+						<div class="left">
+							Подпись
+						</div>
+						<div class="right">
+							<textarea  style="height:100px;" name="signature" />' . h($signature) .'</textarea>
+						</div>
+						<div class="clear"></div>
+					</div>
+					<div class="setting-item">
+						<div class="left">
+							Бан
+						</div>
+						<div class="right">
 							<select name="locked">';
 						
-	if ($locked == 0) {
-		$content .= '<option value="1">Заблокирован</option>
-					<option value="0" selected="selected">Разблокирован</option>';
-	} else {
-		$content .= '<option value="1" selected="selected">Заблокирован</option>
-					<option value="0">Разблокирован</option>';	
-	}
-	
-	$content .= '</select>
-						</td>
-					</tr>
-
-					<tr>
-						<td class="left"><b>Статус:</b></td>
-						<td>
+							if ($locked == 0) {
+								$content .= '<option value="1">Заблокирован</option>
+											<option value="0" selected="selected">Разблокирован</option>';
+							} else {
+								$content .= '<option value="1" selected="selected">Заблокирован</option>
+											<option value="0">Разблокирован</option>';	
+							}
+							
+							$content .= '</select>
+						</div>
+						<div class="clear"></div>
+					</div>
+					<div class="setting-item">
+						<div class="left">
+							Статус
+						</div>
+						<div class="right">
 							<select name="status">';
 							
-	foreach ($statuses as $key => $value) {
-		if ($key == 0) continue;
-		$content .= ($status == $key) ? '<option value="' . $key . '" selected="selected">' . $value['title'] . '</option>' : 
-									'<option value="' . $key . '">' . $value['title'] . '</option>';
-	}
-	$activation = (!empty($activation)) 
-				? 'Активировать <input name="activation" type="checkbox" value="1" >' : '<span style="color:blue;">Активирован</span>';
-	$content .=	 '</select>
-						</td>
-					</tr>
-					<tr>
-						<td class="left"><b>Активация:</b></td>
-						<td>' . $activation . '</td>
-					</tr>
-					<tr>
-						<td colspan ="2" align="center"><input type="submit" name="send" value="Сохранить" /></td>
-					</tr>
-				</table>
-				</form>';
+							foreach ($statuses as $key => $value) {
+								if ($key == 0) continue;
+								$content .= ($status == $key) ? '<option value="' . $key . '" selected="selected">' . $value['title'] . '</option>' : 
+															'<option value="' . $key . '">' . $value['title'] . '</option>';
+							}
+							$activation = (!empty($activation)) 
+										? 'Активировать <input name="activation" type="checkbox" value="1" >' : '<span style="color:blue;">Активирован</span>';
+							$content .=	 '</select>
+						</div>
+						<div class="clear"></div>
+					</div>
+					<div class="setting-item">
+						<div class="left">
+							Активация
+						</div>
+						<div class="right">
+							' . $activation . '
+						</div>
+						<div class="clear"></div>
+					</div>
+
+					<div class="setting-item">
+						<div class="left">
+						</div>
+						<div class="right">
+							<input class="save-button" type="submit" name="send" value="Сохранить" />
+						</div>
+						<div class="clear"></div>
+					</div>
+				</div>
+			</div>
+		</div></form>';
 
 	return $content;
 }

@@ -27,7 +27,7 @@ include_once ROOT . '/admin/inc/adm_boot.php';
  
 $pageTitle = 'Пользователи';
 $pageNav = $pageTitle;
-$pageNavl = '<a href="javascript://" onClick="wiOpen(\'addGroup\')">Добавить группу</a>&nbsp;|&nbsp;<a href="users_rules.php">Редактор прав</a>';
+$pageNavr = '<a href="javascript://" onClick="openPopup(\'Add_group\')">Добавить группу</a>&nbsp;|&nbsp;<a href="users_rules.php">Редактор прав</a>';
 
 
 
@@ -38,6 +38,9 @@ $acl_groups = $Register['ACL']->get_group_info();
 //create tmp array with groups and cnt users in them.
 $errors = array();
 $groups = array();
+$popups = '';
+
+
 if (!empty($acl_groups)) {
 	$groups = $acl_groups;
 	foreach ($acl_groups as $key => $value) {
@@ -140,47 +143,165 @@ if (!empty($errors)) {
 	unset($errors);
 }
 ?>
-	
-	<div id="addGroup_dWin" class="fps-win" style="position:absolute;top:200px;left:40%;display:none">
-	<div class="xw-tl"><div class="xw-tr"><div class="xw-tc xw-tsps"></div>
-	</div></div><div class="xw-ml"><div class="xw-mr"><div align="center" class="xw-mc">
-	<form action="users_groups.php?ac=add" method="POST">
-	<div class="form-item2">
-	Имя Группы:<br />
-	<input type="text" name="title" />
-	<div style="clear:both;"></div></div>
-	
-	<div class="form-item2">
-	Цвет для группы:<br />
-	<select name="color">
-		<option style="color:#000000;" value="000000">Черный</option>
-		<option style="color:#EF1821;" value="EF1821">Красный</option>
-		<option style="color:#368BEB;" value="368BEB">Синий</option>
-		<option style="color:#959385;" value="959385">Серый</option>
-		<option style="color:#FBCA0B;" value="FBCA0B">Желтый</option>
-		<option style="color:#00AA2B;" value="00AA2B">Зеленый</option>
-		<option style="color:#9B703F;" value="9B703F">Коричневый</option>
-		<option style="color:#FAAA3C;" value="FAAA3C">Оранж</option>
-	</select>
-	<div style="clear:both;"></div></div>
-	
-	<div class="form-item2 center">
-	<input type="submit" name="send" value="Сохранить" />
-	<input type="button" onClick="hideWin('addGroup')" value="Отмена" />
-	<div style="clear:both;"></div></div>
-	</form>
-	</div></div></div><div class="xw-bl"><div class="xw-br"><div class="xw-bc">
-	<div class="xw-footer"></div></div></div></div>
+
+
+
+	<div class="popup" id="Add_group">
+		<div class="top">
+			<div class="title">Добавление группы</div>
+			<div class="close" onClick="closePopup('Add_group')"></div>
+		</div>
+		<div class="items">
+			<form action="users_groups.php?ac=add" method="POST">
+			<div class="item">
+				<div class="left">
+					Имя Группы:
+				</div>
+				<div class="right">
+					<input type="text" name="title" />
+				</div>
+				<div class="clear"></div>
+			</div>
+			<div class="item">
+				<div class="left">
+					Цвет для группы:
+				</div>
+				<div class="right">
+					<select name="color">
+						<option style="color:#000000;" value="000000">Черный</option>
+						<option style="color:#EF1821;" value="EF1821">Красный</option>
+						<option style="color:#368BEB;" value="368BEB">Синий</option>
+						<option style="color:#959385;" value="959385">Серый</option>
+						<option style="color:#FBCA0B;" value="FBCA0B">Желтый</option>
+						<option style="color:#00AA2B;" value="00AA2B">Зеленый</option>
+						<option style="color:#9B703F;" value="9B703F">Коричневый</option>
+						<option style="color:#FAAA3C;" value="FAAA3C">Оранж</option>
+					</select>
+				</div>
+				<div class="clear"></div>
+			</div>
+			<div class="item submit">
+				<div class="left"></div>
+				<div class="right" style="float:left;">
+					<input type="submit" value="Сохранить" name="send" class="save-button" />
+				</div>
+				<div class="clear"></div>
+			</div>
+			</form>
+		</div>
 	</div>
 
 
+	
+	
+	<?php if (!empty($groups)): ?>
+		<?php foreach ($groups as $key => $value): ?>
+			<?php if ($key !== 0): ?>
+				<!-- FOR EDIT -->
+				<div class="popup" id="<?php echo h($key) ?>_Edit">
+					<div class="top">
+						<div class="title">Редактроване группы</div>
+						<div class="close" onClick="closePopup('<?php echo h($key) ?>_Edit')"></div>
+					</div>
+					<div class="items">
+						<form action="users_groups.php?ac=edit" method="POST">
+						<div class="item">
+							<div class="left">
+								Имя Группы:
+							</div>
+							<div class="right">
+								<input type="hidden" name="id" value="<?php echo $key ?>" />
+								<input type="text" name="title"  value="<?php echo $value['title'] ?>" />
+							</div>
+							<div class="clear"></div>
+						</div>
+						<div class="item">
+							<div class="left">
+								Цвет для группы:
+							</div>
+							<div class="right">
+								<select name="color">
+									<option style="color:#000000;" value="000000" <?php if($value['color'] == '000000') echo 'selected="selected"' ?>>Черный</option>
+									<option style="color:#EF1821;" value="EF1821" <?php if($value['color'] == 'EF1821') echo 'selected="selected"' ?>>Красный</option>
+									<option style="color:#368BEB;" value="368BEB" <?php if($value['color'] == '368BEB') echo 'selected="selected"' ?>>Синий</option>
+									<option style="color:#959385;" value="959385" <?php if($value['color'] == '959385') echo 'selected="selected"' ?>>Серый</option>
+									<option style="color:#FBCA0B;" value="FBCA0B" <?php if($value['color'] == 'FBCA0B') echo 'selected="selected"' ?>>Желтый</option>
+									<option style="color:#00AA2B;" value="00AA2B" <?php if($value['color'] == '00AA2B') echo 'selected="selected"' ?>>Зеленый</option>
+									<option style="color:#9B703F;" value="9B703F" <?php if($value['color'] == '9B703F') echo 'selected="selected"' ?>>Коричневый</option>
+									<option style="color:#FAAA3C;" value="FAAA3C" <?php if($value['color'] == 'FAAA3C') echo 'selected="selected"' ?>>Оранж</option>
+								</select>
+							</div>
+							<div class="clear"></div>
+						</div>
+						<div class="item submit">
+							<div class="left"></div>
+							<div class="right" style="float:left;">
+								<input type="submit" value="Сохранить" name="send" class="save-button" />
+							</div>
+							<div class="clear"></div>
+						</div>
+						</form>
+					</div>
+				</div>
+				
+				
+				
+				
+				<!-- FOR MOVE -->
+				<div class="popup" id="<?php echo h($key) ?>_Move">
+					<div class="top">
+						<div class="title">Перенос пользователей</div>
+						<div class="close" onClick="closePopup('<?php echo h($key) ?>_Move')"></div>
+					</div>
+					<div class="items">
+						<form action="users_groups.php?ac=move" method="POST">
+						<div class="item">
+							<div class="left">
+								Куда перенести:
+							</div>
+							<div class="right">
+								<input type="hidden" name="id" value="<?php echo $key ?>" />
+								<?php
+								$select = '<select name="to">';
+								if (!empty($groups)) {
+									foreach($groups as $sk => $sv) { 
+										if ($sk != $key) {
+											$select .= '<option value="' . $sk . '">' . h($sv['title']) . '</option>';
+										}
+									}
+								}
+								$select .= '</select>';
+								?>
+								<?php echo $select; ?>
+							</div>
+							<div class="clear"></div>
+						</div>
+						<div class="item submit">
+							<div class="left"></div>
+							<div class="right" style="float:left;">
+								<input type="submit" value="Сохранить" name="send" class="save-button" />
+							</div>
+							<div class="clear"></div>
+						</div>
+						</form>
+					</div>
+				</div>
+	
+			<?php endif; ?>
+		<?php endforeach; ?>
+	<?php endif; ?>
+	
+	
 
-	<table class="lines" width="100%" cellspacing="0">
+
+	<div class="list">
+		<div class="title"></div>
+		<table cellspacing="0" class="grid" style="min-width:100%">
 		<tr>
 			<th width="5%">ID</th>
 			<th>Группа</th>
 			<th width="10%">Пользователей</th>
-			<th width="7%">Действия</th>
+			<th width="15%">Действия</th>
 		</tr>
 
 		
@@ -195,79 +316,12 @@ if (!empty($errors)) {
 			<td><?php echo h($value['title']); ?></td>
 			<td><?php echo h($value['cnt_users']); ?></td>
 			<td>
-				<a href="javascript://" onClick="wiOpen('<?php echo h($key) ?>')"><img src="template/img/edit_16x16.png" title="Edit" /></a>
-				<a href="javascript://" onClick="wiOpen('<?php echo h($key) ?>_move')">
-				<img src="template/img/right_arrow.png" title="Move users" /></a>
+				<a title="Edit" href="javascript://" onClick="openPopup('<?php echo h($key) ?>_Edit')" class="edit"></a>
+				<a title="Move" href="javascript://" onClick="openPopup('<?php echo h($key) ?>_Move')" class="move"></a>
 				<?php if ($key !== 0 && $key !== 1): ?>
-				<a href="users_groups.php?ac=delete&id=<?php echo h($key) ?>" onClick="return confirm('Are you sure?')">
-				<img src="template/img/del.png" title="Delete" />
-				</a>
+				<a title="Delete" href="users_groups.php?ac=delete&id=<?php echo h($key) ?>" onClick="return confirm('Are you sure?')" class="delete"></a>
 				<?php endif; ?>
-				<!-- FOR EDIT -->
-				<div id="<?php echo h($key) ?>_dWin" class="fps-win" style="position:absolute;top:200px;left:40%;display:none">
-				<div class="xw-tl"><div class="xw-tr"><div class="xw-tc xw-tsps"></div>
-				</div></div><div class="xw-ml"><div class="xw-mr"><div align="center" class="xw-mc">
-				<form action="users_groups.php?ac=edit" method="POST">
 				
-				<div class="form-item2">
-				Имя Группы:<br />
-				<input type="hidden" name="id" value="<?php echo $key ?>" />
-				<input type="text" name="title"  value="<?php echo $value['title'] ?>" />
-				<div style="clear:both;"></div></div>
-				
-				<div class="form-item2">
-				Цвет для группы:<br />
-				<select name="color">
-					<option style="color:#000000;" value="000000" <?php if($value['color'] == '000000') echo 'selected="selected"' ?>>Черный</option>
-					<option style="color:#EF1821;" value="EF1821" <?php if($value['color'] == 'EF1821') echo 'selected="selected"' ?>>Красный</option>
-					<option style="color:#368BEB;" value="368BEB" <?php if($value['color'] == '368BEB') echo 'selected="selected"' ?>>Синий</option>
-					<option style="color:#959385;" value="959385" <?php if($value['color'] == '959385') echo 'selected="selected"' ?>>Серый</option>
-					<option style="color:#FBCA0B;" value="FBCA0B" <?php if($value['color'] == 'FBCA0B') echo 'selected="selected"' ?>>Желтый</option>
-					<option style="color:#00AA2B;" value="00AA2B" <?php if($value['color'] == '00AA2B') echo 'selected="selected"' ?>>Зеленый</option>
-					<option style="color:#9B703F;" value="9B703F" <?php if($value['color'] == '9B703F') echo 'selected="selected"' ?>>Коричневый</option>
-					<option style="color:#FAAA3C;" value="FAAA3C" <?php if($value['color'] == 'FAAA3C') echo 'selected="selected"' ?>>Оранж</option>
-				</select>
-				<div style="clear:both;"></div></div>
-				
-				<div class="form-item2 center">
-				<input type="submit" name="send" value="Сохранить" />
-				<input type="button" onClick="hideWin('<?php echo h($key) ?>')" value="Отмена" />
-				<div style="clear:both;"></div></div>
-				</form>
-				</div></div></div><div class="xw-bl"><div class="xw-br"><div class="xw-bc">
-				<div class="xw-footer"></div></div></div></div>
-				</div>
-				
-				<!-- FOR MOVE -->
-				<div id="<?php echo h($key) ?>_move_dWin" class="fps-win" style="position:absolute;top:200px;left:40%;display:none">
-				<div class="xw-tl"><div class="xw-tr"><div class="xw-tc xw-tsps"></div>
-				</div></div><div class="xw-ml"><div class="xw-mr"><div align="center" class="xw-mc">
-				<form action="users_groups.php?ac=move" method="POST">
-				<div class="form-item2">
-				Куда перенести:<br />
-				<input type="hidden" name="id" value="<?php echo $key ?>" />
-				<?php
-				$select = '<select name="to">';
-				if (!empty($groups)) {
-					foreach($groups as $sk => $sv) { 
-						if ($sk != $key) {
-							$select .= '<option value="' . $sk . '">' . h($sv['title']) . '</option>';
-						}
-					}
-				}
-				$select .= '</select>';
-				?>
-				<?php echo $select; ?>
-				<div style="clear:both;"></div></div>
-				
-				<div class="form-item2 center">
-				<input type="submit" name="send" value="Сохранить" />
-				<input type="button" onClick="hideWin('<?php echo h($key) ?>_move')" value="Отмена" />
-				<div style="clear:both;"></div></div>
-				</form>
-				</div></div></div><div class="xw-bl"><div class="xw-br"><div class="xw-bc">
-				<div class="xw-footer"></div></div></div></div>
-				</div>
 			</td>
 		</tr>
 		
@@ -303,6 +357,7 @@ if (!empty($errors)) {
 		
 
 	</table>
+	</div>
 	</form>
 
 

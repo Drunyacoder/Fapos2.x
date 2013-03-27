@@ -30,7 +30,7 @@ include_once ROOT . '/admin/inc/adm_boot.php';
 
 $pageTitle = __('F.A.Q.');
 $pageNav = $pageTitle;
-$pageNavl = '';
+$pageNavr = '';
 
 
 
@@ -143,19 +143,23 @@ include_once ROOT . '/admin/template/header.php';
 
 
 	
-<div class="fps-win">
-	<ul class="authors">
-	
-<?php foreach ($FAQ as $key => $value): ?>
-		<li>
-			<h3 style="padding: 0px; margin:0px;"><?php echo ($key + 1); ?>. <?php echo $value[0]; ?></h3>
-			<li class="comment"><?php echo $value[1]; ?></li>
-		</li>
-		<br />
-<?php  endforeach; ?>
+<div class="list">
+	<div class="title">F.A.Q.</div>
+	<div class="level1">
+		<div class="items">
+		
+	<?php foreach ($FAQ as $key => $value): ?>
+			<div class="setting-item">
+				<div class="center">
+					<h3 style="padding: 0px; margin:0px;"><?php echo ($key + 1); ?>. <?php echo $value[0]; ?></h3>
+					<?php echo $value[1]; ?>
+				</div>
+			</div>
+	<?php  endforeach; ?>
 
 
-	</ul>
+		</div>
+	</div>
 </div>
 <?php
 include_once 'template/footer.php';

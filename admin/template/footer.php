@@ -21,22 +21,17 @@
 ## без согласия автора, является не законным    ##
 ##################################################
 ?>
-</div>
-</div></div></div>   <div class="xw-bl"><div class="xw-br"><div class="xw-bc"><div class="xw-footer"></div></div></div></div>  
+							</div>
+							<div class="clear"></div>
+							<div class="footer">(c) Fapos — 2013. All rights reserved.</div>
+						</div>
+						
+					</td>
+				</tr>
+			</table>
 
-<!--*************************************************************************************************************-->
-
-</td>
-</tr>
-</table>
-<script type="text/javascript">
-var cont = document.getElementById('mainConttainer');
-var html = document.body;
-cont.style.height = html.clientHeight - 75 + 'px';
-</script>
-<!-- /Body -->
-
-
-<div class="clear"></div>
+		</div>	
+	</div>
+	<div id="overlay"></div>
 </body>
 </html>

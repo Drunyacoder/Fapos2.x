@@ -30,7 +30,8 @@ include_once ROOT . '/admin/inc/adm_boot.php';
 
 $pageTitle = 'Управление дизайном - меню';
 $pageNav = $pageTitle;
-$pageNavl = '';
+$pageNavR = '';
+$popups = '';
 
 $menu_conf_file = ROOT . '/sys/settings/menu.dat';	
 
@@ -149,6 +150,7 @@ function parseNode($data) {
 function buildMenu($node) {
 	$out = '';
 	$n = 0;
+	global $popups;
 	
 	if (!empty($node) && is_array($node)) {	
 		foreach ($node as $key => $value) {
@@ -168,51 +170,85 @@ function buildMenu($node) {
 				. '<input type="hidden" name="prefix" value="' . h($value['prefix']) . '" />' . "\n"
 				. '<input type="hidden" name="sufix" value="' . h($value['sufix']) . '" />' . "\n" 
 				. '<input type="hidden" name="newwin" value="' . h($value['newwin']) . '" />' . "\n" 
-				. '<div style="float:right;"><img src="template/img/edit_16x16.png" ' 
-				. 'title="Edit" onClick="wiOpen(\'' . md5($value['id']) . '\');" />' . "\n"
-				. '<img src="template/img/del.png" title="Delete" '
-				. 'onClick="deletePoint(this);" /><div style="clear:both;"></div></div>' . "\n"
+				. '<div style="float:right;"><a class="edit" ' 
+				. 'title="Edit" onClick="openPopup(\'edit' . $value['id'] . '\');"></a>' . "\n"
+				. '<a class="delete" title="Delete" '
+				. 'onClick="deletePoint(this);"></a><div style="clear:both;"></div></div>' . "\n"
 				. '</div>' . "\n";
 				
 			$checked = (!empty($value['newwin'])) ? 'selected="selected"' : '';
-			$out .= '<div id="' . md5($value['id']) . '_dWin" class="fps-win" style="position:absolute;top:200px;left:40%;display:none">
-				<div class="xw-tl"><div class="xw-tr"><div class="xw-tc xw-tsps"></div>
-				</div></div><div class="xw-ml"><div class="xw-mr"><div align="center" class="xw-mc">
+			
+			
+			
+			
+			
+			
+			$popups .= '<div id="edit' . $value['id'] . '" class="popup">
+				<div class="top">
+					<div class="title">Добавление пункта</div>
+					<div onClick="closePopup(\'edit' . $value['id'] . '\')" class="close"></div>
+				</div>
 				<form action="menu_editor.php?ac=edit&id=' . $value['id'] . '" method="POST">
-
-				<div class="form-item2">
-				Текст ссылки:<br />
-				<input type="text" name="ankor" value="' . h($value['title']) . '" />
-				<div style="clear:both;"></div></div>
-
-				<div class="form-item2">
-				Сылка(URL):<br />
-				<input type="text" name="url" value="' . h($value['url']) . '" />
-				<div style="clear:both;"></div></div>
-
-				<div class="form-item2">
-				Префикс:<br />
-				<textarea name="prefix">' . h($value['prefix']) . '</textarea>
-				<div style="clear:both;"></div></div>
-
-				<div class="form-item2">
-				Суфикс:<br />
-				<textarea name="sufix">' . h($value['sufix']) . '</textarea>
-				<div style="clear:both;"></div></div>
-
-				<div class="form-item2">
-				В новом окне:<br />
-				<input type="checkbox" value="1" name="newwin" ' . $checked . ' />
-				<div style="clear:both;"></div></div>
-
-				<div class="form-item2">
-				<input type="submit" name="send" value="Сохранить" />
-				<input type="button" onClick="hideWin(\'' . md5($value['id']) . '\')" value="Отмена" />
-				<div style="clear:both;"></div></div>
+				<div class="items">
+					<div class="item">
+						<div class="left">
+							Текст ссылки:
+						</div>
+						<div class="right">
+							<input type="text" name="ankor" value="' . h($value['title']) . '" />
+						</div>
+						<div class="clear"></div>
+					</div>
+					<div class="item">
+						<div class="left">
+							Сылка(URL):
+						</div>
+						<div class="right">
+							<input type="text" name="url" value="' . h($value['url']) . '" />
+						</div>
+						<div class="clear"></div>
+					</div>
+					<div class="item">
+						<div class="left">
+							Префикс:
+						</div>
+						<div class="right">
+							<textarea name="prefix">' . h($value['prefix']) . '</textarea>
+						</div>
+						<div class="clear"></div>
+					</div>
+					<div class="item">
+						<div class="left">
+							Суфикс:
+						</div>
+						<div class="right">
+							<textarea name="sufix">' . h($value['sufix']) . '</textarea>
+						</div>
+						<div class="clear"></div>
+					</div>
+					<div class="item">
+						<div class="left">
+							В новом окне:
+						</div>
+						<div class="right">
+							<input id="newwin" type="checkbox" value="1" name="newwin" ' . $checked . ' />
+							<label for="newwin"></lael>
+						</div>
+						<div class="clear"></div>
+					</div>
+					
+					<div class="item submit">
+						<div class="left"></div>
+						<div class="right" style="float:left;">
+							<input type="submit" value="Сохранить" name="send" class="save-button" />
+						</div>
+						<div class="clear"></div>
+					</div>
+				</div>
 				</form>
-				</div></div></div><div class="xw-bl"><div class="xw-br"><div class="xw-bc">
-				<div class="xw-footer"></div></div></div></div>
-				</div>';
+			</div>';
+			
+	
 
 
 			$out .= '<ul>' . "\n";	
@@ -254,7 +290,7 @@ include_once ROOT . '/admin/template/header.php';
 
 
 
-<div class="fps-win">
+<div class="warning">
 	* Создавайте любые пункты меню и сортируйте их простым перетаскиванием.<br />
 	* Удаляйте и редактируйте пункты, нажатием кнопочек с правой стороны.</b><br />
 	* В конце не забудьте сохранить изменения, нажатием кнопки "Сохранить".<br />
@@ -317,67 +353,106 @@ function form1() {
 	});
 }
 </script>
-<table class="lines">
-	<tr>
-		<td>
-			Код для вставки: 
-			<input style="width:100px; font-size:16px;" type="text" value="{MAINMENU}" onClick="" />
-		</td>
-	</tr>
-	<tr>
-		<td>
-			<ul id="sort">
-			<?php  echo buildMenu($menu); ?>
-			</ul>
-
-			<br />
-			<br />
-			<br />
-			<br />
-			<input type="submit" value="Сохранить" onClick="form1();" id="sendButton" />
-			<input type="submit" value="Добавить" onClick="wiOpen('sec');" />
-		</td>
-	</tr>
-</table>
 
 
-<div id="sec_dWin" class="fps-win" style="position:absolute;top:200px;left:40%;display:none">
-<div class="xw-tl"><div class="xw-tr"><div class="xw-tc xw-tsps"></div>
-</div></div><div class="xw-ml"><div class="xw-mr"><div align="center" class="xw-mc">
-	<form action="menu_editor.php?ac=add" method="POST">
 
-	<div class="form-item2">
-	Текст ссылки:<br />
-	<input type="text" name="ankor" value="" />
-	<div style="clear:both;"></div></div>
 
-	<div class="form-item2">
-	Сылка(URL):<br />
-	<input type="text" name="url" />
-	<div style="clear:both;"></div></div>
-
-	<div class="form-item2">
-	Префикс:<br />
-	<textarea name="prefix"></textarea>
-	<div style="clear:both;"></div></div>
-
-	<div class="form-item2">
-	Суфикс:<br />
-	<textarea name="sufix"></textarea>
-	<div style="clear:both;"></div></div>
-
-	<div class="form-item2">
-	В новом окне:<br />
-	<input type="checkbox" value="1" name="newwin" />
-	<div style="clear:both;"></div></div>
-
-	<div class="form-item2">
-	<input type="submit" name="send" value="Сохранить" />
-	<input type="button" onClick="hideWin('sec')" value="Отмена" />
-	<div style="clear:both;"></div></div>
-	</form>
-</div></div></div><div class="xw-bl"><div class="xw-br"><div class="xw-bc">
-<div class="xw-footer"></div></div></div></div>
+<div class="list">
+	<div class="title">Редактор меню</div>
+	<div onClick="openPopup('addCat');" class="add-cat-butt"><div class="add"></div>Добавить пункт</div>
+	<table cellspacing="0" style="width:100%;" class="grid">
+		<tr>
+			<td>
+				Код для вставки: 
+				<input style="width:100px; font-size:16px;" type="text" value="{MAINMENU}" onClick="" />
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<ul id="sort">
+				<?php  echo buildMenu($menu); ?>
+				</ul>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<input style="margin:auto;" class="save-button" type="submit" value="Сохранить" onClick="form1();" id="sendButton" />
+			</td>
+		</tr>
+	</table>
 </div>
+
+
+
+
+<?php echo $popups; ?>
+
+<div id="addCat" class="popup">
+	<div class="top">
+		<div class="title">Добавление пункта</div>
+		<div onClick="closePopup('addCat')" class="close"></div>
+	</div>
+	<form action="menu_editor.php?ac=add" method="POST">
+	<div class="items">
+		<div class="item">
+			<div class="left">
+				Текст ссылки:
+			</div>
+			<div class="right">
+				<input type="text" name="ankor" value="" />
+			</div>
+			<div class="clear"></div>
+		</div>
+		<div class="item">
+			<div class="left">
+				Сылка(URL):
+			</div>
+			<div class="right">
+				<input type="text" name="url" />
+			</div>
+			<div class="clear"></div>
+		</div>
+		<div class="item">
+			<div class="left">
+				Префикс:
+			</div>
+			<div class="right">
+				<textarea name="prefix"></textarea>
+			</div>
+			<div class="clear"></div>
+		</div>
+		<div class="item">
+			<div class="left">
+				Суфикс:
+			</div>
+			<div class="right">
+				<textarea name="sufix"></textarea>
+			</div>
+			<div class="clear"></div>
+		</div>
+		<div class="item">
+			<div class="left">
+				В новом окне:
+			</div>
+			<div class="right">
+				<input id="newwin" type="checkbox" value="1" name="newwin" />
+				<label for="newwin"></lael>
+			</div>
+			<div class="clear"></div>
+		</div>
+		
+		<div class="item submit">
+			<div class="left"></div>
+			<div class="right" style="float:left;">
+				<input type="submit" value="Сохранить" name="send" class="save-button" />
+			</div>
+			<div class="clear"></div>
+		</div>
+	</div>
+	</form>
+</div>
+
+
+
 
 <?php include_once 'template/footer.php';

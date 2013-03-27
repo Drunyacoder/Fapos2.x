@@ -33,6 +33,10 @@ include_once ROOT . '/admin/inc/adm_boot.php';
 $ModulesManager = new ModulesManager();
 $allow_modules = $ModulesManager->getAddFieldsAllowedModules();
 $modules_titles = $ModulesManager->getAddFieldsAllowedModulesTitles();
+
+
+
+
 if (empty($_GET['m']) || !in_array($_GET['m'], $allow_modules)) {
 	$_GET['m'] = 'news';
 	$_GET['ac'] = 'index';
@@ -71,64 +75,203 @@ if ($_GET['ac'] == 'index'):
 
 
 	$pageNav = $pageTitle;
-	$pageNavl = '';
+	$pageNavr = '';
 	//echo $head
     include_once ROOT . '/admin/template/header.php';
 ?>
 	
-	<span style="float:right;"><input type="button" value="<?php echo __('Add') ?>" onClick="wiOpen('add')" /></span>
-	<div style="clear:both;"></div>
-	</div></div></div>   <div class="xw-bl"></div> 
-	<div class="xw-tl1"><div class="xw-tr1"><div class="xw-tc1"></div></div></div>
-	<div class="xw-ml"><div class="xw-mr"><div id="mainContent" class="xw-mc topBlockM">
-
-
-	<div id="add_dWin" class="fps-win" style="position:absolute;top:200px;left:40%;display:none">
-	<div class="xw-tl"><div class="xw-tr"><div class="xw-tc xw-tsps"></div>
-	</div></div><div class="xw-ml"><div class="xw-mr"><div align="center" class="xw-mc">
-	<form action="additional_fields.php?m=<?php echo $_GET['m'] ?>&ac=add" method="POST">
-	<div class="form-item2">
-	<?php echo __('Type of field') ?>:<br />
-	<select name="type">
-		<option value="text">text</option>
-		<option value="checkbox">checkbox</option>
-		<option value="textarea">textarea</option>
-	</select>
-	<div style="clear:both;"></div></div>
 	
-	<div class="form-item2">
-	<?php echo __('Visible name of field') ?>:<br />
-	<span class="comment"><?php echo __('Will be displayed in errors') ?></span><br />
-	<input type="text" name="label" value="" />
-	<div style="clear:both;"></div></div>
 	
-	<div class="form-item2">
-	<?php echo __('Max length') ?>:<br />
-	<span class="comment"><?php echo __('of saving data') ?></span><br />
-	<input type="text" name="size" value="" />
-	<div style="clear:both;"></div></div>
 	
-	<div class="form-item2">
-	<?php echo __('Params') ?>:<br />
-	<span class="comment"><?php echo __('Read more in the doc') ?></span><br />
-	<input type="text" name="params" value="" />
-	<div style="clear:both;"></div></div>
 	
-	<div class="form-item2">
-	<?php echo __('Required field') ?>:<br />
-	<input type="checkbox" name="required" value="1" />
-	<div style="clear:both;"></div></div>
 	
-	<div class="form-item2 center">
-	<input type="submit" name="send" value="<?php echo __('Save') ?>" />
-	<input type="button" onClick="hideWin('add')" value="<?php echo __('Cancel') ?>" />
-	<div style="clear:both;"></div></div>
-	</form>
-	</div></div></div><div class="xw-bl"><div class="xw-br"><div class="xw-bc">
-	<div class="xw-footer"></div></div></div></div>
+	
+	
+	
+	
+	<div class="popup" id="addCat">
+		<div class="top">
+			<div class="title">Добавление поля</div>
+			<div class="close" onClick="closePopup('addCat')"></div>
+		</div>
+		<div class="items">
+			<form action="additional_fields.php?m=<?php echo $_GET['m'] ?>&ac=add" method="POST">
+			<div class="item">
+				<div class="left">
+					<?php echo __('Type of field') ?>:
+				</div>
+				<div class="right">
+					<select name="type">
+						<option value="text">text</option>
+						<option value="checkbox">checkbox</option>
+						<option value="textarea">textarea</option>
+					</select>
+				</div>
+				<div class="clear"></div>
+			</div>
+			<div class="item">
+				<div class="left">
+					<?php echo __('Visible name of field') ?>:
+					<span class="comment"><?php echo __('Will be displayed in errors') ?></span>
+				</div>
+				<div class="right">
+					<input type="text" name="label" value="" />
+				</div>
+				<div class="clear"></div>
+			</div>
+			<div class="item">
+				<div class="left">
+					<?php echo __('Max length') ?>:
+					<span class="comment"><?php echo __('of saving data') ?></span>
+				</div>
+				<div class="right">
+					<input type="text" name="size" value="" />
+				</div>
+				<div class="clear"></div>
+			</div>
+			<div class="item">
+				<div class="left">
+					<?php echo __('Params') ?>:
+					<span class="comment"><?php echo __('Read more in the doc') ?></span>
+				</div>
+				<div class="right">
+					<input type="text" name="params" value="" />
+				</div>
+				<div class="clear"></div>
+			</div>
+			<div class="item">
+				<div class="left">
+					<?php echo __('Required field') ?>:
+				</div>
+				<div class="right">
+					<input type="checkbox" name="required" value="1" />
+				</div>
+				<div class="clear"></div>
+			</div>
+			<div class="item submit">
+				<div class="left"></div>
+				<div class="right" style="float:left;">
+					<input type="submit" value="Сохранить" name="send" class="save-button" />
+				</div>
+				<div class="clear"></div>
+			</div>
+			</form>
+		</div>
 	</div>
+	
+
+	
+	
+	
+<?php if (!empty($fields)): ?>
+<?php foreach($fields as $field): ?>
+	<?php
+		$params = (!empty($field['params'])) ? unserialize($field['params']) : array();
+		$values = (!empty($params['values'])) ? $params['values'] : '-';
+		$field_market = 'add_field_' . $field['id'];
+		
+		$required = (!empty($params['required'])) 
+		? '<span style="color:red;">' . __('Yes') . '</span>' 
+		: '<span style="color:blue;">' . __('No') . '</span>';
+	?>
+	
+	<div class="popup" id="edit_<?php echo $field['id'] ?>">
+		<div class="top">
+			<div class="title">Добавление поля</div>
+			<div class="close" onClick="closePopup('edit_<?php echo $field['id'] ?>')"></div>
+		</div>
+		<div class="items">
+			<form action="additional_fields.php?m=<?php echo $_GET['m'] ?>&ac=edit&id=<?php echo $field['id'] ?>" method="POST">
+			<div class="item">
+				<div class="left">
+					<?php echo __('Type of field') ?>:
+				</div>
+				<div class="right">
+					<select name="type">
+						<option value="text"<?php if($field['type'] == 'text') echo ' selected="selected"' ?>>test</option>
+						<option value="checkbox"<?php if($field['type'] == 'checkbox') echo ' selected="selected"' ?>>checkbox</option>
+						<option value="textarea"<?php if($field['type'] == 'textarea') echo ' selected="selected"' ?>>textarea</option>
+					</select>
+				</div>
+				<div class="clear"></div>
+			</div>
+			<div class="item">
+				<div class="left">
+					<?php echo __('Visible name of field') ?>:
+					<span class="comment"><?php echo __('Will be displayed in errors') ?></span>
+				</div>
+				<div class="right">
+					<input type="text" name="label" value="<?php echo h($field['label']) ?>" />
+				</div>
+				<div class="clear"></div>
+			</div>
+			<div class="item">
+				<div class="left">
+					<?php echo __('Max length') ?>:
+					<span class="comment"><?php echo __('of saving data') ?></span>
+				</div>
+				<div class="right">
+					<input type="text" name="size" value="<?php echo (!empty($field['size'])) ? h($field['size']) : ''; ?>" />
+				</div>
+				<div class="clear"></div>
+			</div>
+			<div class="item">
+				<div class="left">
+					<?php echo __('Params') ?>:
+					<span class="comment"><?php echo __('Read more in the doc') ?></span>
+				</div>
+				<div class="right">
+					<input type="text" name="params" value="<?php echo ($values != '-') ? h($values) : ''; ?>" />
+				</div>
+				<div class="clear"></div>
+			</div>
+			<div class="item">
+				<div class="left">
+					<?php echo __('Required field') ?>:
+				</div>
+				<div class="right">
+					<input type="checkbox" name="required" value="1"<?php if(!empty($params['required'])) echo ' checked="checked"' ?>/>
+				</div>
+				<div class="clear"></div>
+			</div>
+			<div class="item submit">
+				<div class="left"></div>
+				<div class="right" style="float:left;">
+					<input type="submit" value="Сохранить" name="send" class="save-button" />
+				</div>
+				<div class="clear"></div>
+			</div>
+			</form>
+		</div>
+	</div>
+	
+	
+
+	
+	
+<?php endforeach; ?>
+<?php endif; ?>	
+	
+	
+	
+	
 
 
+	
+<div class="list">
+	<div class="title">Дополнительные поля</div>
+	<div onclick="openPopup('addCat');" class="add-cat-butt"><div class="add"></div><?php echo __('Add') ?></div>
+	<table class="grid" cellspacing="0" style="width:100%;">
+		<tr>
+			<th><?php echo __('Type of field') ?></th>
+			<th><?php echo __('Visible name of field') ?></th>
+			<th><?php echo __('Max length') ?></th>
+			<th><?php echo __('Params') ?></th>
+			<th><?php echo __('Required field') ?></th>
+			<th><?php echo __('Marker of field') ?></th>
+			<th style="width:160px;">Действия</th>
+		</tr>
+	
 	<?php if (!empty($fields)): ?>
 	<?php foreach($fields as $field): ?>
 		<?php
@@ -141,78 +284,33 @@ if ($_GET['ac'] == 'index'):
 			: '<span style="color:blue;">' . __('No') . '</span>';
 		?>
 		
-		<div class="fps-win lines2">
-			<div class="items">
-				<div class="item"><?php echo __('Type of field') ?>: <div><?php echo h($field['type']); ?></div></div>
-				<div class="item"><?php echo __('Visible name of field') ?>: <div><?php echo h($field['label']); ?></div></div>
-				<div class="item"><?php echo __('Max length') ?>: <div><?php echo (!empty($field['size'])) ? h($field['size']) : '-'; ?></div></div>
-				<div class="item"><?php echo __('Params') ?>: <div><?php echo (!empty($values)) ? h($values) : ''; ?></div></div>
-				<div class="item"><?php echo __('Required field') ?>: <div><?php echo $required; ?></div></div>
-				<div class="item"><?php echo __('Marker of field') ?>: <div><?php echo h(strtolower($field_market)); ?></div></div>
-			</div>
-			<div class="textarea-item">
-				<textarea style="width:100%; height:103px;;"><?php echo (!empty($inputs[$field_market])) ? $inputs[$field_market] : ''; ?></textarea>
-			</div>
-			
-			<div class="control-but">
-				<a href="javascript://" onClick="wiOpen('edit_<?php echo $field['id'] ?>')">
-				<img src="<?php echo get_url('/admin/template/img/edit_16x16.png'); ?>"  /></a>&nbsp;
-				<a href="additional_fields.php?m=<?php echo $_GET['m'] ?>&ac=del&id=<?php echo $field['id'] ?>" onClick="return confirm('Are you sure?');">
-				<img src="<?php echo get_url('/admin/template/img/del.png'); ?>"  /></a>
-			</div>
-			<div style="clear:both;"></div>
-		</div>
-		
-		<div id="edit_<?php echo $field['id'] ?>_dWin" class="fps-win" style="position:absolute;top:200px;left:40%;display:none">
-		<div class="xw-tl"><div class="xw-tr"><div class="xw-tc xw-tsps"></div>
-		</div></div><div class="xw-ml"><div class="xw-mr"><div align="center" class="xw-mc">
-		<form action="additional_fields.php?m=<?php echo $_GET['m'] ?>&ac=edit&id=<?php echo $field['id'] ?>" method="POST">
-		<div class="form-item2">
-		<?php echo __('Type of field') ?>:<br />
-		<select name="type">
-			<option value="text"<?php if($field['type'] == 'text') echo ' selected="selected"' ?>>test</option>
-			<option value="checkbox"<?php if($field['type'] == 'checkbox') echo ' selected="selected"' ?>>checkbox</option>
-			<option value="textarea"<?php if($field['type'] == 'textarea') echo ' selected="selected"' ?>>textarea</option>
-		</select>
-		<div style="clear:both;"></div></div>
-		
-		<div class="form-item2">
-		<?php echo __('Visible name of field') ?>:<br />
-		<span class="comment"><?php echo __('Will be displayed in errors') ?></span><br />
-		<input type="text" name="label" value="<?php echo h($field['label']) ?>" />
-		<div style="clear:both;"></div></div>
-		
-		<div class="form-item2">
-		<?php echo __('Max length') ?>:<br />
-		<span class="comment"><?php echo __('of saving data') ?></span><br />
-		<input type="text" name="size" value="<?php echo (!empty($field['size'])) ? h($field['size']) : ''; ?>" />
-		<div style="clear:both;"></div></div>
-		
-		<div class="form-item2">
-		<?php echo __('Params') ?>:<br />
-		<span class="comment"><?php echo __('Read more in the doc') ?></span><br />
-		<input type="text" name="params" value="<?php echo ($values != '-') ? h($values) : ''; ?>" />
-		<div style="clear:both;"></div></div>
-		
-		<div class="form-item2">
-		<?php echo __('Required field') ?>:<br />
-		<input type="checkbox" name="required" value="1"<?php if(!empty($params['required'])) echo ' checked="checked"' ?>/>
-		<div style="clear:both;"></div></div>
-		
-		<div class="form-item2 center">
-		<input type="submit" name="send" value="<?php echo __('Save') ?>" />
-		<input type="button" onClick="hideWin('edit_<?php echo $field['id'] ?>')" value="<?php echo __('Cancel') ?>" />
-		<div style="clear:both;"></div></div>
-		</form>
-		</div></div></div><div class="xw-bl"><div class="xw-br"><div class="xw-bc">
-		<div class="xw-footer"></div></div></div></div>
-		</div>
-		
-		
+
+
+				<tr>
+					<td><?php echo h($field['type']); ?></td>
+					<td><?php echo h($field['label']); ?></td>
+					<td><?php echo (!empty($field['size'])) ? h($field['size']) : '-'; ?></td>
+					<td><?php echo (!empty($values)) ? h($values) : ''; ?></td>
+					<td><?php echo $required; ?></td>
+					<td><?php echo h(strtolower($field_market)); ?></td>
+					<td>
+						<a class="edit" title="Edit" href="javascript://" onClick="openPopup('edit_<?php echo $field['id'] ?>')"></a>
+						<a class="delete" title="Delete" href="additional_fields.php?m=<?php echo $_GET['m'] ?>&ac=del&id=<?php echo $field['id'] ?>" onClick="return confirm('Are you sure?');"></a>
+					</td>
+				</tr>
+
 	<?php endforeach; ?>
 	<?php else: ?>
 	<div class="fps-win"><div class="h3"><?php echo __('Additional fields not found') ?></div></div>
 	<?php endif; ?>
+	</table>
+</div>
+			
+	
+	
+	
+	
+	
 	<?php if (!empty($_SESSION['FpsForm']['errors'])): ?>
 		<script type="text/javascript">showHelpWin('<?php echo '<ul class="error">' . $_SESSION['FpsForm']['errors'] . '</ul>'; ?>', '<?php echo __('Errors') ?>');</script>
 		<?php unset($_SESSION['FpsForm']); ?>

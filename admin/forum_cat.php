@@ -32,6 +32,10 @@ include_once ROOT . '/admin/inc/adm_boot.php';
 $pageTitle = __('Forum');
 
 
+// For all popup's(edit & add). Their must be in main wrapper
+$popups_content = '';
+
+
 
 if (!isset($_GET['ac'])) $_GET['ac'] = 'index';
 $permis = array('add', 'del', 'index', 'edit');
@@ -62,21 +66,27 @@ include_once ROOT . '/admin/template/header.php';
  ?>
 
 
-<div class="fps-win">
-<span class="comment">
+<div class="warning">
 <?php echo __('If you delete a category, all the materials in it will be removed') ?><br /><br />
 
 <?php echo __('Each forum should be inherited from the section') ?>
-</span>
+
+<?php
+if (!empty($_SESSION['addErrors'])) {
+	echo '<ul class="error" style="list-style-type:none;color:red;">' . $_SESSION['addErrors'] . '</ul>';
+	unset($_SESSION['addErrors']);
+}
+?>
 </div>
 
 <?php
+echo $popups_content;
 echo $content;
 
 
 
 function index(&$page_title) {
-	global $FpsDB;
+	global $FpsDB, $popups_content;
 	deleteCollisions();
 
 	$page_title = __('Forum - sections editor');
@@ -85,7 +95,7 @@ function index(&$page_title) {
 	
 	//cats and position selectors for ADD
 	if (count($query) > 0) {
-		$cat_selector = '<select style="width:130px;" name="in_cat" id="cat_secId">';	
+		$cat_selector = '<select name="in_cat" id="cat_secId">';	
 		foreach ($query as $key => $result) {
 			$cat_selector .= '<option value="' . $result['id'] . '">' . h($result['title']) . '</option>';
 		}
@@ -98,7 +108,7 @@ function index(&$page_title) {
 
 	
 	//selector for subforums
-	$sub_selector = '<select style="width:130px;" name="parent_forum_id">';
+	$sub_selector = '<select name="parent_forum_id">';
 	$sub_selector .= '<option value=""></option>';
 	if (!empty($forums)) {
 		foreach($forums as $forum) {
@@ -110,140 +120,225 @@ function index(&$page_title) {
 	
 	$html = '';
 
-	$html .= '<table width="100%"><tr><td>
-		<input type="button" name="add" value="' . __('Add section') . '" onClick="wiOpen(\'sec\');" /></td>';
-	$html .= '<td align="right">
-				<div align="right" class="topButtonL" id="cat_view"><input type="button" name="add" value="' . __('Create forum') . '" onClick="wiOpen(\'cat\');" /></div></td></tr></table>
-				
-		<div id="cat_dWin" class="fps-win" style="position:absolute;top:100px;left:40%;display:none">
-		<div class="xw-tl"><div class="xw-tr"><div class="xw-tc xw-tsps"></div>
-		</div></div><div class="xw-ml"><div class="xw-mr"><div align="center" class="xw-mc">
-		<form action="forum_cat.php?ac=add" method="POST" enctype="multipart/form-data">
+
 		
-		<div class="form-item2">
-		' . __('Parent section') . ':<br />
-		' . $cat_selector . '
-		<div style="clear:both;"></div></div>
-		
-		<div class="form-item2">
-		' . __('Title of forum') . ':<br />
-		<input type="hidden" name="type" value="forum" />
-		<input type="text" style="width:130px" name="title" />
-		<div style="clear:both;"></div></div>
-		
-		<div class="form-item2">
-		' . __('Forum position') . ':<br /><span class="comment">' . __('Numeric') . '</span><br />
-		<input type="text" name="in_pos" />
-		<div style="clear:both;"></div></div>
-		
-		<div class="form-item2">
-		' . __('Parent forum') . ':<br /><span class="comment">' . __('For which this will be sub-forum') . '</span><br />
-		' . $sub_selector . '
-		<div style="clear:both;"></div></div>
-		
-		<div class="form-item2">
-		' . __('Icon') . ':<br /> <span class="comment">(' . __('Empty field - no icon') . ')<br />
-		' . __('The desired size 16x16 px') . '</span><br />
-		<input type="file" style="margin-right:50px;width:130px" name="icon" />
-		<div style="clear:both;"></div></div>
-		
-		<div class="form-item2">
-		' . __('Description') . ':<br />
-		<textarea name="description" cols="30" rows="3" /></textarea><br />
-		<div style="clear:both;"></div></div>
-		
-		<hr />
-		
-		<div class="form-item2">
-		' . __('Lock on passwd') . ':<br />
-		<input type="text" name="lock_passwd"/><br />
-		<div style="clear:both;"></div></div>
-		
-		<div class="form-item2">
-		' . __('Lock on posts count') . ':<br />
-		<input type="text" name="lock_posts"/><br />
-		<div style="clear:both;"></div></div>
-		
-		<div class="form-item2 center">
-		<input type="submit" name="send" value="' . __('Save') . '" />
-		<input type="button" onClick="hideWin(\'cat\')" value="' . __('Cancel') . '" />
-		<div style="clear:both;"></div></div>
-		</form>
-		</div></div></div><div class="xw-bl"><div class="xw-br"><div class="xw-bc">
-		<div class="xw-footer"></div></div></div></div>
-		</div>
-		
-		<div id="sec_dWin" class="fps-win" style="position:absolute;top:200px;left:40%;display:none">
-		<div class="xw-tl"><div class="xw-tr"><div class="xw-tc xw-tsps"></div>
-		</div></div><div class="xw-ml"><div class="xw-mr"><div align="center" class="xw-mc">
-		<form action="forum_cat.php?ac=add" method="POST">
-		
-		<div class="form-item2">
-		' . __('Title') . ':<br />
-		<input type="hidden" name="type" value="section" />
-		<input type="text" name="title" />
-		<div style="clear:both;"></div></div>
-		
-		<div class="form-item2">
-		' . __('Section position') . ':<br /><span class="comment">' . __('Numeric') . '</span><br />
-		<input type="text" name="in_pos" />
-		<div style="clear:both;"></div></div>
-		
-		<div class="form-item2">
-		<input type="submit" name="send" value="' . __('Save') . '" />
-		<input type="button" onClick="hideWin(\'sec\')" value="' . __('Cancel') . '" />
-		<div style="clear:both;"></div></div>
-		</form>
-		</div></div></div><div class="xw-bl"><div class="xw-br"><div class="xw-bc">
-		<div class="xw-footer"></div></div></div></div>
+	$popups_content .=	'<div id="sec" class="popup">
+			<div class="top">
+				<div class="title">Добавление категории</div>
+				<div onClick="closePopup(\'sec\');" class="close"></div>
+			</div>
+			<form action="forum_cat.php?ac=add" method="POST">
+			<div class="items">
+				<div class="item">
+					<div class="left">
+						' . __('Title') . ':
+					</div>
+					<div class="right">
+						<input type="hidden" name="type" value="section" />
+						<input type="text" name="title" />
+					</div>
+					<div class="clear"></div>
+				</div>
+				<div class="item">
+					<div class="left">
+						' . __('Section position') . ':
+						<span class="comment">' . __('Numeric') . '</span>
+					</div>
+					<div class="right">
+						<input type="text" name="in_pos" />
+					</div>
+					<div class="clear"></div>
+				</div>
+				<div class="item submit">
+					<div class="left"></div>
+					<div class="right" style="float:left;">
+						<input type="submit" value="' . __('Save') . '" name="send" class="save-button" />
+					</div>
+					<div class="clear"></div>
+				</div>
+			</div>
+			</form>
 		</div>';
-		
+	
+	
+	
+	
+	$html .= '<div class="list">
+		<div class="title">Управление форумами</div>
+		<div class="add-cat-butt" onClick="openPopup(\'sec\');"><div class="add"></div>' . __('Add section') . '</div>';
+
+
+
+	
+	/*
+	$html .= '<td align="right">
+				<div align="right" class="topButtonL" id="cat_view"><input type="button" name="add" value="' . __('Create forum') . '" onClick="wiOpen(\'cat\');" /></div></td></tr></table>';
+	*/
 		
 		
 	if (count($query) > 0) {
-		$html .= '<div class="cat_list_container">';
-		
-		if (!empty($_SESSION['addErrors'])) {
-			$html .= '<ul class="error" style="list-style-type:none;color:red;">' . $_SESSION['addErrors'] . '</ul>';
-			unset($_SESSION['addErrors']);
-		}
-		
-		
 		foreach ($query as $result) {
 
-			$html .= '
-				<div class="section">
-				<b>'.$result['title'].'</b>
-				<div class="tools"><a href="javascript://" onClick="wiOpen(\'' . $result['id'] . '_section\')"><img src="template/img/edit_16x16.png"  /></a>
-				<a href="?ac=del&id=' . $result['id'] . '&&section" onClick="return _confirm();"><img src="template/img/del.png"  /></a>';
-			/* EDIT SECTION FORM */
-			$html .= '		
-				<div id="' . $result['id'] . '_section_dWin" class="fps-win" style="position:absolute;top:200px;left:40%;display:none">
-				<div class="xw-tl"><div class="xw-tr"><div class="xw-tc xw-tsps"></div>
-				</div></div><div class="xw-ml"><div class="xw-mr"><div align="center" class="xw-mc">
-				<form action="forum_cat.php?ac=edit&id=' . $result['id'] . '" method="POST">
-				
-				<div class="form-item2">
-				' . __('Title') . ':<br />
-				<input type="hidden" name="type" value="section" />
-				<input type="text" name="title" value="' . $result['title'] . '" />
-				<div style="clear:both;"></div></div>
-				
-				<div class="form-item2">
-				' . __('Section position') . ':<br /><span class="comment">' . __('Numeric') . '</span><br />
-				<input type="text" name="in_pos" value="' . $result['previev_id'] . '" />
-				<div style="clear:both;"></div></div>
-				
-				<div class="form-item2 center">
-				<input type="submit" name="send" value="' . __('Save') . '" />
-				<input type="button" onClick="hideWin(\'' . $result['id'] . '_section\')" value="' . __('Cancel') . '" />
-				<div style="clear:both;"></div></div>
-				</form>
-				</div></div></div><div class="xw-bl"><div class="xw-br"><div class="xw-bc">
-				<div class="xw-footer"></div></div></div></div>
+			$html .= '<div class="level1">
+				<div class="head">
+					<div class="title">' . h($result['title']) . '</div>
+					<div class="buttons">
+						<a title="Add" href="javascript://" onClick="openPopup(\'addForum' . $result['id'] . '\');" class="add"></a>
+						<a title="Edit" href="javascript://" onClick="openPopup(\'editSec' . $result['id'] . '\');" class="edit"></a>
+						<a title="Delete" href="?ac=del&id=' . $result['id'] . '&section" onClick="return _confirm();" class="delete"></a>
+					</div>
+					<div class="clear"></div>
 				</div>
-				</div></div>';
+				<div class="items">';
+		
+		
+			// Select current section
+			$cat_selector_ = str_replace('selected="selected"', ' ', $cat_selector);
+			$cat_selector_ = str_replace(
+				'value="' . $result['id'] .'"', 
+				' selected="selected" value="' . $result['id'] .'"', 
+				$cat_selector_
+			);
+		
+		
+			$popups_content .= '<div id="addForum' . $result['id'] . '" class="popup">
+					<div class="top">
+						<div class="title">Добавление категории</div>
+						<div onClick="closePopup(\'addForum' . $result['id'] . '\');" class="close"></div>
+					</div>
+					<form action="forum_cat.php?ac=add" method="POST" enctype="multipart/form-data">
+					<div class="items">
+						<div class="item">
+							<div class="left">
+								' . __('Parent section') . ':
+							</div>
+							<div class="right">' . $cat_selector_ . '</div>
+							<div class="clear"></div>
+						</div>
+						<div class="item">
+							<div class="left">
+								' . __('Title of forum') . ':
+							</div>
+							<div class="right">
+								<input type="hidden" name="type" value="forum" />
+								<input type="text" name="title" />
+							</div>
+							<div class="clear"></div>
+						</div>
+						<div class="item">
+							<div class="left">
+								' . __('Forum position') . ':
+								<span class="comment">' . __('Numeric') . '</span>
+							</div>
+							<div class="right">
+								<input type="text" name="in_pos" />
+							</div>
+							<div class="clear"></div>
+						</div>
+						<div class="item">
+							<div class="left">
+								' . __('Parent forum') . ':
+								<span class="comment">' . __('For which this will be sub-forum') . '</span>
+							</div>
+							<div class="right">
+								' . $sub_selector . '
+							</div>
+							<div class="clear"></div>
+						</div>
+						<div class="item">
+							<div class="left">
+								' . __('Icon') . ':
+								<span class="comment">(' . __('Empty field - no icon') . ')<br />
+								' . __('The desired size 16x16 px') . '</span>
+							</div>
+							<div class="right">
+								<input type="file" name="icon" />
+							</div>
+							<div class="clear"></div>
+						</div>
+						<div class="item">
+							<div class="left">
+								' . __('Description') . ':
+							</div>
+							<div class="right">
+								<textarea name="description" /></textarea>
+							</div>
+							<div class="clear"></div>
+						</div>
+						<div class="item">
+							<div class="left">
+								' . __('Lock on passwd') . ':
+							</div>
+							<div class="right">
+								<input type="text" name="lock_passwd"/>
+							</div>
+							<div class="clear"></div>
+						</div>
+						<div class="item">
+							<div class="left">
+								' . __('Lock on posts count') . ':
+							</div>
+							<div class="right">
+								<input type="text" name="lock_posts"/>
+							</div>
+							<div class="clear"></div>
+						</div>
+						<div class="item submit">
+							<div class="left"></div>
+							<div class="right" style="float:left;">
+								<input type="submit" value="' . __('Save') . '" name="send" class="save-button" />
+							</div>
+							<div class="clear"></div>
+						</div>
+					</div>
+					</form>
+				</div>';
+				
+				
+				
+				
+			$popups_content .= '<div id="editSec' . $result['id'] . '" class="popup">
+					<div class="top">
+						<div class="title">Добавление категории</div>
+						<div onClick="closePopup(\'editSec' . $result['id'] . '\');" class="close"></div>
+					</div>
+					<form action="forum_cat.php?ac=edit&id=' . $result['id'] . '" method="POST">
+					<div class="items">
+						<div class="item">
+							<div class="left">
+								' . __('Title') . ':
+							</div>
+							<div class="right">
+								<input type="hidden" name="type" value="section" />
+								<input type="text" name="title" value="' . $result['title'] . '" />
+							</div>
+							<div class="clear"></div>
+						</div>
+						<div class="item">
+							<div class="left">
+								' . __('Section position') . ':
+								<span class="comment">' . __('Numeric') . '</span>
+							</div>
+							<div class="right">
+								<input type="text" name="in_pos" value="' . $result['previev_id'] . '" />
+							</div>
+							<div class="clear"></div>
+						</div>
+						<div class="item submit">
+							<div class="left"></div>
+							<div class="right" style="float:left;">
+								<input type="submit" value="' . __('Save') . '" name="send" class="save-button" />
+							</div>
+							<div class="clear"></div>
+						</div>
+					</div>
+					</form>
+				</div>';
 			/* END EDIT SECTION FORM */
+			
+			
+			
+			
 			$queryCat = $FpsDB->query("
 				SELECT a.*, COUNT(b.`id`) as cnt FROM `" . $FpsDB->getFullTableName('forums') . "` a 
 				LEFT JOIN `" . $FpsDB->getFullTableName('themes') . "` b ON b.`id_forum` = a.`id` 
@@ -254,7 +349,7 @@ function index(&$page_title) {
 
 					
 					//cat selector and position selector for EDIT FRORUMS
-					$cat_selector = '<select style="width:130px;" name="in_cat" id="cat_secId">';	
+					$cat_selector = '<select name="in_cat" id="cat_secId">';	
 					foreach ($query as $key => $category) {
 						if ($cat['in_cat'] == $category['id']) {
 							$cat_selector .= '<option value="' . $category['id'] . '" selected="selected">' . $category['title'] . '</option>';
@@ -264,8 +359,10 @@ function index(&$page_title) {
 					}
 					$cat_selector .= '</select>';
 
+					
+					
 					//selector for subforums
-					$sub_selector = '<select style="width:130px;" name="parent_forum_id">';
+					$sub_selector = '<select name="parent_forum_id">';
 					$sub_selector .= '<option value=""></option>';
 					if (!empty($forums)) {
 						foreach($forums as $forum) {
@@ -280,76 +377,121 @@ function index(&$page_title) {
 					$issubforum = (!empty($cat['parent_forum_id'])) 
 					? '&nbsp;<span style="color:#0373FE;">' . __('Under forum with ID') . ' ' . $cat['parent_forum_id'] . '</span>' : '';
 					
-					$html .= '<div class="category_row"><div class="category">[' . $cat['id'] . ']&nbsp;<b>' . $cat['title'] 
-					. '</b>&nbsp;( ' . $cat['cnt'] . ' ) ' . $issubforum . ' 
-						<div class="tools"><a href="javascript://" onClick="wiOpen(\'' . $cat['id'] . '_forum\')">
-						<img src="template/img/edit_16x16.png"  /></a>
-						<a href="?ac=del&id='
-						. $cat['id'] . '" onClick="return _confirm();"><img src="template/img/del.png"  /></a>';
-					/* EDIT FORUM FORM */
-					$html .= '
-						<div id="' . $cat['id'] . '_forum_dWin" class="fps-win" style="position:absolute;top:200px;left:40%;display:none">
-						<div class="xw-tl"><div class="xw-tr"><div class="xw-tc xw-tsps"></div>
-						</div></div><div class="xw-ml"><div class="xw-mr"><div align="center" class="xw-mc">
-						<form action="forum_cat.php?ac=edit&id=' . $cat['id'] . '" method="POST" enctype="multipart/form-data">
-						
-						<div class="form-item2">
-						' . __('Parent section') . ':<br />
-						' . $cat_selector . '
-						<div style="clear:both;"></div></div>
-						
-						
-						<div class="form-item2">
-						' . __('Title of forum') . ':<br />
-						<input type="hidden" name="type" value="forum" />
-						<input type="text" style="width:130px" name="title" value="' . $cat['title'] . '" />
-						<div style="clear:both;"></div></div>
-						
-						<div class="form-item2">
-						' . __('Forum position') . ':<br /><span class="comment">' . __('Numeric') . '</span><br />
-						<input type="text" name="in_pos" value="' . $cat['pos'] . '" />
-						<div style="clear:both;"></div></div>
-						
-						<div class="form-item2">
-						' . __('Parent forum') . ':<br /><span class="comment">' . __('For which this will be sub-forum') . '</span><br />
-						' . $sub_selector . '<div style="clear:both;"></div></div>
-						
-						<div class="form-item2">
-						' . __('Icon') . ':<br /> <span class="comment">(' . __('Empty field - no icon') . ')<br />
-						' . __('The desired size 16x16 px') . '</span><br />
-						<input type="file" style="margin-right:50px;width:130px" name="icon" />
-						<div style="clear:both;"></div></div>
-						
-						<div class="form-item2">
-						' . __('Description') . ':<br />
-						<textarea name="description" cols="30" rows="3" />' . $cat['description'] . '</textarea>
-						<div style="clear:both;"></div></div>
-						
-						<hr />
-						
-						<div class="form-item2">
-						' . __('Lock on passwd') . ':<br />
-						<input type="text" name="lock_passwd" value="' . $cat['lock_passwd'] . '" /><br />
-						<div style="clear:both;"></div></div>
-						
-						<div class="form-item2">
-						' . __('Lock on posts count') . ':<br />
-						<input type="text" name="lock_posts" value="' . $cat['lock_posts'] . '" /><br />
-						<div style="clear:both;"></div></div>
-						
-						<div class="form-item2 center">
-						<input type="submit" name="send" value="' . __('Save') . '" />
-						<input type="button" onClick="hideWin(\'' . $cat['id'] . '_forum\')" value="' . __('Cancel') . '" />
-						<div style="clear:both;"></div></div>
-						</form>
-						</div></div></div><div class="xw-bl"><div class="xw-br"><div class="xw-bc">
-						<div class="xw-footer"></div></div></div></div>
-						</div></div></div></div>';
+					
+					
+					$html .= '<div class="level2">
+								<div class="number">' . $cat['id'] . '</div>
+								<div class="title">' . h($cat['title']) . ' ' . $issubforum . '</div>
+								<div class="buttons">
+									<a href="javascript://" onClick="openPopup(\'editForum' . $cat['id'] . '\')" class="edit"></a>
+									<a href="?ac=del&id=' . $cat['id'] . '" onClick="return _confirm();" class="delete"></a>
+								</div>
+								<div class="posts">' . $cat['cnt'] . '</div>
+							</div>';
+
+							
+							
+					/* EDIT FORUM FORM */	
+					$popups_content .= '<div id="editForum' . $cat['id'] . '" class="popup">
+							<div class="top">
+								<div class="title">Добавление категории</div>
+								<div onClick="closePopup(\'editForum' . $cat['id'] . '\');" class="close"></div>
+							</div>
+							<form action="forum_cat.php?ac=edit&id=' . $cat['id'] . '" method="POST" enctype="multipart/form-data">
+							<div class="items">
+								<div class="item">
+									<div class="left">
+										' . __('Parent section') . ':
+									</div>
+									<div class="right">' . $cat_selector_ . '</div>
+									<div class="clear"></div>
+								</div>
+								<div class="item">
+									<div class="left">
+										' . __('Title of forum') . ':
+									</div>
+									<div class="right">
+										<input type="hidden" name="type" value="forum" />
+										<input type="text" name="title" value="' . $cat['title'] . '" />
+									</div>
+									<div class="clear"></div>
+								</div>
+								<div class="item">
+									<div class="left">
+										' . __('Forum position') . ':
+										<span class="comment">' . __('Numeric') . '</span>
+									</div>
+									<div class="right">
+										<input type="text" name="in_pos" value="' . $cat['pos'] . '" />
+									</div>
+									<div class="clear"></div>
+								</div>
+								<div class="item">
+									<div class="left">
+										' . __('Parent forum') . ':
+										<span class="comment">' . __('For which this will be sub-forum') . '</span>
+									</div>
+									<div class="right">
+										' . $sub_selector . '
+									</div>
+									<div class="clear"></div>
+								</div>
+								<div class="item">
+									<div class="left">
+										' . __('Icon') . ':
+										<span class="comment">(' . __('Empty field - no icon') . ')<br />
+										' . __('The desired size 16x16 px') . '</span>
+									</div>
+									<div class="right">
+										<input type="file" name="icon" />
+									</div>
+									<div class="clear"></div>
+								</div>
+								<div class="item">
+									<div class="left">
+										' . __('Description') . ':
+									</div>
+									<div class="right">
+										<textarea name="description" cols="30" rows="3" />' . $cat['description'] . '</textarea>
+									</div>
+									<div class="clear"></div>
+								</div>
+								<div class="item">
+									<div class="left">
+										' . __('Lock on passwd') . ':
+									</div>
+									<div class="right">
+										<input type="text" name="lock_passwd" value="' . $cat['lock_passwd'] . '" />
+									</div>
+									<div class="clear"></div>
+								</div>
+								<div class="item">
+									<div class="left">
+										' . __('Lock on posts count') . ':
+									</div>
+									<div class="right">
+										<input type="text" name="lock_posts" value="' . $cat['lock_posts'] . '" />
+									</div>
+									<div class="clear"></div>
+								</div>
+								<div class="item submit">
+									<div class="left"></div>
+									<div class="right" style="float:left;">
+										<input type="submit" value="' . __('Save') . '" name="send" class="save-button" />
+									</div>
+									<div class="clear"></div>
+								</div>
+							</div>
+							</form>
+						</div>';
 					/* END EDIT FORUM FORM */
+					
 				}
 			} else {
-				$html .= '<div class="category_row"><div>' . __('Empty') . '</div></div>';
+				$html .= '<div class="level2"><div class="left"><div class="title">' . __('Empty') . '</div></div></div>';
 			}
+			
+			$html .= '</div></div>';
 			
 		}
 		$html .= '</div>';
@@ -358,6 +500,9 @@ function index(&$page_title) {
 	}
 	return $html;
 }
+
+
+
 
 
 function edit() {

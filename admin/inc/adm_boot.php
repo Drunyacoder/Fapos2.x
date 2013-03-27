@@ -85,50 +85,55 @@ if (!isset($_SESSION['adm_panel_authorize']) || $_SESSION['adm_panel_authorize']
 
     $pageTitle = 'Авторизация в панели Администрирования';
     $pageNav = '';
-    $pageNavl = '';
-    include_once ROOT . '/admin/template/header.php';
+    $pageNavк = '';
+    //include_once ROOT . '/admin/template/header.php';
 ?>
-	<div class="all-wrap"></div>
+
+
+
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<title>Fapos Admin Panel Authorization</title>
+	<meta name="description" content="" />
+	<meta name="keywords" content="" />
+	<meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />
+	<link rel="StyleSheet" type="text/css" href="template/css/style.css" />
+	<script language="JavaScript" type="text/javascript" src="../sys/js/jquery.js"></script>
 	<script type="text/javascript">
-	// background gemor
-	document.body.style.height = '100%';
-	document.body.style.overflow = 'hidden';
 	</script>
-	
-	
-	<div class="fps-win authorize" id="helpBox">
-		<div class="title">Вход в панель Администрирования</div>
-		<a href="../"><div class="close"></div></a>
-		<div style="clear:both;"></div>
-		<form method="POST" action="" >
-			
-			<div class="auth-form-img"><img src="/admin/template/img/protected_key.png" style="float:left; margin-right:10px;" /></div>
-			<div class="auth-form">
-				<?php 
-				if (!empty($errors)) {
-					echo '<ul class="error">' . $errors . '</ul>';
-					unset($errors);
-				}
-				?>
-				<div class="form-item">
-					Логин:&nbsp;<input name="login" style="float:right;" type="text" value="" />
-					<div style="clear:both;"></div>
+</head>
+<body>
+	<div id="login-wrapper">
+		<div class="shadow-mask"></div>
+		<div class="form">
+			<div class="title">Авторизация</div>
+			<form method="POST" action="" >
+				<div class="items">
+					<?php 
+					if (!empty($errors)) {
+						echo '<ul class="error">' . $errors . '</ul>';
+						unset($errors);
+					}
+					?>
+					<div class="item"><span>Логин</span><input name="login" type="text" /></div>
+					<div class="item"><span>Пароль</span><input name="passwd" type="text" /></div>
 				</div>
-				<div class="form-item">
-					Пароль:&nbsp;<input name="passwd" style="float:right;" type="password" value="" />
-					<div style="clear:both;"></div>
-				</div>
-				<div class="form-item center" style="text-align:center;">
-					<input type="submit" name="send" value="Авторизация" />
-					<div style="clear:both;"></div>
-				</div>
-			</div>
-			<div style="clear:both;"></div>
-		</form>
+				<div class="submit"><input type="submit" name="send" value="" /></div>
+			</form>
+		</div>
 	</div>
+</body>
+</html>
+
+
+
+
+
 
 <?php	
-	include_once 'template/footer.php';
+	//include_once 'template/footer.php';
 	die();
 
 	

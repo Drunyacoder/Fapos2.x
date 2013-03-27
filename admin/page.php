@@ -317,7 +317,7 @@ $Register = Register::getInstance();
 $FpsDB = $Register['DB'];
 $pageTitle = 'Редактор страниц';
 $pageNav = $pageTitle;
-$pageNavl = 'Страницы &raquo; [редактирование]';
+$pageNavr = 'Страницы &raquo; [редактирование]';
 
 
 $page = array(
@@ -339,60 +339,103 @@ include_once ROOT . '/admin/template/header.php';
 
 
 <div class="white">
-	<div style="float:left; width:20%;">
-		
-		<div class="tree-wrapper">
-			<div id="pageTree"></div>
+	<div class="pages-tree">
+		<div class="title">Страницы</div>
+		<div class="wrapper">
+			<div class="tree-wrapper">
+				<div id="pageTree"></div>
+			</div>
 		</div>
 		<div style="width:100%;">&nbsp;</div>
 	</div>
-	<div style="width:80%; float:left; position:relative;">
-		<div style="display:none;" class="ajax-wrapper" id="ajax-loader"><div class="loader"></div></div>
-		<form id="FpsForm" style="opacity:1;" method="POST" action="">
-		<table class="settings-tb">
+	
+	
 
-		<tr><td class="left">Заголовок:</td>
-		<td><input type="text" name="title" value="">
-		<input type="hidden" name="id" value=""></td></tr>
+	<div style="display:none;" class="ajax-wrapper" id="ajax-loader"><div class="loader"></div></div>
+	<form id="FpsForm" style="opacity:1;" method="POST" action="">
 
-		<tr><td class="left">URL:<br></td>
-		<td><input type="text" name="url" value=""></td></tr>
-		
-		<?php /*
-		<tr><td class="left">Родитель:<br></td>
-		<td>
-			<select name="parent_id">
-				<option value="0"></option>
-				 foreach ($other as $item): ?>
-				<option <?php if ($item->getId() === $page['parent_id']) echo 'selected="selected"'; ?> value="<?php echo $item->getId() ?>"><?php echo h($item->getName()) ?></option>
-				<?php endforeach; 
-			</select>
-		</td></tr>
-		*/ ?>
-		
-		<tr><td class="left">Видна ли в меню:<br></td>
-		<td><input type="checkbox" name="visible" value="1" checked="checked"></td></tr>
-		
-		<tr><td class="left">Keywords:<br></td>
-		<td><input type="text" name="meta_keywords" value=""></td></tr>
-		
-		<tr><td class="left">Description:<br></td>
-		<td><input type="text" name="meta_description" value=""></td></tr>
-		
-		<tr><td class="left">Шаблон:<br></td>
-		<td><input type="text" name="template" value=""></td></tr>
-		
 
-		<tr><td colspan="2" class="">
-			<textarea style="height:300px;" id="mainTextarea" name="content"></textarea>
-		</td></tr>
-
-		<tr><td colspan="2" align="center"><input type="submit" name="send" value="Сохранить"><br></td></tr>
-
-		</table>
-		</form>
+	
+	<div class="list pages-form">
+		<div class="title">Редактор страницы</div>
+		<div class="level1">
+			<div class="items">
+				<div class="setting-item">
+					<div class="left">
+						Заголовок
+					</div>
+					<div class="right">
+						<input type="text" name="title" value="">
+						<input type="hidden" name="id" value="">
+					</div>
+					<div class="clear"></div>
+				</div>
+				<div class="setting-item">
+					<div class="left">
+						URL
+					</div>
+					<div class="right">
+						<input type="text" name="url" value="">
+					</div>
+					<div class="clear"></div>
+				</div>
+				<div class="setting-item">
+					<div class="left">
+						Видна ли в меню
+					</div>
+					<div class="right">
+						<input id="checkbox1" type="checkbox" name="visible" value="1" checked="checked">
+						<label for="checkbox1"></label>
+					</div>
+					<div class="clear"></div>
+				</div>
+				<div class="setting-item">
+					<div class="left">
+						Keywords
+					</div>
+					<div class="right">
+						<input type="text" name="meta_keywords" value="">
+					</div>
+					<div class="clear"></div>
+				</div>
+				<div class="setting-item">
+					<div class="left">
+						Description
+					</div>
+					<div class="right">
+						<input type="text" name="meta_description" value="">
+					</div>
+					<div class="clear"></div>
+				</div>
+				<div class="setting-item">
+					<div class="left">
+						Шаблон
+					</div>
+					<div class="right">
+						<input type="text" name="template" value="">
+					</div>
+					<div class="clear"></div>
+				</div>
+				<div class="setting-item">
+					<div class="center">
+						<textarea style="height:300px;" id="mainTextarea" name="content"></textarea>
+					</div>
+					<div class="clear"></div>
+				</div>
+				<div class="setting-item">
+					<div class="left">
+					</div>
+					<div class="right">
+						<input class="save-button" type="submit" name="send" value="Сохранить" />
+					</div>
+					<div class="clear"></div>
+				</div>
+			</div>
+		</div>
 	</div>
+	</form>
 	<div class="clear"></div>
+
 </div>
 
 
@@ -737,31 +780,25 @@ endif;
 ?>
 
 
-<table class="lines">
-	<tr>
-		<td>
-			<div>
-			<ul class="uz">
-				<li><div class="global-marks">{{ content }}</div> - Основной контент страницы</li>
-				<li><div class="global-marks">{{ title }}</div> - Заголовок страницы</li>
-				<li><div class="global-marks">{{ description }}</div> - Содержание Мета-тега description</li>
-				<li><div class="global-marks">{{ fps_wday }}</div> - День кратко</li>
-				<li><div class="global-marks">{{ fps_date }}</div> - Дата</li>
-				<li><div class="global-marks">{{ fps_time }}</div> - Время</li>
-				<li><div class="global-marks">{{ headmenu }}</div> - Верхнее меню</li>
-				<li><div class="global-marks">{{ fps_user_name }}</div> - Ник текущего пользователя (Для не авторизованного - Гость)</li>
-				<li><div class="global-marks">{{ fps_user_group }}</div> - Группа текущего пользователя (Для не авторизованного - Гости)</li>
-				<li><div class="global-marks">{{ categories }}</div> - Список категорий раздела</li>
-				<li><div class="global-marks">{{ counter }}</div> - Встроенный счетчик посещаемости CMS Fapos</li>
-				<li><div class="global-marks">{{ fps_year }}</div> - Год</li>
-				<li><div class="global-marks">{{ powered_by }}</div> - CMS Fapos</li>
-				<li><div class="global-marks">{{ comments }}</div> - Комментарии к материалу и форма добавления комментариев <b>(если предусмотренно)</b></li>
-				<li><div class="global-marks">{{ personal_page_link }}</div> - URL на свою персональную страницу или на страницу регистрации, если не авторизован</li>
-			</ul>
-			</div>
-		</td>
-	</tr>
-</table>
+
+<ul class="markers">
+	<li><div class="global-marks">{{ content }}</div> - Основной контент страницы</li>
+	<li><div class="global-marks">{{ title }}</div> - Заголовок страницы</li>
+	<li><div class="global-marks">{{ description }}</div> - Содержание Мета-тега description</li>
+	<li><div class="global-marks">{{ fps_wday }}</div> - День кратко</li>
+	<li><div class="global-marks">{{ fps_date }}</div> - Дата</li>
+	<li><div class="global-marks">{{ fps_time }}</div> - Время</li>
+	<li><div class="global-marks">{{ headmenu }}</div> - Верхнее меню</li>
+	<li><div class="global-marks">{{ fps_user_name }}</div> - Ник текущего пользователя (Для не авторизованного - Гость)</li>
+	<li><div class="global-marks">{{ fps_user_group }}</div> - Группа текущего пользователя (Для не авторизованного - Гости)</li>
+	<li><div class="global-marks">{{ categories }}</div> - Список категорий раздела</li>
+	<li><div class="global-marks">{{ counter }}</div> - Встроенный счетчик посещаемости CMS Fapos</li>
+	<li><div class="global-marks">{{ fps_year }}</div> - Год</li>
+	<li><div class="global-marks">{{ powered_by }}</div> - CMS Fapos</li>
+	<li><div class="global-marks">{{ comments }}</div> - Комментарии к материалу и форма добавления комментариев <b>(если предусмотренно)</b></li>
+	<li><div class="global-marks">{{ personal_page_link }}</div> - URL на свою персональную страницу или на страницу регистрации, если не авторизован</li>
+</ul>
+
 
 
 

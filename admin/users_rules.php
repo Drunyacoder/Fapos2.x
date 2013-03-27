@@ -69,7 +69,7 @@ if (isset($_POST['send'])) {
 
 
 $pageNav = $pageTitle;
-$pageNavl = '<a href="users_groups.php">Редактор групп</a>';
+$pageNavr = '<a href="users_groups.php">Редактор групп</a>';
 
 
 
@@ -84,7 +84,9 @@ include_once ROOT . '/admin/template/header.php';
 
 
 <form action="users_rules.php" method="POST">
-<table class="settings-tb">
+<div class="list">
+<div class="title"></div>
+<table cellspacing="0" class="grid" style="min-width:100%">
 <tr>
 	<td>Действие</td>
 	<?php foreach ($acl_groups as $id => $gr): ?>
@@ -92,7 +94,6 @@ include_once ROOT . '/admin/template/header.php';
 		<?php echo h($gr['title']); ?>
 	</td>
 	<?php endforeach; ?>
-	<td>
 </tr>
 
 
@@ -104,11 +105,11 @@ include_once ROOT . '/admin/template/header.php';
 	
 		<td class="left"><?php echo getAddTitle($title); ?></td>
 		<?php foreach ($acl_groups as $id => $gr): ?>
-		<td width="20px" style="width:60px;">
-			<input name="<?php echo $mod.'['.$title.'_'.$id.']' ?>" type="checkbox" value="1" <?php if ($ACL->turn(array($mod, $title), false, $id)) echo 'checked="checked"' ?> />
+		<?php  $ch_id = $id . '_' . $title; ?>
+		<td class="right">
+			<input name="<?php echo $mod.'['.$title.'_'.$id.']' ?>" type="checkbox" value="1" <?php if ($ACL->turn(array($mod, $title), false, $id)) echo 'checked="checked"' ?> id="<?php  echo $ch_id; ?>" /><label for="<?php  echo $ch_id; ?>"></label>
 		</td>
 		<?php endforeach; ?>
-		<td></td>
 		
 		
 	</tr>
@@ -116,10 +117,11 @@ include_once ROOT . '/admin/template/header.php';
 <?php endforeach; ?>
 	<tr>
 		<td align="center" colspan="<?php echo count($acl_groups) + 2 ?>">
-			<input name="send" type="submit" value="Сохранить"  />
+			<input class="save-button" name="send" type="submit" value="Сохранить"  />
 		</td>
 	</tr>
 </table>
+</div>
 </form>
 
 

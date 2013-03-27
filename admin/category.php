@@ -133,11 +133,12 @@ include_once ROOT . '/admin/template/header.php';
 
 
 
-<div class="fps-win">
+<div class="warning">
 <?php echo __('If you delete a category, all the materials in it will be removed') ?><br /><br />
-
 </div>
 <?php
+
+
 echo $content;
 
 
@@ -172,13 +173,14 @@ function buildCatsList($catsTree, $catsList, $indent = '') {
     $acl_groups = $Register['ACL']->get_group_info();
 	$out = '';
 	
+	
 	foreach ($catsTree as $id => $node) {
 		$cat = $node['category'];
 		$no_access = ($cat['no_access'] !== '') ? explode(',', $cat['no_access']) : array();
 
 		
 		$_catList = (count($catsList)) ? $catsList : array();
-		$cat_selector = '<select style="width:130px;" name="id_sec" id="cat_secId">';
+		$cat_selector = '<select  name="id_sec" id="cat_secId">';
 		if (empty($cat['parent_id'])) {
 			$cat_selector .= '<option value="0" selected="selected">&nbsp;</option>';
 		} else {
@@ -197,59 +199,86 @@ function buildCatsList($catsTree, $catsList, $indent = '') {
 		$cat_selector .= '</select>';
 		
 		
-		$out .= '<div class="category_row">' . $indent . '<div class="category"><b>' 
-			. h($cat['title']) . '</b>( ' . $cat['cnt'] 
-			. ' )<div class="tools"><a href="javascript://" onClick="wiOpen(\'' . $cat['id'] . '_cat\');">' 
-			. '<img src="template/img/edit_16x16.png"  /></a>&nbsp;<a href="?ac=del&id=' . $cat['id'] 
-			. '&mod='.getCurrMod().'" onClick="return _confirm();"><img src="template/img/del.png"  /></a>&nbsp;';
+		
+		$out .= '<div class="level2">
+					<div class="number">' . $cat['id'] . '</div>
+					<div class="title">' . $indent . h($cat['title']) . '</div>
+					<div class="buttons">';
+					
+
 		
 
 		if (getCurrMod() != 'foto') {
 			if ($cat['view_on_home'] == 1) {
-				$out .=  '<a href="?ac=off_home&id=' . $cat['id'] . '&mod='.getCurrMod().'" onClick="return _confirm();">'
-					. '<img title="' . __('On home') . '" src="template/img/round_ok.png" /></a>';
+				$out .=  '<a class="off-home" title="Top off" href="?ac=off_home&id=' . $cat['id'] . '&mod='.getCurrMod().'" onClick="return _confirm();">'
+					. '</a>';
 			} else {
-				$out .=  '<a href="?ac=on_home&id=' . $cat['id'] . '&mod='.getCurrMod().'" onClick="return _confirm();">'
-					. '<img title="' . __('On home') . '" src="template/img/round_not_ok.png" /></a>';
+				$out .=  '<a class="on-home" title="On top" href="?ac=on_home&id=' . $cat['id'] . '&mod='.getCurrMod().'" onClick="return _confirm();">'
+					. '</a>';
 			}
 		}
-			  
-		$out .= '<div id="' . $cat['id'] . '_cat_dWin" class="fps-win" style="position:absolute;top:200px;left:40%;display:none">
-			<div class="xw-tl"><div class="xw-tr"><div class="xw-tc xw-tsps"></div>
-			</div></div><div class="xw-ml"><div class="xw-mr"><div align="center" class="xw-mc">
-			<form action="category.php?mod=' . getCurrMod() . '&ac=edit&id=' . $cat['id'] . '" method="POST">
 			
-			<div class="form-item2">
-			' . __('Parent section') . ':<br />
-			' . $cat_selector . '
-			<div style="clear:both;"></div></div>
 			
-			<div class="form-item2">
-			' . __('Title') . ':<br />
-			<input type="text" style="width:130px" name="title" value="' . h($cat['title']) . '" />
-			<div style="clear:both;"></div></div>
+		$out .= '<a href="javascript://" class="edit" title="Edit" onClick="openPopup(\'' . $cat['id'] . '_cat\');"></a>
+				 <a title="Delete" href="?ac=del&id=' . $cat['id'] . '&mod='.getCurrMod().'" class="delete" onClick="return _confirm();"></a>
+				</div>
+			<div class="posts">' . $cat['cnt'] . '</div>
+		</div>';
 			
-			<div class="form-item2">
-			' . __('Access for') . ':<br /><table><tr>';
-		$n = 1;
-		foreach ($acl_groups as $id => $group) {
-			if (($n % 3) == 0) $out .= '</tr><tr>';
-			$checked = (in_array($id, $no_access)) ? '' : ' checked="checked"';
-			$out .= '<td><input type="checkbox" name="access[' . $id . ']" value="' . $id 
-			. '"' . $checked . '  />&nbsp;' . h($group['title']) . '</td>';
-			$n++;
-		}
-		$out .= '</tr></table><div style="clear:both;"></div></div>
 			
-			<div class="form-item2 center">
-			<input type="submit" name="send" value="' . __('Save') . '" />
-			<input type="button" onClick="hideWin(\'' . $cat['id'] . '_cat\')" value="' . __('Cancel') . '" />
-			<div style="clear:both;"></div></div>
-			</form>
-			</div></div></div><div class="xw-bl"><div class="xw-br"><div class="xw-bc">
-			<div class="xw-footer"></div></div></div></div>
-			</div>';	  
-		$out .= '</div></div></div>';
+			
+		$out .=	'<div id="' . $cat['id'] . '_cat" class="popup">
+				<div class="top">
+					<div class="title">Редактрование категорий</div>
+					<div onClick="closePopup(\'' . $cat['id'] . '_cat\');" class="close"></div>
+				</div>
+				<form action="category.php?mod=' . getCurrMod() . '&ac=edit&id=' . $cat['id'] . '" method="POST">
+				<div class="items">
+					<div class="item">
+						<div class="left">
+							' . __('Parent section') . ':
+						</div>
+						<div class="right">' . $cat_selector . '</div>
+						<div class="clear"></div>
+					</div>
+					<div class="item">
+						<div class="left">
+							' . __('Title') . ':
+						</div>
+						<div class="right"><input type="text" name="title" value="' . h($cat['title']) . '" /></div>
+						<div class="clear"></div>
+					</div>
+					<div class="item">
+						<div class="left">
+							' . __('Access for') . ':
+						</div>
+						<div class="right"><table class="checkbox-collection"><tr>';
+						$n = 0;
+						foreach ($acl_groups as $id => $group) {
+							if (($n % 3) == 0) $out .= '</tr><tr>';
+							$checked = (in_array($id, $no_access)) ? '' : ' checked="checked"';
+							
+							$id = md5(rand(0, 99999) . $n);
+							
+							$out .= '<td><input id="' . $id . '" type="checkbox" name="access[' . $id . ']" value="' . $id 
+							. '"' . $checked . '  /><label for="' . $id . '"></label>&nbsp;' . h($group['title']) . '</td>';
+							$n++;
+						}
+						$out .= '</tr></table></div>
+						<div class="clear"></div>
+					</div>
+					
+					<div class="item submit">
+						<div class="left"></div>
+						<div class="right" style="float:left;">
+							<input type="submit" value="Сохранить" name="send" class="save-button" />
+						</div>
+						<div class="clear"></div>
+					</div>
+				</div>
+				</form>
+			</div>';
+			
 		
 		if (count($node['subcategories'])) {
 			$out .= buildCatsList($node['subcategories'], $catsList, $indent . '<div class="cat-indent">&nbsp;</div>');
@@ -268,7 +297,7 @@ function index(&$page_title) {
 
 
 	$page_title .= ' - ' . __('Sections editor');
-	$cat_selector = '<select style="width:130px;" name="id_sec" id="cat_secId">';
+	$cat_selector = '<select name="id_sec" id="cat_secId">';
 	$cat_selector .= '<option value="0">&nbsp;</option>';
 	$all_sections = $FpsDB->select(getCurrMod() . '_sections', DB_ALL, array(
 		'joins' => array(
@@ -290,7 +319,7 @@ function index(&$page_title) {
 	
 	$html = '';
 	if (!empty($_SESSION['errors'])) {
-		$html .= '<ul style="color:red;list-style-type:none;">' . $_SESSION['errors'] . '</ul>';
+		$html .= '<div class="warning"><ul style="color:red;list-style-type:none;">' . $_SESSION['errors'] . '</ul></div>';
 		unset($_SESSION['errors']);
 	}
 	
@@ -303,58 +332,90 @@ function index(&$page_title) {
 		}
 	}
 	
+
 	
 	
-	$html .= '<table width="100%"><tr><td></td>';
-	$html .= '<td align="right">
-				<div align="right" class="topButtonL" id="cat_view"><input type="button" name="add" value="' . __('Add section') . '" onClick="wiOpen(\'cat\');" /></div></td></tr></table>
+	
+	$html .=	'<div id="addCat" class="popup">
+			<div class="top">
+				<div class="title">Добавление категории</div>
+				<div onClick="closePopup(\'addCat\');" class="close"></div>
+			</div>
+			<form action="category.php?mod=' . getCurrMod() . '&ac=add" method="POST">
+			<div class="items">
+				<div class="item">
+					<div class="left">
+						' . __('Parent section') . ':
+					</div>
+					<div class="right">' . $cat_selector . '</div>
+					<div class="clear"></div>
+				</div>
+				<div class="item">
+					<div class="left">
+						' . __('Title') . ':
+					</div>
+					<div class="right">
+						<input type="hidden" name="type" value="cat" />
+						<input type="text" name="title" /></div>
+					<div class="clear"></div>
+				</div>
+				<div class="item">
+					<div class="left">
+						' . __('Access for') . ':
+					</div>
+					<div class="right">
+						<table class="checkbox-collection"><tr>';
+						$n = 0;
+						$id = md5(rand(0, 99999) . $n);
+						foreach ($acl_groups as $id => $group) {
+							if (($n % 3) == 0) $html .= '</tr><tr>';
+							$html .= '<td><input type="checkbox" name="access[' . $id . ']" value="' . $id 
+							. '"  checked="checked" /><label for="' . $id . '"></label>&nbsp;' . h($group['title']) . '</td>';
+							$n++;
+						}
+						$html .= '</tr></table>
+					</div>
+					<div class="clear"></div>
+				</div>
 				
-		<div id="cat_dWin" class="fps-win" style="position:absolute;top:200px;left:40%;display:none">
-		<div class="xw-tl"><div class="xw-tr"><div class="xw-tc xw-tsps"></div>
-		</div></div><div class="xw-ml"><div class="xw-mr"><div align="center" class="xw-mc">
-		<form action="category.php?mod=' . getCurrMod() . '&ac=add" method="POST">
-		
-		<div class="form-item2">
-		' . __('Parent section') . ':<br />
-		' . $cat_selector . '
-		<div style="clear:both;"></div></div>
-		
-		<div class="form-item2">
-		' . __('Title') . ':<br />
-		<input type="hidden" name="type" value="cat" />
-		<input type="text" style="width:130px" name="title" />
-		<div style="clear:both;"></div></div>
-		
-		<div class="form-item2">
-		Доступно:<br /><table><tr>';
-		$n = 1;
-		foreach ($acl_groups as $id => $group) {
-			if (($n % 3) == 0) $html .= '</tr><tr>';
-			$html .= '<td><input type="checkbox" name="access[' . $id . ']" value="' . $id 
-			. '"  checked="checked" />&nbsp;' . h($group['title']) . '</td>';
-			$n++;
-		}
-		$html .= '</tr></table><div style="clear:both;"></div></div>
-		
-		<div class="form-item2 center">
-		<input type="submit" name="send" value="' . __('Save') . '" />
-		<input type="button" onClick="hideWin(\'cat\')" value="' . __('Cancel') . '" />
-		<div style="clear:both;"></div></div>
-		</form>
-		</div></div></div><div class="xw-bl"><div class="xw-br"><div class="xw-bc">
-		<div class="xw-footer"></div></div></div></div>
+				<div class="item submit">
+					<div class="left"></div>
+					<div class="right" style="float:left;">
+						<input type="submit" value="Сохранить" name="send" class="save-button" />
+					</div>
+					<div class="clear"></div>
+				</div>
+			</div>
+			</form>
 		</div>';
 	
 	
-
 	
+	
+	$html .= '<div class="list">
+		<div class="title">Управление разделами</div>
+		<div class="add-cat-butt" onClick="openPopup(\'addCat\');"><div class="add"></div>' . __('Add section') . '</div>
+
+		<div class="level1">
+			<div class="head">
+				<div class="title">Раздел</div>
+				<div class="buttons">
+				</div>
+				<div class="clear"></div>
+			</div>
+			<div class="items">';
+			
+			
 	if (count($all_sections) > 0) {
-		$html .= '<div class="cat_list_container">';
 		$html .= buildCatsList($cats_tree, $all_sections); 	
-		$html .= '</div>';
 	} else {
 		$html .= __('Sections not found');
 	}
+	
+	
+	$html .= '</div></div></div>';
+
+	
 	return $html;
 }
 
@@ -362,11 +423,19 @@ function index(&$page_title) {
 
 
 function edit() {
-	global $FpsDB, $acl_groups;
+
 	if (!isset($_GET['id'])) redirect('/admin/category.php?mod=' . getCurrMod());
 	if (!isset($_POST['title'])) redirect('/admin/category.php?mod=' . getCurrMod());
 	$id = intval($_GET['id']);
+	
 	if ($id < 1) redirect('/admin/category.php?mod=' . getCurrMod());
+	
+	
+	global $FpsDB;
+	$Register = Register::getInstance();
+	$acl_groups = $Register['ACL']->get_group_info();
+	
+	
 	$error = '';
 
 	if (empty($_POST['title'])) $error .= '<li>' . __('Empty field "title"') . '</li>';
@@ -416,8 +485,14 @@ function edit() {
 
 
 function add() {
-	global $FpsDB, $acl_groups;
+	global $FpsDB;
 	if (empty($_POST['title'])) redirect('/admin/category.php?mod=' . getCurrMod());
+	
+	
+	$Register = Register::getInstance();
+	$acl_groups = $Register['ACL']->get_group_info();
+	
+	
 	$error = '';
 	$title = mysql_real_escape_string($_POST['title']);
 	$in_cat = intval($_POST['id_sec']);

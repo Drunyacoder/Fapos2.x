@@ -105,38 +105,58 @@ include_once ROOT . '/admin/template/header.php';
 
 
 <form method="POST" action="users_rating.php">
-<table class="settings-tb">
-
-
-<tr><td class="left">Без ранга<br /> 
-(какое звание будет у нового пользователя) :</td>
-<td><input type="text" name="rat0" value="<?php echo (!empty($result['rat0'])) ? $result['rat0'] : ''; ?>">
-<?php echo (!empty($errors['rat0'])) ? '<br /><span class="error">'.$errors['rat0'].'</span>' : ''; ?>
-</td>
-</tr>
-
-
-<?php for ($i = 1; $i < 11; $i++): ?>
-
-	<tr>
-		<td class="left">Ранг № <?php echo $i; ?></td>
-		<td>
-			<input type="text" name="cond<?php echo $i ?>" value="<?php echo (!empty($result['cond'.$i])) ? intval($result['cond'.$i]) : 10*$i; ?>">&nbsp;<span class="comment">Кол-во сообщений</span><br /><br />
-			<?php echo (!empty($errors['cond'.$i])) ? '<br /><span class="error">'.$errors['cond'.$i].'</span>' : ''; ?>
-			<input type="text" name="rat<?php echo $i ?>" value="<?php echo (!empty($result['rat'.$i])) ? h($result['rat'.$i]) : ''; ?>">&nbsp;<span class="comment">Звание</span><br />
-			<?php echo (!empty($errors['rat'.$i])) ? '<br /><span class="error">'.$errors['rat'.$i].'</span>' : ''; ?>
-		</td>
-	</tr>
-
-
-
-<?php endfor ?>
-
-
-<tr><td align="center" colspan="2"><input type="submit" name="send" value="Сохранить"><br></td></tr>
-
-</table>
+<div class="list">
+	<div class="title">Ранги пользователей</div>
+	<div class="level1">
+		<div class="head">
+			<div class="title settings">Номер</div>
+			<div class="title-r">Сообщений / Звание</div>
+			<div class="clear"></div>
+		</div>
+		<div class="items">
+			<div class="setting-item">
+				<div class="left">
+					Без ранга
+					<span class="comment">(какое звание будет у нового пользователя)</span>
+				</div>
+				<div class="right">
+					<input type="text" name="rat0" value="<?php echo (!empty($result['rat0'])) ? $result['rat0'] : ''; ?>">
+					<?php echo (!empty($errors['rat0'])) ? '<br /><span class="error">'.$errors['rat0'].'</span>' : ''; ?>
+				</div>
+				<div class="clear"></div>
+			</div>
+			
+			
+			<?php for ($i = 1; $i < 11; $i++): ?>
+			<div class="setting-item">
+				<div class="left">
+					Ранг № <?php echo $i; ?>
+				</div>
+				<div class="right">
+					<input type="text" name="cond<?php echo $i ?>" value="<?php echo (!empty($result['cond'.$i])) ? intval($result['cond'.$i]) : 10*$i; ?>">&nbsp;<span class="help">Кол-во сообщений</span><br /><br />
+					<?php echo (!empty($errors['cond'.$i])) ? '<br /><span class="error">'.$errors['cond'.$i].'</span>' : ''; ?>
+					<input type="text" name="rat<?php echo $i ?>" value="<?php echo (!empty($result['rat'.$i])) ? h($result['rat'.$i]) : ''; ?>">&nbsp;<span class="help">Звание</span><br />
+					<?php echo (!empty($errors['rat'.$i])) ? '<br /><span class="error">'.$errors['rat'.$i].'</span>' : ''; ?>
+				</div>
+				<div class="clear"></div>
+			</div>
+			<?php endfor ?>
+			
+			
+			<div class="setting-item">
+				<div class="left">
+				</div>
+				<div class="right">
+					<input class="save-button" type="submit" name="send" value="Сохранить" />
+				</div>
+				<div class="clear"></div>
+			</div>
+		</div>
+	</div>
+</div>
 </form>
+
+
 
 <?php
 include_once ROOT . '/admin/template/footer.php';

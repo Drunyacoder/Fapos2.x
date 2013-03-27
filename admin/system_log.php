@@ -46,16 +46,33 @@ if (!empty($log_files)) {
 
 $pageTitle = 'Лог действий';
 $pageNav = $pageTitle;
-$pageNavl = '';
+$pageNavr = '';
 include_once ROOT . '/admin/template/header.php';
 ?>
 
 
-<div class="pages_block">
-<?php echo $pages ?>
-</div>
 
-<table class="lines" cellspacing="0" width="100%">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="list">
+<div class="title"><div class="pages"><?php echo $pages ?></div></div>
+<table class="grid" cellspacing="0" width="100%">
 	<?php if(!empty($data)): ?>
 	<th width="15%">Дата</th>
 	<th width="30%">Действие</th>
@@ -97,7 +114,7 @@ include_once ROOT . '/admin/template/header.php';
 	<?php
 	endif;
 	?>
-</table>
+</table></div>
 <?php
 include_once 'template/footer.php';
 ?>

@@ -30,59 +30,73 @@ include_once ROOT . '/admin/inc/adm_boot.php';
 
 $pageTitle = $page_title = __('Dev. Team');
 $pageNav = $page_title;
-$pageNavl = '<span style="float:right;"><a href="javascript://" onClick="showHelpWin(\'Арбайтен! Арбайтен! Арбайтен!\', \'А никто и не мешает\')">' . __('I want to be here') . '</a></span>';
+$pageNavr = '<span style="float:right;"><a href="javascript://" onClick="showHelpWin(\'Арбайтен! Арбайтен! Арбайтен!\', \'А никто и не мешает\')">' . __('I want to be here') . '</a></span>';
 include_once ROOT . '/admin/template/header.php';
 ?>
 
 
 	
-<div class="fps-win">
-	<ul class="authors">
-		<li>
-			<h3 style="padding: 0px; margin:0px;">Idea by</h3>
-			<li class="comment">Andrey Brykin (Drunya)</li>
-		</li>
-		<br />
-		<li>
-			<h3 style="padding: 0px; margin:0px;">Programmers</h3>
-			<li class="comment">Andrey Brykin (Drunya)</li>
-			<li class="comment">Danilov Alexandr (modos189)</li>
-		</li>
-		<br />
-		<li>
-			<h3 style="padding: 0px; margin:0px;">Testers and audit</h3>
-			<li class="comment">Andrey Konyaev (Ater)</li>
-			<li class="comment">Laguta Dmitry (ARMI)</li>
-			<li class="comment">Roman Maximov (r00t_san)</li>
-			<li class="comment">Alexandr Verenik (Wasja)</li>
-		</li>
-		<br />
-		<li>
-			<h3 style="padding: 0px; margin:0px;">Marketing</h3>
-			<li class="comment">Andrey Konyaev (Ater)</li>
-		</li>
-		<br />
-		<li>
-			<h3 style="padding: 0px; margin:0px;">Design and Templates</h3>
-			<li class="comment">Andrey Brykin (Drunya)</li>
-			<li class="comment">Alexandr Bognar (Krevedko)</li>
-			<li class="comment">Roman Maximov (r00t_san)</li>
-			<li class="comment">Laguta Dmitry (ARMI)</li>
-		</li>
-		<br />
-		<li>
-			<h3 style="padding: 0px; margin:0px;">Specialists by Security</h3>
-			<li class="comment">Roman Maximov (r00t_san)</li>
-		</li>
-		<br />
-		<li>
-			<h3 style="padding: 0px; margin:0px;">Additional Software</h3>
-			<li class="comment">Andrey Brykin (Drunya)</li>
-			<li class="comment">Alexandr Verenik (Wasja)</li>
-		</li>
-		<br />
-	</ul>
+<div class="list">
+	<div class="title">Authors</div>
+	<div class="level1">
+		<div class="items">
+			<div class="setting-item">
+				<div class="center">
+					<h3>Idea by</h3>
+					Andrey Brykin (Drunya)
+				</div>
+			</div>
+			<div class="setting-item">
+				<div class="center">
+					<h3>Programmers</h3>
+					Andrey Brykin (Drunya)<br />
+					Danilov Alexandr (modos189)
+				</div>
+			</div>
+			<div class="setting-item">
+				<div class="center">
+					<h3>Testers and audit</h3>
+					Andrey Konyaev (Ater)<br />
+					Laguta Dmitry (ARMI)<br />
+					Roman Maximov (r00t_san)<br />
+					Alexandr Verenik (Wasja)<br />
+					Danilov Alexandr (modos189)
+				</div>
+			</div>
+			<div class="setting-item">
+				<div class="center">
+					<h3>Marketing</h3>
+					Andrey Brykin (Drunya)<br />
+					Andrey Konyaev (Ater)
+				</div>
+			</div>
+			<div class="setting-item">
+				<div class="center">
+					<h3>Design and Templates</h3>
+					Andrey Brykin (Drunya)<br />
+					Alexandr Bognar (Krevedko)<br />
+					Roman Maximov (r00t_san)<br />
+					Laguta Dmitry (ARMI)
+				</div>
+			</div>
+			<div class="setting-item">
+				<div class="center">
+					<h3>Specialists by Security</h3>
+					Roman Maximov (r00t_san)
+				</div>
+			</div>
+			<div class="setting-item">
+				<div class="center">
+					<h3>Additional Software</h3>
+					Andrey Brykin (Drunya)<br />
+					Alexandr Verenik (Wasja)
+				</div>
+			</div>
+		</div>
+	</div>
 </div>
+
+
 <?php
 include_once 'template/footer.php';
 ?>

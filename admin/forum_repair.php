@@ -55,7 +55,7 @@ if (!empty($forums)) {
 
 $pageTitle = __('Recalculation forum');
 $pageNav = $pageTitle;
-$pageNavl = '';
+$pageNavr = '';
 
 include_once ROOT . '/admin/template/header.php';
 ?>

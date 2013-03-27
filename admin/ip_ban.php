@@ -57,15 +57,11 @@ $pageNavl = '';
 include_once ROOT . '/admin/template/header.php';
 ?>
 
-		<div style="float:right;">
-		<a href="javascript://" onClick="wiOpen('addIp')">Добавить IP</a>
-		</div>
-		<div style="clear:right;"></div>
-		</div></div></div>   <div class="xw-bl"></div> 
-		<div class="xw-tl1"><div class="xw-tr1"><div class="xw-tc1"></div></div></div>
-		<div class="xw-ml"><div class="xw-mr"><div id="mainContent" class="xw-mc topBlockM">
+
+<?php echo $content; ?>
+
 <?php
-echo $content;
+
 include_once ROOT . '/admin/template/footer.php';
 
 	
@@ -75,33 +71,48 @@ function index(&$page_title) {
 		$data = file(ROOT . '/sys/logs/ip_ban/baned.dat');
 		if (!empty($data)) {
 			foreach($data as $key => $row) {
-				$content .= '<tr><td>' . $row . '</td><td width="30px"><a onClick="return confirm(\'Are you sure?\');" href="ip_ban.php?ac=del&id=' . $key . '">
-							<img src="' . get_url('/sys/img/delete_16x16.png') . '" /></a></td></tr>';
+				$content .= '<tr><td>' . $row . '</td><td width="30px"><a class="delete" onClick="return confirm(\'Are you sure?\');" href="ip_ban.php?ac=del&id=' . $key . '"></a></td></tr>';
 			}
 		}
 	}
-	if (empty($content)) $content = '<div class="info-str">Записей пока нет</div>';
-	else $content = '<table class="lines">' . $content . '</table>';
+	
+	if (empty($content)) $content = '<div class="list">
+		<div class="title">Баны IP адресов</div>
+		<div class="add-cat-butt" onClick="openPopup(\'addBan\');"><div class="add"></div>' . __('Add') . '
+		</div><table style="width:100%;" cellspacing="0" class="grid"><tr><td colspan="2">Записей пока нет</td></tr></table></div>';
+	else $content = '<div class="list">
+		<div class="title">Баны IP адресов</div>
+		<div class="add-cat-butt" onClick="openPopup(\'addBan\');"><div class="add"></div>' . __('Add') . '
+		</div><table cellspacing="0" style="width:100%;" class="grid">' . $content . '</table></div>';
 	
 	//add form
-	$content .= '<div id="addIp_dWin" class="fps-win" style="position:absolute;top:200px;left:40%;display:none">
-			<div class="xw-tl"><div class="xw-tr"><div class="xw-tc xw-tsps"></div>
-			</div></div><div class="xw-ml"><div class="xw-mr"><div align="center" class="xw-mc">
+	$content .= '<div id="addBan" class="popup">
+			<div class="top">
+				<div class="title">Добавление категории</div>
+				<div onClick="closePopup(\'addBan\');" class="close"></div>
+			</div>
 			<form action="ip_ban.php?ac=add" method="POST">
-			
-			<div class="form-item2">
-			IP:<br />
-			<input type="text" name="ip" />
-			<div style="clear:both;"></div></div>
-			
-			<div class="form-item2">
-			<input type="submit" name="send" value="Сохранить" />
-			<input type="button" onClick="hideWin(\'addIp\')" value="Отмена" />
-			<div style="clear:both;"></div></div>
+			<div class="items">
+				<div class="item">
+					<div class="left">
+						IP:
+					</div>
+					<div class="right"><input type="text" name="ip" /></div>
+					<div class="clear"></div>
+				</div>
+				
+				<div class="item submit">
+					<div class="left"></div>
+					<div class="right" style="float:left;">
+						<input type="submit" value="Сохранить" name="send" class="save-button" />
+					</div>
+					<div class="clear"></div>
+				</div>
+			</div>
 			</form>
-			</div></div></div><div class="xw-bl"><div class="xw-br"><div class="xw-bc">
-			<div class="xw-footer"></div></div></div></div>
-			</div>';
+		</div>';
+	
+
 	
 	if (isset($_SESSION['add']['errors'])) {
 		$content = $_SESSION['add']['errors'] . $content;
@@ -158,7 +169,7 @@ function delete() {
 				$data = implode("", $_data);
 				file_put_contents(ROOT . '/sys/logs/ip_ban/baned.dat', $data);
 			} else {
-				$_SESSION['add']['errors'] = '<ul class="uz_err"><li>Записи с таким ключом не найдено</li></ul>';
+				$_SESSION['add']['errors'] = '<ul class="error"><li>Записи с таким ключом не найдено</li></ul>';
 			}
 		}
 	}

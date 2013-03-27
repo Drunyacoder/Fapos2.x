@@ -172,7 +172,7 @@ $output = '';
 if (count($settingsInfo)) {
 	foreach ($settingsInfo as $fname => $params) {
 		if (is_string($params)) {
-			$output .= '<tr class="small"><td class="group" colspan="3">' . h($params) . '</td></tr>';
+			//$output .= '<tr class="small"><td class="group" colspan="3">' . h($params) . '</td></tr>';
 			continue;
 		}
 		
@@ -212,6 +212,9 @@ if (count($settingsInfo)) {
 				break;
 				
 			case 'checkbox':
+			
+				$id = md5(rand(0, 99999) + rand(0, 99999));
+			
 				$state = (!empty($params['checked']) && 
 				$currValue == $params['checked']) 
 				? ' checked="checked" ' : '';
@@ -227,8 +230,8 @@ if (count($settingsInfo)) {
 				}
 				
 				
-				$output_ = '<input type="checkbox" name="' . h($fname) 
-				. '" value="' . $params['value'] . '" ' . $state . '' . $attr . ' />';
+				$output_ = '<input id="' . $id . '" type="checkbox" name="' . h($fname) 
+				. '" value="' . $params['value'] . '" ' . $state . '' . $attr . ' /><label for="' . $id . '"></label>';
 				break;
 				
 			case 'select':
@@ -260,9 +263,16 @@ if (count($settingsInfo)) {
 		}
 		
 		
-		$output .= '<tr><td class="left">' . h($params['title']) . ':<br />
-			<span class="comment">' . h($params['description']) . '</span><br /></td><td colspan="2">'
+
+		$output .= '<div class="setting-item">
+			<div class="left">
+				' . h($params['title']) . '
+				<span class="comment">' . h($params['description']) . '</span>
+			</div>
+			<div class="right">'
 			. $output_;
+		
+
 
 		// If we have function by create sufix after input field
 		if (!empty($params['input_sufix_func'])
@@ -276,24 +286,46 @@ if (count($settingsInfo)) {
 		
 
 		// Help note
-		if (!empty($params['help'])) $output .= '&nbsp;<span class="comment">' . h($params['help']) . '</span>';
-		$output .= '<br /></td></tr>';
+		if (!empty($params['help'])) $output .= '&nbsp;<span class="comment2">' . h($params['help']) . '</span>';
+		$output .= '</div><div class="clear"></div></div>';
 	}
 }
 
 
 
 $pageNav = $pageTitle;
-$pageNavl = '';
+$pageNavr = '';
 include_once ROOT . '/admin/template/header.php';
+?>
+
+<form method="POST" action="settings.php?m=<?php echo $module; ?>" enctype="multipart/form-data">
+<div class="list">
+	<div class="title">Общие настройки</div>
+	<div class="level1">
+		<div class="head">
+			<div class="title settings">Ключ</div>
+			<div class="title-r">Значение</div>
+			<div class="clear"></div>
+		</div>
+		<div class="items">
+			<?php echo $output; ?>
+			<div class="setting-item">
+				<div class="left">
+				</div>
+				<div class="right">
+					<input class="save-button" type="submit" name="send" value="Сохранить" />
+				</div>
+				<div class="clear"></div>
+			</div>
+		</div>
+	</div>
+</div>
+</form>
 
 
 
+<?php /*echo '<form method="POST" action="settings.php?m=' . $module . '" enctype="multipart/form-data">*/ ?>
 
-echo '<form method="POST" action="settings.php?m=' . $module . '" enctype="multipart/form-data">
-<table class="settings-tb">';
-echo $output;
-echo '<tr><td colspan="3" align="center"><input type="submit" name="send" value="Сохранить"><br></td></tr>
-</table>
-</form>';
-include_once 'template/footer.php';
+
+
+<?php include_once 'template/footer.php'; ?>

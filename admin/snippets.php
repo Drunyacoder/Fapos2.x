@@ -33,12 +33,12 @@ $cache->clean();
 
 
 
-$pageTitle = 'Глобальные блоки. Сниппеты.';
-$pageNav = $pageTitle;
+$pageTitle = $pageNav = 'Глобальные блоки. Сниппеты.';
+$pageNavr = $pageTitle;
 if (isset($_GET['a']) && $_GET['a'] == 'ed') {
-    $pageNavl = 'Сниппеты &raquo; [редактирование] &raquo; <a href="snippets.php">создание</a>';
+    $pageNavr = 'Сниппеты &raquo; [редактирование] &raquo; <a href="snippets.php">создание</a>';
 } else {
-    $pageNavl = 'Сниппеты &raquo; <a href="snippets.php?a=ed">редактирование</a> &raquo; [создание]';
+    $pageNavr = 'Сниппеты &raquo; <a href="snippets.php?a=ed">редактирование</a> &raquo; [создание]';
 }
 
 
@@ -75,18 +75,29 @@ if (isset($_GET['a']) && $_GET['a'] == 'ed') {
 ?>	
 
 
+<div class="warning">
+	Снипеты позволяют создать блоки php кода и подключать их в любом месте сайта, прямо в шаблонах.<br />
+	Вызвать снипет из шаблона можно так <strong>{[ИМЯ СНИППЕТА]}</strong><br />
+	После того, как Вы добавите метку в шаблон, она будет заменена на результат выполнения кода сниппета.<br />
+	Тут приведен список, уже созданных, сниппетов. Вы можете их просматривать и редактировать.<br />
+	Для то, что бы создавать и редактировать сниппеты, желательно, обладать, хотя бы, базовыми знаниями PHP
+	
+
+	<?php if (isset($_SESSION['mess'])) : ?>
+	<br />
+	<br />
+	<br />
+	<tr><td align="center" colspan="2" style="color:green; font-size:11px; font-weight:none; font-family: Tahoma, Arial, serif;"><b><?php echo $_SESSION['mess'] ?></b></td></tr>
+	<?php unset($_SESSION['mess']); endif; ?>
+</div>
 
 
-	<table width="100%">
-		<tr>
-			<td>
-			
-			
-			
-				<table style="z-index:30;" border="0" cellpadding="1" cellspacing="0" width="100%">
-				<tr>
-				<td class="dis-list" valign="top" rowspan="3"><div id="listener" class="tmplsuDiv">
-
+<div class="white">
+	<div class="pages-tree" style="height:550px;">
+		<div class="title">Страницы</div>
+		<div class="wrapper">
+			<div class="tree-wrapper">
+				<div id="pageTree">
 				<?php
 				$sql = $FpsDB->select('snippets', DB_ALL);
 					foreach ($sql as $record) {
@@ -95,59 +106,62 @@ if (isset($_GET['a']) && $_GET['a'] == 'ed') {
 						 . h($record['name']) . '</a></div>';
 					}
 				?>
-
 				</div>
-					</td>
-					<td colspan="2" valign="top">
-						<div style="margin-left:15px;" class="fps-win">
-						Снипеты позволяют создать блоки php кода и подключать их в любом месте сайта, прямо в шаблонах.<br />
-						Вызвать снипет из шаблона можно так <strong>{[ИМЯ СНИППЕТА]}</strong><br />
-						После того, как Вы добавите метку в шаблон, она будет заменена на результат выполнения кода сниппета.<br />
-						Тут приведен список, уже созданных, сниппетов. Вы можете их просматривать и редактировать.<br />
-						Для то, что бы создавать и редактировать сниппеты, желательно, обладать, хотя бы, базовыми знаниями PHP
-						</div>
-					</td>
-				</tr>
-				</table>
-			</td>
-			
-		</tr>
-		<tr>
-			<td>
-				<form action="<?php echo $_SERVER['REQUEST_URI']?>" method="post">
-				<table class="settings-tb">
-				
-				<?php if (isset($_SESSION['mess'])) : ?>
-					<tr><td align="center" colspan="2" style="color:green; font-size:11px; font-weight:none; font-family: Tahoma, Arial, serif;"><b><?php echo $_SESSION['mess'] ?></b></td></tr>
-				<?php unset($_SESSION['mess']); endif; ?>
+			</div>
+		</div>
+		<div style="width:100%;">&nbsp;</div>
+	</div>
+	
+	
 
-					<tr>
-						<td class="left"><b>Имя сниппета:</b></td>
-						<td  class="right">
+	<div style="display:none;" class="ajax-wrapper" id="ajax-loader"><div class="loader"></div></div>
+	<form action="<?php echo $_SERVER['REQUEST_URI']?>" method="post">
+
+
+	
+	<div class="list pages-form">
+		<div class="title">Редактор страницы</div>
+		<div class="level1">
+			<div class="items">
+				<div class="setting-item">
+					<div class="left">
+						Имя сниппета
+					</div>
+					<div class="right">
 						<input disabled="disabled" name="my_title" type="text" style="" value="<?php echo (!empty($name)) ? $name : '';?>">
 						<?php if(isset($id) && $id != null) : ?> 
-							<a href="snippets.php?a=ed&id=<?php echo $id ?>&delete=y" onClick="return confirm('Are you sure?')">
-							<img src="template/img/del.png" title="Удалить">
-							</a>
+							<a class="delete" href="snippets.php?a=ed&id=<?php echo $id ?>&delete=y" onClick="return confirm('Are you sure?')"></a>
 						<?php endif; ?>
-						</td>
-					</tr>
-					<tr>
-						<td class="left"><b>Код сниппета</b></td>
-						<td class="right">
-						<textarea name="text_edit" style="width:99%" rows="25"><?php echo $content;?></textarea>
-						</td>
-					</tr>
-					<tr>
-						<td colspan="2" align="center"><input name="save" type="submit" value="Сохранить" /></td>
-					</tr> 
+					</div>
+					<div class="clear"></div>
+				</div>
+				<div class="setting-item">
+					<div class="center">
+						<textarea name="text_edit" style="width:99%; height:300px;"><?php echo $content;?></textarea>
+					</div>
+					<div class="clear"></div>
+				</div>
+				<div class="setting-item">
+					<div class="left">
+					</div>
+					<div class="right">
+						<input class="save-button" type="submit" name="send" value="Сохранить" />
+					</div>
+					<div class="clear"></div>
+				</div>
+			</div>
+		</div>
+	</div>
+	</form>
+	<div class="clear"></div>
 
-				</table>
-				</form>
-			</td>
+</div>
 
-		</tr>
-	</table>
+
+
+
+
+
 	
 
 <?php
@@ -176,56 +190,89 @@ if (isset($_GET['a']) && $_GET['a'] == 'ed') {
 	?>
 
 
+	
+<div class="warning">
+	Снипеты позволяют создать блоки php кода и подключать их в любом месте сайта, прямо в шаблонах.<br />
+	Вызвать снипет из шаблона можно так <strong>{[ИМЯ СНИППЕТА]}</strong><br />
+	После того, как Вы добавите метку в шаблон, она будет заменена на результат выполнения кода сниппета.<br />
+	На странице редактирования приведен список, уже созданных, сниппетов. Вы можете их просматривать и редактировать.<br />
+	Для то, что бы создавать и редактировать сниппеты, желательно, обладать, хотя бы, базовыми знаниями PHP
+	
 
+	
+	<?php if (isset($_SESSION['mess'])) : ?>
+	<br />
+	<br />
+	<br />
+	<tr><td colspan="2" align="center" style="color:green; font-size:11px; font-weight:none; font-family: Tahoma, Arial, serif;"><b><?php echo $_SESSION['mess'] ?></b></td></tr>
+	<?php unset($_SESSION['mess']); endif; ?>
+</div>
+
+
+<div class="white">
+	<div class="pages-tree" style="height:550px;">
+		<div class="title">Страницы</div>
+		<div class="wrapper">
+			<div class="tree-wrapper">
+				<div id="pageTree">
+				<?php
+				$sql = $FpsDB->select('snippets', DB_ALL);
+					foreach ($sql as $record) {
+						echo '<div id="mItem48"  class="tba"><a href="snippets.php?a=ed&id='
+						 . ($record['id']) . '">'
+						 . h($record['name']) . '</a></div>';
+					}
+				?>
+				</div>
+			</div>
+		</div>
+		<div style="width:100%;">&nbsp;</div>
+	</div>
+	
+	
+
+	<div style="display:none;" class="ajax-wrapper" id="ajax-loader"><div class="loader"></div></div>
 	<form action="snippets.php" method="post">
-	<table width="100%">
-		<tr>
-			<td>
-				<table width="100%">
-					<tr>
-						<td>
-							<div class="fps-win">
-							Снипеты позволяют создать блоки php кода и подключать их в любом месте сайта, прямо в шаблонах.<br />
-							Вызвать снипет из шаблона можно так <strong>{[ИМЯ СНИППЕТА]}</strong><br />
-							После того, как Вы добавите метку в шаблон, она будет заменена на результат выполнения кода сниппета.<br />
-							На странице редактирования приведен список, уже созданных, сниппетов. Вы можете их просматривать и редактировать.<br />
-							Для то, что бы создавать и редактировать сниппеты, желательно, обладать, хотя бы, базовыми знаниями PHP
-							</div>
-						</td>
-					</tr>
-				</table>
-			</td>
-			
-		</tr>
-		<tr>
-			<td>
-			
-				<table class="settings-tb">
-				<?php if (isset($_SESSION['mess'])) : ?>
-					<tr><td colspan="2" align="center" style="color:green; font-size:11px; font-weight:none; font-family: Tahoma, Arial, serif;"><b><?php echo $_SESSION['mess'] ?></b></td></tr>
-				<?php unset($_SESSION['mess']); endif; ?>
 
-				  <tr>
-					<td class="left">Имя сниппета:</td>
-					<td>
-					<input name="my_title" type="text" style="" value="<?php if (!empty($_POST['my_title'])) echo h($_POST['my_title']) ?>" /></td>
-				  </tr>
-				  <tr>
-					<td class="left">Код сниппета</td>
-					<td>
-					<div align="center" class="dis-textarea">
-					<textarea name="my_text" style="width:99%" rows="25" ><?php if (!empty($_POST['my_text'])) echo h($_POST['my_text']) ?></textarea>
-					</div></td>
-				  </tr>
-				  <tr>
-					<td colspan="2"  align="center"><input name="send" type="submit" value="Сохранить" /></td>
-				  </tr> 
-				</table>
-			</td>
 
-		</tr>
-	</table>
+	
+	<div class="list pages-form">
+		<div class="title">Редактор страницы</div>
+		<div class="level1">
+			<div class="items">
+				<div class="setting-item">
+					<div class="left">
+						Имя сниппета
+					</div>
+					<div class="right">
+						<input name="my_title" type="text" style="" value="<?php if (!empty($_POST['my_title'])) echo h($_POST['my_title']) ?>" />
+					</div>
+					<div class="clear"></div>
+				</div>
+				<div class="setting-item">
+					<div class="center">
+						<textarea name="my_text" style="width:99%; height:300px;" ><?php if (!empty($_POST['my_text'])) echo h($_POST['my_text']) ?></textarea>
+					</div>
+					<div class="clear"></div>
+				</div>
+				<div class="setting-item">
+					<div class="left">
+					</div>
+					<div class="right">
+						<input class="save-button" type="submit" name="send" value="Сохранить" />
+					</div>
+					<div class="clear"></div>
+				</div>
+			</div>
+		</div>
+	</div>
 	</form>
+	<div class="clear"></div>
+
+</div>	
+	
+	
+
 
 
 <?php } ?> 
