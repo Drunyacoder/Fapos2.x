@@ -15,7 +15,7 @@
 	<script type="text/javascript" src="../sys/js/redactor/redactor.js"></script>
 	<link type="text/css" rel="StyleSheet" href="../sys/js/redactor/css/redactor.css" />
 	
-	<link rel="StyleSheet" type="text/css" href="template/css/style.css" />
+
 	
 	
 	<script type="text/javascript" src="../sys/js/jquery.cookie.js"></script>
@@ -24,6 +24,8 @@
 	<link type="text/css" rel="StyleSheet" href="../sys/js/jstree/_docs/syntax/!style.css" />
 	<link type="text/css" rel="StyleSheet" href="../sys/js/jstree/_docs/!style.css" />
 	<script type="text/javascript" src="../sys/js/jstree/_docs/syntax/!script.js"></script>
+	
+	<link rel="StyleSheet" type="text/css" href="template/css/style.css" />
 	
 	<script type="text/javascript">
 

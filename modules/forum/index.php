@@ -2,12 +2,12 @@
 /*-----------------------------------------------\
 | 												 |
 |  @Author:       Andrey Brykin (Drunya)         |
-|  @Version:      1.6.60                         |
+|  @Version:      1.6.70                         |
 |  @Project:      CMS                            |
 |  @package       CMS Fapos                      |
 |  @subpackege    Forum Module                   |
 |  @copyright     ©Andrey Brykin 2010-2013       |
-|  @last mod.     2013/02/23                     |
+|  @last mod.     2013/03/30                     |
 \-----------------------------------------------*/
 
 /*-----------------------------------------------\
@@ -242,11 +242,11 @@ Class ForumModule extends Module {
 	 */
 	public function view_forum($id_forum = null) 
 	{
-		//turn access
-		$this->ACL->turn(array('forum', 'view_forums'));
 		$id_forum = intval($id_forum);
 		if (empty($id_forum) || $id_forum < 1) redirect('/forum/');
-
+		
+		//turn access
+		$this->ACL->turn(array('forum', 'view_forums'));
 		
 		
 		//who is here
@@ -299,7 +299,7 @@ Class ForumModule extends Module {
 			
 			
 			// reply link
-			$addLink = ($this->Register['ACL']->turn(array('forum', 'add_themes'), false)) 
+			$addLink = ($this->ACL->turn(array('forum', 'add_themes'), false)) 
 			? get_link(get_img('/template/' . $this->Register['Config']->read('template').'/img/add_theme_button.png', 
 			array('alt' => __('New topic'))), '/forum/add_theme_form/' . $id_forum) : '';
 			
@@ -462,13 +462,15 @@ Class ForumModule extends Module {
 		
 		//ADMINBAR 
 		$adminbar = '';
-		if ($this->ACL->turn(array('forum', 'edit_themes'), false) 
+		if ($this->ACL->turn(array('forum', 'edit_themes', $theme->getId_forum()), false) 
 		|| (!empty($_SESSION['user']['id']) && $theme->getId_author() == $_SESSION['user']['id'] 
-		&& $this->ACL->turn(array('forum', 'edit_mine_themes'), false))) {
+		&& $this->ACL->turn(array('forum', 'edit_mine_themes', $theme->getId_forum()), false))) {
 			$adminbar .= get_link(get_img('/sys/img/edit_16x16.png', array('alt' => __('Edit'), 'title' => __('Edit'))),
 				'/forum/edit_theme_form/' . $theme->getId());
 		}
-		if ($this->ACL->turn(array('forum', 'close_themes'), false)) {
+		
+		
+		if ($this->ACL->turn(array('forum', 'close_themes', $theme->getId_forum()), false)) {
 			if ( $theme->getLocked() == 0 ) { // заблокировать тему
 				$adminbar .= get_link(get_img('/sys/img/lock_16x16.png', array('alt' => __('Lock'), 'title' => __('Lock'))),
 					'/forum/lock_theme/' . $theme->getId());
@@ -490,9 +492,9 @@ Class ForumModule extends Module {
 		}
 		
 		
-		if ($this->ACL->turn(array('forum', 'delete_themes'), false) 
+		if ($this->ACL->turn(array('forum', 'delete_themes', $theme->getId_forum()), false) 
 		|| (!empty($_SESSION['user']['id']) && $theme->getId_author() == $_SESSION['user']['id'] 
-		&& $this->ACL->turn(array('forum', 'delete_mine_themes'), false))) {
+		&& $this->ACL->turn(array('forum', 'delete_mine_themes', $theme->getId_forum()), false))) {
 			$adminbar .= get_link(get_img('/sys/img/delete_16x16.png', array('alt' => __('Delete'), 'title' => __('Delete'))),
 				'/forum/delete_theme/' . $theme->getId(), array('onClick' => "return confirm('" . __('Are you sure') . "')"));
 		}
@@ -611,8 +613,6 @@ Class ForumModule extends Module {
 	 */
 	public function view_theme($id_theme = null) 
 	{	
-		//turn access
-		$this->ACL->turn(array('forum', 'view_themes'));
 		$id_theme = (int)$id_theme;
 		if (empty($id_theme) || $id_theme < 1) redirect('/forum/');
 
@@ -622,7 +622,11 @@ Class ForumModule extends Module {
 		$themeModel->bindModel('forum');
 		$themeModel->bindModel('poll');
 		$theme = $themeModel->getById($id_theme);
+		
 		if (!$theme->getForum())  return $this->showInfoMessage(__('Can not find forum'), '/forum/' );
+		
+		//turn access
+		$this->ACL->turn(array('forum', 'view_themes'));
 
 		
 		// Check access to this forum. May be locked by pass or posts count
@@ -696,7 +700,7 @@ Class ForumModule extends Module {
 			
 			
 			//if (!isset($_SESSION['user'])) $markers['add_link'] = '';
-			if (!$this->Register['ACL']->turn(array('forum', 'add_posts'), false)) $markers['add_link'] = '';
+			if (!$this->ACL->turn(array('forum', 'add_posts', $theme->getId_forum()), false)) $markers['add_link'] = '';
 			$markers['meta'] = '';
 			$this->_globalize($markers);
 			
@@ -741,7 +745,7 @@ Class ForumModule extends Module {
 
 
 					// Статус пользователя
-					$status = $this->Register['ACL']->get_group_info();
+					$status = $this->ACL->get_group_info();
 					$user_status = $status[$postAuthor->getStatus()];
 					$postAuthor->setStatus_title($user_status['title']);
 					
@@ -902,19 +906,24 @@ Class ForumModule extends Module {
 				$edit_link = '';
 				$delete_link = '';
 				if (!empty($_SESSION['user'])) {
-					if ($this->ACL->turn(array('forum', 'edit_posts'), false) 
+				
+					if ($this->ACL->turn(array('forum', 'edit_posts', $theme->getId_forum()), false) 
 					|| (!empty($_SESSION['user']['id']) && $post->getId_author() == $_SESSION['user']['id'] 
-					&& $this->ACL->turn(array('forum', 'edit_mine_posts'), false))) {
+					&& $this->ACL->turn(array('forum', 'edit_mine_posts', $theme->getId_forum()), false))) {
 						$edit_link = '&nbsp;' . get_link(get_img('/sys/img/edit_16x16.png', 
 						array('alt' => __('Edit'), 'title' => __('Edit'))), '/forum/edit_post_form/' . $post->getId());
 					} 
-					if ($this->ACL->turn(array('forum', 'delete_posts'), false) 
+					
+					
+					if ($this->ACL->turn(array('forum', 'delete_posts', $theme->getId_forum()), false) 
 					|| (!empty($_SESSION['user']['id']) && $post->getId_author() == $_SESSION['user']['id'] 
-					&& $this->ACL->turn(array('forum', 'delete_mine_posts'), false))) {
+					&& $this->ACL->turn(array('forum', 'delete_mine_posts', $theme->getId_forum()), false))) {
 						$delete_link = '&nbsp;' . get_link(get_img('/sys/img/delete_16x16.png', array('alt' => __('Delete'), 
 						'title' => __('Delete'))), '/forum/delete_post/' . $post->getId(), array('onClick' => "return confirm('" . __('Are you sure') . "')"));
 					}
 				}
+				
+				
 				$on_top = '&nbsp;' . get_link(get_img('/sys/img/up_arrow_16x16.png', 
 				array('alt' => __('To top'), 'title' => __('To top'))), '#top', array(), true);
 				$post->setOn_top_link($on_top);
@@ -1856,9 +1865,9 @@ Class ForumModule extends Module {
 		
 		
 		//check access
-		if (!$this->ACL->turn(array('forum', 'edit_themes'), false) 
+		if (!$this->ACL->turn(array('forum', 'edit_themes', $theme->getId_forum()), false) 
 		&& (empty($_SESSION['user']['id']) || $theme->getId_author() != $_SESSION['user']['id'] 
-		|| !$this->ACL->turn(array('forum', 'edit_mine_themes'), false))) {
+		|| !$this->ACL->turn(array('forum', 'edit_mine_themes', $theme->getId_forum()), false))) {
 			return $this->showInfoMessage(__('Permission denied'), '/forum/view_forum/' . $id_forum );
 		}
 
@@ -1909,7 +1918,7 @@ Class ForumModule extends Module {
 			'first_top' => (!empty($first_top)) ? $first_top : '0',
 		);
 			
-		$data['users_groups'] = $this->Register['ACL']->getGroups();
+		$data['users_groups'] = $this->ACL->getGroups();
 		
 		// nav block
 		$navi = array();
@@ -1958,7 +1967,7 @@ Class ForumModule extends Module {
 		
 		
 		$gr_access = array();
-		$groups = $this->Register['ACL']->getGroups();
+		$groups = $this->ACL->getGroups();
 		foreach ($groups as $grid => $grval) {
 			if (isset($_POST['gr_access_' . $grid])) $gr_access[] = $grid;
 		}
@@ -1987,9 +1996,9 @@ Class ForumModule extends Module {
 		
 		
 		//check access
-		if (!$this->ACL->turn(array('forum', 'edit_themes'), false) 
+		if (!$this->ACL->turn(array('forum', 'edit_themes', $theme->getId_forum()), false) 
 		&& (empty($_SESSION['user']['id']) || $theme->getId_author() != $_SESSION['user']['id'] 
-		|| !$this->ACL->turn(array('forum', 'edit_mine_themes'), false))) {
+		|| !$this->ACL->turn(array('forum', 'edit_mine_themes', $theme->getId_forum()), false))) {
 			return $this->showInfoMessage(__('Permission denied'), '/forum/view_forum/' . $id_forum );
 		}
 		
@@ -2056,9 +2065,9 @@ Class ForumModule extends Module {
 		
 		
 		//check access
-		if (!$this->ACL->turn(array('forum', 'delete_themes'), false) 
+		if (!$this->ACL->turn(array('forum', 'delete_themes', $theme->getId_forum()), false) 
 		|| (!empty($_SESSION['user']['id']) && $theme->getId_author() == $_SESSION['user']['id'] 
-		&& !$this->ACL->turn(array('forum', 'delete_mine_themes'), false))) {
+		&& !$this->ACL->turn(array('forum', 'delete_mine_themes', $theme->getId_forum()), false))) {
 			return $this->showInfoMessage(__('Permission denied'), '/forum/');
 		}
 
@@ -2149,7 +2158,6 @@ Class ForumModule extends Module {
 	 * Close Theme
 	 */
 	public function lock_theme($id_theme = null) {
-		$this->ACL->turn(array('forum', 'close_themes'));
 		$id_theme = (int)$id_theme;
 		if ($id_theme < 1) redirect('/forum/');
 		
@@ -2158,6 +2166,9 @@ Class ForumModule extends Module {
 		$themesModel = $this->Register['ModManager']->getModelInstance('Themes');
 		$theme = $themesModel->getById($id_theme);
 		if (!$theme) return $this->showInfoMessage(__('Topic not found'), '/forum/' );
+		
+		
+		$this->ACL->turn(array('forum', 'close_themes', $theme->getId_forum()));
 		
 		
 		// Сначала заблокируем сообщения (посты) темы
@@ -2189,9 +2200,11 @@ Class ForumModule extends Module {
 	 * Unlocking Theme
 	 */
 	public function unlock_theme($id_theme = null) {
-		$this->ACL->turn(array('forum', 'close_themes'));
 		$id_theme = (int)$id_theme;
 		if ($id_theme < 1) redirect('/forum/');
+		
+		
+		$this->ACL->turn(array('forum', 'close_themes', $theme->getId_forum()));
 		
 
 		$postsModel = $this->Register['ModManager']->getModelInstance('Posts');
@@ -2238,7 +2251,7 @@ Class ForumModule extends Module {
 		$writer_status = (!empty($_SESSION['user']['status'])) ? $_SESSION['user']['status'] : 0;
 
 
-		if ($this->ACL->turn(array('forum', 'add_posts'), false)) {
+		if ($this->ACL->turn(array('forum', 'add_posts', $theme->getId_forum()), false)) {
 			if ($theme->getLocked() == 1) {
 				$html = '<div class="not-auth-mess">' . __('Theme is locked') . '</div>';
 			} else {
@@ -2301,8 +2314,8 @@ Class ForumModule extends Module {
 	 *
 	 * @param int $id_theme
 	 */
-	public function add_post($id_theme = null) {
-		$this->ACL->turn(array('forum', 'add_posts'));
+	public function add_post($id_theme = null) 
+	{
 		if (empty($id_theme) || !isset($_POST['mainText'])) redirect('/forum/');
 		$id_theme = (int)$id_theme;
 		if ($id_theme < 1) redirect('/forum/');
@@ -2315,6 +2328,9 @@ Class ForumModule extends Module {
 		if (!$theme) redirect('/forum/');
 		if ($theme->getLocked() == 1)
 			return $this->showInfoMessage(__('Can not write in a closed theme'), '/forum/view_theme/' . $id_theme );
+			
+			
+		$this->ACL->turn(array('forum', 'add_posts', $theme->getId_forum()));
 			
 			
 		
@@ -2542,13 +2558,20 @@ Class ForumModule extends Module {
 		if (!$post)
 			return $this->showInfoMessage(__('Some error occurred'),  '/forum/' );
 		
-		$id_theme = $post->getId_theme();		
+		$id_theme = $post->getId_theme();
+
+
+		// get theme for check access (by theme.id_forum)
+		$themesModel = $this->Register['ModManager']->getModelInstance('Themes');
+		$theme = $themesModel->getById($id_theme);
+		if (!$theme)
+			return $this->showInfoMessage(__('Topic not found'),  '/forum/' );
 		
 		
 		//check access
-		if (!$this->ACL->turn(array('forum', 'edit_posts'), false) 
+		if (!$this->ACL->turn(array('forum', 'edit_posts', $theme->getId_forum()), false) 
 		&& (!empty($_SESSION['user']['id']) && $post->getId_author() == $_SESSION['user']['id'] 
-		&& $this->ACL->turn(array('forum', 'edit_mine_posts'), false)) === false) {
+		&& $this->ACL->turn(array('forum', 'edit_mine_posts', $theme->getId_forum()), false)) === false) {
 			return $this->showInfoMessage(__('Permission denied'), '/forum/');
 		}
 
@@ -2640,11 +2663,17 @@ Class ForumModule extends Module {
 		$id_theme = $post->getId_theme();
 		
 		
+		// get theme for check access (by theme.id_forum)
+		$themesModel = $this->Register['ModManager']->getModelInstance('Themes');
+		$theme = $themesModel->getById($id_theme);
+		if (!$theme)
+			return $this->showInfoMessage(__('Topic not found'),  '/forum/' );
+		
 		
 		//check access
-		if (!$this->ACL->turn(array('forum', 'edit_posts'), false) 
+		if (!$this->ACL->turn(array('forum', 'edit_posts', $theme->getId_forum()), false) 
 		&& (!empty($_SESSION['user']['id']) && $post->getId_author() == $_SESSION['user']['id'] 
-		&& $this->ACL->turn(array('forum', 'edit_mine_posts'), false)) === false) {
+		&& $this->ACL->turn(array('forum', 'edit_mine_posts', $theme->getId_forum()), false)) === false) {
 			return $this->showInfoMessage(__('Permission denied'), '/forum/');
 		}
 
@@ -2790,17 +2819,21 @@ Class ForumModule extends Module {
 		$post = $postsModel->getById($id);
 		if (!$post) return $this->showInfoMessage(__('Some error occurred'), '/forum/' );
 
+				
+		// get theme for check access (by theme.id_forum)
+		$themesModel = $this->Register['ModManager']->getModelInstance('Themes');
+		$theme = $themesModel->getById($post->getId_theme());
+		if (!$theme)
+			return $this->showInfoMessage(__('Topic not found'),  '/forum/' );
+		
 		
 		//check access
-		if (!$this->ACL->turn(array('forum', 'delete_posts'), false) 
+		if (!$this->ACL->turn(array('forum', 'delete_posts', $theme->getId_forum()), false) 
 		&& (!empty($_SESSION['user']['id']) && $post->getId_author() == $_SESSION['user']['id'] 
-		&& $this->ACL->turn(array('forum', 'delete_mine_posts'), false)) === false) {
+		&& $this->ACL->turn(array('forum', 'delete_mine_posts', $theme->getId_forum()), false)) === false) {
 			return $this->showInfoMessage(__('Permission denied'), '/forum/');
 		}
 
-		
-		$themesModel = $this->Register['ModManager']->getModelInstance('Themes');
-		$theme = $themesModel->getById($post->getId_theme());
 
 		// Удаляем файл, если он есть
 		$attachModel = $this->Register['ModManager']->getModelInstance('ForumAttaches');

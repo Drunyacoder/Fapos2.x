@@ -191,7 +191,6 @@ $acl_rules = array (
       1 => 2,
       3 => 4,
       4 => 3,
-      5 => 5,
       6 => 0,
     ),
     'view_materials' => 
@@ -422,6 +421,7 @@ $acl_rules = array (
       0 => 1,
       3 => 4,
       4 => 3,
+      5 => 0,
     ),
     'edit_posts' => 
     array (
