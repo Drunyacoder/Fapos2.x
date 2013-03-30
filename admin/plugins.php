@@ -59,15 +59,17 @@ switch ( $_GET['ac'] )
 $pageNav = $pageTitle;
 $pageNavr = '<a href="plugins.php">Список Плагинов</a>';
 
-$footer = file_get_contents('template/footer.php');
+
 
 $dp = new Document_Parser;
 
-$content = $content.$footer;
+$content = $content;
 include_once ROOT . '/admin/template/header.php';
 echo $content;
- 	
+include_once ROOT . '/admin/template/footer.php';
 
+	
+	
 	
 function index(&$page_title) {
 	global $FpsDB;
