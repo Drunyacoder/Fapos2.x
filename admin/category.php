@@ -93,6 +93,7 @@ $ptitles = array(
 	'foto' => __('Photo'),
 );
 $page_title = $ptitles[getCurrMod()];
+$popups = '';
 
 
 if (!isset($_GET['ac'])) $_GET['ac'] = 'index';
@@ -127,7 +128,7 @@ switch($_GET['ac']) {
 
 $pageTitle = $page_title;
 $pageNav = $page_title;
-$pageNavl = '';
+$pageNavr = '';
 include_once ROOT . '/admin/template/header.php';
 ?>
 
@@ -139,6 +140,7 @@ include_once ROOT . '/admin/template/header.php';
 <?php
 
 
+echo $popups;
 echo $content;
 
 
@@ -168,6 +170,8 @@ function getTreeNode($array, $id = false) {
 
 
 function buildCatsList($catsTree, $catsList, $indent = '') {
+	global $popups;
+
     $Register = Register::getInstance();
 	$FpsDB = $Register['DB'];
     $acl_groups = $Register['ACL']->get_group_info();
@@ -227,7 +231,7 @@ function buildCatsList($catsTree, $catsList, $indent = '') {
 			
 			
 			
-		$out .=	'<div id="' . $cat['id'] . '_cat" class="popup">
+		$popups .=	'<div id="' . $cat['id'] . '_cat" class="popup">
 				<div class="top">
 					<div class="title">Редактрование категорий</div>
 					<div onClick="closePopup(\'' . $cat['id'] . '_cat\');" class="close"></div>
@@ -255,16 +259,16 @@ function buildCatsList($catsTree, $catsList, $indent = '') {
 						<div class="right"><table class="checkbox-collection"><tr>';
 						$n = 0;
 						foreach ($acl_groups as $id => $group) {
-							if (($n % 3) == 0) $out .= '</tr><tr>';
+							if (($n % 3) == 0) $popups .= '</tr><tr>';
 							$checked = (in_array($id, $no_access)) ? '' : ' checked="checked"';
 							
 							$id = md5(rand(0, 99999) . $n);
 							
-							$out .= '<td><input id="' . $id . '" type="checkbox" name="access[' . $id . ']" value="' . $id 
+							$popups .= '<td><input id="' . $id . '" type="checkbox" name="access[' . $id . ']" value="' . $id 
 							. '"' . $checked . '  /><label for="' . $id . '"></label>&nbsp;' . h($group['title']) . '</td>';
 							$n++;
 						}
-						$out .= '</tr></table></div>
+						$popups .= '</tr></table></div>
 						<div class="clear"></div>
 					</div>
 					
@@ -291,6 +295,8 @@ function buildCatsList($catsTree, $catsList, $indent = '') {
 
 
 function index(&$page_title) {
+	global $popups;
+
     $Register = Register::getInstance();
 	$FpsDB = $Register['DB'];
     $acl_groups = $Register['ACL']->get_group_info();
@@ -336,7 +342,7 @@ function index(&$page_title) {
 	
 	
 	
-	$html .=	'<div id="addCat" class="popup">
+	$popups .=	'<div id="addCat" class="popup">
 			<div class="top">
 				<div class="title">Добавление категории</div>
 				<div onClick="closePopup(\'addCat\');" class="close"></div>
@@ -368,12 +374,12 @@ function index(&$page_title) {
 						$n = 0;
 						$id = md5(rand(0, 99999) . $n);
 						foreach ($acl_groups as $id => $group) {
-							if (($n % 3) == 0) $html .= '</tr><tr>';
-							$html .= '<td><input type="checkbox" name="access[' . $id . ']" value="' . $id 
+							if (($n % 3) == 0) $popups .= '</tr><tr>';
+							$popups .= '<td><input type="checkbox" name="access[' . $id . ']" value="' . $id 
 							. '"  checked="checked" /><label for="' . $id . '"></label>&nbsp;' . h($group['title']) . '</td>';
 							$n++;
 						}
-						$html .= '</tr></table>
+						$popups .= '</tr></table>
 					</div>
 					<div class="clear"></div>
 				</div>
