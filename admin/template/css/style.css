@@ -48,7 +48,7 @@ table.side-separator, table.side-separator tr td {vertical-align:top; min-height
 .side-menu li {display:block; width:235px; min-height:42px; background:url('../img/sidemenu-point-bg.png') 209px -33px no-repeat; position:relative; border-top:1px solid #272728; border-bottom:1px solid #646363;}
 .side-menu li:hover {background:url('../img/sidemenu-point-bg.png') 210px 3px no-repeat;}
 .side-menu li:last-child {border-bottom:none;}
-.side-menu li div.icon {width:50px; height:30px; float:left; background:url('../img/sidemenu-icons-sprite.png') no-repeat; margin-left: 10px;}
+.side-menu li div.icon {width:50px; height:30px; float:left; background:url('../img/sidemenu-icons-sprite.png') no-repeat; background-position:0px 100px; margin-left: 10px;}
 .side-menu li a {height:16px; display:inline-block; float:left; padding:13px 0px; color:#fff; text-transform:uppercase; text-shadow:0px -2px 1px #000; -moz-text-shadow:0px -2px 1px #000; -webkit-text-shadow:0px -2px 1px #000; text-decoration:none; font-size:12px;}
 .side-menu li .sub-opener {width:20px; height:30px; position:absolute; right:10px; top:5px;}
 .side-menu li div.sub {position:relative; background:url('../img/sidemenu-sub-bg.png') repeat; border-top:1px solid #272728; overflow:hidden; display:none;}
