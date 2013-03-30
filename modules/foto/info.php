@@ -105,7 +105,7 @@ $settingsInfo = array(
 
 
 if (!function_exists('fotoSaveWaterMark')) {
-	function fotoSaveWaterMark($settings)
+	function fotoSaveWaterMark(&$settings)
 	{
 		if ($_FILES['watermark_img']['type'] == 'image/jpg'
 		|| $_FILES['watermark_img']['type'] == 'image/gif'
@@ -120,7 +120,7 @@ if (!function_exists('fotoSaveWaterMark')) {
 }
 
 if (!function_exists('fotoShowWaterMarkImage')) {
-	function fotoShowWaterMarkImage($settings)
+	function fotoShowWaterMarkImage(&$settings)
 	{
 		$params = array(
 			'style' => 'max-width:200px; max-height:200px;',

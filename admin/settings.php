@@ -2,12 +2,12 @@
 ##################################################
 ##												##
 ## @Author:       Andrey Brykin (Drunya)        ##
-## @Version:      1.4.9                         ##
+## @Version:      1.5.0                         ##
 ## @Project:      CMS                           ##
 ## @package       CMS Fapos                     ##
 ## @subpackege    Admin Panel module            ##
-## @copyright     ©Andrey Brykin 2010-2011      ##
-## @last mod.     2012/02/15                    ##
+## @copyright     ©Andrey Brykin 2010-2013      ##
+## @last mod.     2013/03/30                    ##
 ##################################################
 
 
@@ -122,7 +122,7 @@ if (isset($_POST['send'])) {
 			if ('file' == $params['type']) {
 				if (!empty($params['onsave']['func'])
 				&& function_exists((string)$params['onsave']['func'])) {
-					call_user_func((string)$params['onsave']['func'], &$tmpSet);
+					call_user_func((string)$params['onsave']['func'], $tmpSet);
 				}
 				continue;
 			}
@@ -300,7 +300,7 @@ include_once ROOT . '/admin/template/header.php';
 
 <form method="POST" action="settings.php?m=<?php echo $module; ?>" enctype="multipart/form-data">
 <div class="list">
-	<div class="title">Общие настройки</div>
+	<div class="title">Настройки</div>
 	<div class="level1">
 		<div class="head">
 			<div class="title settings">Ключ</div>
