@@ -4,12 +4,12 @@
 |  @Author:       Andrey Brykin (Drunya)         |
 |  @Email:        drunyacoder@gmail.com          |
 |  @Site:         http://fapos.net			     |
-|  @Version:      1.5.7                          |
+|  @Version:      1.5.8                          |
 |  @Project:      CMS                            |
 |  @Package       CMS Fapos                      |
 |  @Subpackege    Module Class                   |
 |  @Copyright     ©Andrey Brykin 2010-2013       |
-|  @Last mod.     2013/01/17                     |
+|  @Last mod.     2013/02/22                     |
 \-----------------------------------------------*/
 
 /*-----------------------------------------------\
@@ -234,12 +234,6 @@ class Module {
 		//$this->Register['GlobalParams'] = $this->getGlobalMarkers();
 	}
 	
-
-	protected function _loadModel($modelName)
-	{
-		$modelName = $modelName . 'Model';
-		return new $modelName();
-	}
 	
 	
 	protected function setModel()
@@ -641,5 +635,18 @@ class Module {
 		die();
 	}
 
-
+	
+	/**
+	 * Replace image marker
+	 */
+	function insertImageAttach($message, $filename, $number, $module = null)
+	{
+		if (!isset($module)) $module = $this->module;
+		
+		
+		return str_replace('{IMAGE'.$number.'}'
+			, '<a class="gallery" href="' . get_url('/sys/files/' . $module . '/' . $filename) 
+			. '"><img src="' . get_url('/image/' . $module . '/' . $filename) . '" /></a>'
+			, $message);
+	}
 }

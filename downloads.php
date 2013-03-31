@@ -32,4 +32,3 @@ if (!empty($params[0]) && !empty($params[1])) {
 }
 
 die();
-?>

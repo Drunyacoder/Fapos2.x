@@ -6,7 +6,7 @@
 | @Project:      CMS                           |
 | @package       CMS Fapos                     |
 | @subpackege    NewsAddFields Model           |
-| @copyright     ©Andrey Brykin 2010-2012      |
+| @copyright     ©Andrey Brykin 2010-2013      |
 | @last mod      2012/03/02                    |
 |----------------------------------------------|
 |											   |

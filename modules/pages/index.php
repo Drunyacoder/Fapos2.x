@@ -2,12 +2,12 @@
 /*-----------------------------------------------\
 | 												 |
 |  @Author:       Andrey Brykin (Drunya)         |
-|  @Version:      1.5.2                          |
+|  @Version:      1.5.4                          |
 |  @Project:      CMS                            |
 |  @package       CMS Fapos                      |
 |  @subpackege    Pages Module                   |
-|  @copyright     ©Andrey Brykin 2010-2012       |
-|  @last mod      2012/09/18                     |
+|  @copyright     ©Andrey Brykin 2010-2013       |
+|  @last mod      2013/02/22                     |
 \-----------------------------------------------*/
 
 /*-----------------------------------------------\
@@ -238,13 +238,14 @@ Class PagesModule extends Module {
                             $attachDir = ROOT . '/sys/files/' . $result->getSkey() . '/';
                             foreach ($matattaches as $attach) {
 							
+							
                                 if ($attach->getIs_image() == 1 && file_exists($attachDir . $attach->getFilename())) {
-								
-									$announce = str_replace('{IMAGE'.$attach->getAttach_number().'}'
-									, '<a class="gallery" href="' . get_url('/sys/files/' . $result->getSkey() . '/' . $attach->getFilename()) 
-									. '"><img src="' . get_url('/image/' . $result->getSkey() . '/' . $attach->getFilename()) . '" /></a>'
-									, $announce);
-										
+									$announce = $this->insertImageAttach(
+										$announce, 
+										$attach->getFilename(), 
+										$attach->getAttach_number(),
+										$result->getSkey()
+									);
                                 }
                             }
                         }

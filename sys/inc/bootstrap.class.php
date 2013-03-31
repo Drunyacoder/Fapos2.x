@@ -78,7 +78,7 @@ class Bootstrap
         * last time visit
         * This information store in <DataBase>.users
         */
-        if (isset($_SESSION['user'])) {
+        if (!empty($_SESSION['user'])) {
             $UserAuth->setTimeVisit();
         }
     }
