@@ -4,12 +4,12 @@
 | @Author:       Andrey Brykin (Drunya)          |
 | @Email:        drunyacoder@gmail.com           |
 | @Site:         http://fapos.net                |
-| @Version:      1.5.4                           |
+| @Version:      1.5.5                           |
 | @Project:      CMS                             |
 | @package       CMS Fapos                       |
 | @subpackege    Foto Module  			 		 |
 | @copyright     ©Andrey Brykin 2010-2013        |
-| @last  mod     2013/01/22                      |
+| @last  mod     2013/03/31                      |
 \-----------------------------------------------*/
 
 /*-----------------------------------------------\
@@ -539,8 +539,8 @@ Class FotoModule extends Module {
 		
 		
 		// Create watermark and resample image
-		$watermark_path = ROOT . '/sys/img/' . $this->Register['Config']->read('watermark_img', 'foto');
-		if ($this->Register['Config']->read('use_watermarks', 'foto') && !empty($watermark_path) && file_exists($watermark_path)) {
+		$watermark_path = ROOT . '/sys/img/' . ($this->Register['Config']->read('watermark_type') == '1' ? 'watermark_text.png' : $this->Register['Config']->read('watermark_img'));
+		if ($this->Register['Config']->read('use_watermarks') && !empty($watermark_path) && file_exists($watermark_path)) {
 			$waterObj = new FpsImg;
 			$waterObj->createWaterMark($save_path, $watermark_path);
 		}

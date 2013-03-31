@@ -138,7 +138,9 @@
 		  [
 		  '<a href="settings.php?m=hlu"><?php echo __('SEO settings'); ?></a>',
 		  '<a href="settings.php?m=rss"><?php echo __('RSS settings'); ?></a>',
-		  '<a href="settings.php?m=sitemap"><?php echo __('Sitemap settings'); ?></a>'
+		  '<a href="settings.php?m=sitemap"><?php echo __('Sitemap settings'); ?></a>',
+		  '<a href="settings.php?m=watermark"><?php echo __('Watermark settings'); ?></a>',
+		  '<a href="settings.php?m=autotags"><?php echo __('Autotags settings'); ?></a>'
 		  ]],
 		  
 

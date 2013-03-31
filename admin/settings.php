@@ -2,12 +2,12 @@
 ##################################################
 ##												##
 ## @Author:       Andrey Brykin (Drunya)        ##
-## @Version:      1.5.0                         ##
+## @Version:      1.6.0                         ##
 ## @Project:      CMS                           ##
 ## @package       CMS Fapos                     ##
 ## @subpackege    Admin Panel module            ##
 ## @copyright     ©Andrey Brykin 2010-2013      ##
-## @last mod.     2013/03/30                    ##
+## @last mod.     2013/03/31                    ##
 ##################################################
 
 
@@ -53,6 +53,46 @@ if (!empty($templates)) {
 
 
 
+// Prepare fonts select list
+$fonts = glob(ROOT . '/sys/fonts/*.ttf');
+sort($fonts);
+$fontSelect = array();
+if (!empty($fonts)) {
+	foreach ($fonts as $value) {
+		$pos = strrpos($value, "/");
+		if ($pos >= 0) {
+			$value = substr($value, $pos + 1);
+		}
+		$fontSelect[$value] = $value;
+	}
+}
+
+
+
+// Prepare smiles select list
+$smiles = glob(ROOT . '/sys/img/smiles/*/info.php');
+sort($smiles);
+$smilesSelect = array();
+if (!empty($smiles)) {
+	foreach ($smiles as $value) {
+		if (is_file($value)) {
+			include_once $value;
+			$path = dirname($value);
+			$pos = strrpos($path, "/");
+			if ($pos >= 0) {
+				$value = substr($path, $pos + 1);
+			}
+			if (isset($smilesInfo) && isset($smilesInfo['name'])) {
+				$smilesSelect[$value] = $smilesInfo['name'];
+			};
+		}
+	}
+} else {
+	$smilesSelect['fapos'] = 'Fapos';
+}
+
+
+
 /**
  * For show template preview
  * 
@@ -66,7 +106,6 @@ function getImgPath($template) {
 	}
 	return get_url('/sys/img/noimage.jpg');
 }
-
 
 
 
@@ -116,16 +155,15 @@ if (isset($_POST['send'])) {
 			continue;
 		} 
 		
-		
-		
+
 		if (isset($_POST[$fname]) || isset($_FILES[$fname])) {
-			if ('file' == $params['type']) {
-				if (!empty($params['onsave']['func'])
-				&& function_exists((string)$params['onsave']['func'])) {
-					call_user_func((string)$params['onsave']['func'], $tmpSet);
-				}
-				continue;
+			
+			if (!empty($params['onsave']['func'])
+			&& function_exists((string)$params['onsave']['func'])) {
+				call_user_func((string)$params['onsave']['func'], $tmpSet);
 			}
+			continue;
+			
 			$value = trim((string)$_POST[$fname]);
 		
 		

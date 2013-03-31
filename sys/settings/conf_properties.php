@@ -11,8 +11,10 @@ $settingsInfo = array(
 			'title' => 'Включить ЧПУ',
 			'description' => '',
 			'checked' => '1',
+			'value' => '1',
 		),
 		'hlu_extention' => array(
+			'type' => 'text',
 			'title' => 'Окончание URL',
 			'description' => 'Например .html',
 		),
@@ -21,6 +23,17 @@ $settingsInfo = array(
 			'title' => 'Разбор ЧПУ',
 			'description' => 'Новые ссылки будут обычными, но обращение через ЧПУ будет поддерживаться для работоспособности старых ссылок',
 			'checked' => '1',
+		),
+	),
+	
+	/* SITEMAP */
+	'sitemap' => array(
+		'auto_sitemap' => array(
+			'type' => 'checkbox',
+			'title' => 'Автогенерация sitemap',
+			'description' => '',
+			'checked' => '1',
+			'value' => '1',
 		),
 	),
 
@@ -39,27 +52,22 @@ $settingsInfo = array(
 		'site_title' => array(
 			'type' => 'text',
 			'title' => 'Название сайта',
-			'description' => 'можно использовать в шаблонах как {SITE_TITLE}',
+			'description' => 'можно использовать в шаблонах как {{ site_title }}',
 		),
 		'title' => array(
 			'type' => 'text',
 			'title' => 'Заголовок сайта',
-			'description' => 'можно использовать в шаблонах как {TITLE}',
-		),
-		'title' => array(
-			'type' => 'text',
-			'title' => 'Заголовок сайта',
-			'description' => 'можно использовать в шаблонах как {TITLE}',
+			'description' => 'можно использовать в шаблонах как {{ title }}',
 		),
 		'meta_keywords' => array(
 			'type' => 'text',
 			'title' => 'Ключевые слова сайта',
-			'description' => 'можно использовать в шаблонах как {META_KEYWORDS}',
+			'description' => 'можно использовать в шаблонах как {{ meta_keywords }}',
 		),
 		'meta_description' => array(
 			'type' => 'text',
 			'title' => 'Описание сайта',
-			'description' => 'можно использовать в шаблонах как {META_DESCRIPTION}',
+			'description' => 'можно использовать в шаблонах как {{ meta_description }}',
 		),
 		'cookie_time' => array(
 			'type' => 'text',
@@ -305,14 +313,362 @@ $settingsInfo = array(
              'value' => '1',
        	),
     ),
+	
+	/* Watermark */
+	'watermark' => array(
+		'use_watermarks' => array(
+			'type' => 'checkbox',
+			'title' => 'Разрешить использование',
+			'value' => '1',
+			'checked' => '1',
+		),
+		'watermark_type' => array(
+			'type' => 'select',
+			'title' => 'Тип',
+			'description' => 'Определяет тип водяного знака.',
+			'options' => array(
+				'1' => 'Текст',
+				'0' => 'Картинка',
+			),
+		),
+		'Водяной знак (картинка)' => 'Водяной знак (картинка)',
+		'watermark_img' => array(
+			'type' => 'file',
+			'title' => 'Водяной знак (картинка)',
+			'input_sufix_func' => 'showWaterMarkImage',
+			'onsave' => array(
+				'func' => 'saveWaterMarkImage',
+			),
+		),
+
+		'Водяной знак (текст)' => 'Водяной знак (текст)',
+		'watermark_text' => array(
+			'type' => 'text',
+			'title' => 'Водяной знак (текст)',
+			'input_sufix_func' => 'showWaterMarkText',
+		),
+		'watermark_text_font' => array(
+			'type' => 'select',
+			'title' => 'Шрифт',
+			'description' => '',
+			'options' => $fontSelect,
+		),
+		'watermark_text_angle' => array(
+			'type' => 'select',
+			'title' => 'Угол поворота текста',
+			'help' => 'Градусы',
+			'options' => array(
+				'315' => '315',
+				'270' => '270',
+				'225' => '225',
+				'180' => '180',
+				'135' => '135',
+				'90' => '90',
+				'45' => '45',
+				'0' => '0 (без поворота)',
+			),
+		),
+		'watermark_text_size' => array(
+			'type' => 'text',
+			'title' => 'Размер текста',
+			'help' => 'px',
+		),
+		'watermark_text_color' => array(
+			'type' => 'select',
+			'title' => 'Цвет текста',
+			'options' => array(
+				'000000' => 'Черный',
+				'FF0000' => 'Красный',
+				'008000' => 'Зелёный',
+				'0000FF' => 'Синий',
+				'00FFFF' => 'Аква',        
+				'FF00FF' => 'Розовый',
+				'808080' => 'Серый',        
+				'00FF00' => 'Лаймовый',
+				'800000' => 'Темно-бордовый',
+				'000080' => 'Темно-синий',
+				'808000' => 'Оливковый',
+				'800080' => 'Фиолетовый',
+				'c0c0c0' => 'Серебряный',
+				'008080' => 'Чирок',
+				'FFFFFF' => 'Белый',
+				'FFFF00' => 'Желтый',
+			),
+		),
+		'watermark_text_border' => array(
+			'type' => 'select',
+			'title' => 'Цвет контура текста',
+			'options' => array(
+				'000000' => 'Черный',
+				'FF0000' => 'Красный',
+				'008000' => 'Зелёный',
+				'0000FF' => 'Синий',
+				'00FFFF' => 'Аква',        
+				'FF00FF' => 'Розовый',
+				'808080' => 'Серый',        
+				'00FF00' => 'Лаймовый',
+				'800000' => 'Темно-бордовый',
+				'000080' => 'Темно-синий',
+				'808000' => 'Оливковый',
+				'800080' => 'Фиолетовый',
+				'c0c0c0' => 'Серебряный',
+				'008080' => 'Чирок',
+				'FFFFFF' => 'Белый',
+				'FFFF00' => 'Желтый',
+			),
+			'onsave' => array(
+				'func' => 'saveWaterMarkText',
+			),
+		),
+
+		'Сохранение результатов' => 'Сохранение результатов',
+		'quality_jpeg' => array(
+			'type' => 'select',
+			'title' => 'Качество картинки (JPEG)',
+			'description' => 'Значение от 0 (наихудшее качество, минимальный размер) до 100 (наилучшее качество, максимальный размер). По умолчания используется значение 75.',
+			'options' => array(
+				'100' => '100 (наилучшее качество)',
+				'95' => '95',
+				'90' => '90',
+				'85' => '85',
+				'80' => '80',
+				'75' => '75',
+				'70' => '70',
+				'65' => '65',
+				'60' => '60',
+				'55' => '55',
+				'50' => '50',
+				'45' => '45',
+				'40' => '40',
+				'35' => '35',
+				'30' => '30',
+				'25' => '25',
+				'20' => '20',
+				'15' => '15',
+				'10' => '10',
+				'5' => '5',
+				'0' => '0 (наихудшее качество)',
+			),
+		),
+		'quality_png' => array(
+			'type' => 'select',
+			'title' => 'Качество картинки (PNG)',
+			'description' => 'Значение от 0 (без сжатия) до 9 (наилучшее сжатие)',
+			'options' => array(
+				'9' => '9 (наилучшее сжатие)',
+				'8' => '8',
+				'7' => '7',
+				'6' => '6',
+				'5' => '5',
+				'4' => '4',
+				'3' => '3',
+				'2' => '2',
+				'1' => '1',
+				'0' => '0 (без сжатия)',
+			),
+		),
+		
+		'Прочее' => 'Прочее',
+		'watermark_hpos' => array(
+			'type' => 'select',
+			'title' => 'Горизонтальное выравнивание водяного знака',
+			'options' => array(
+				'3' => 'По правому краю изображения',
+				'2' => 'По центру изображения',
+				'1' => 'По левому краю изображения',
+			),
+		),
+		'watermark_vpos' => array(
+			'type' => 'select',
+			'title' => 'Вертикальное выравнивание водяного знака',
+			'options' => array(
+				'3' => 'Снизу изображения',
+				'2' => 'По центру изображения',
+				'1' => 'Сверху изображения',
+			),
+		),
+		'watermark_alpha' => array(
+			'type' => 'select',
+			'title' => 'Прозрачность водного знака',
+			'description' => 'Значение от 0 (полностью прозрачный) до 100 (полностью непрозрачный).',
+			'options' => array(
+				'100' => '100 (полностью непрозрачный)',
+				'95' => '95',
+				'90' => '90',
+				'85' => '85',
+				'80' => '80',
+				'75' => '75',
+				'70' => '70',
+				'65' => '65',
+				'60' => '60',
+				'55' => '55',
+				'50' => '50',
+				'45' => '45',
+				'40' => '40',
+				'35' => '35',
+				'30' => '30',
+				'25' => '25',
+				'20' => '20',
+				'15' => '15',
+				'10' => '10',
+				'5' => '5',
+				'0' => '0 (полностью прозрачный)',
+			),
+		),
+	),
+	
+    /* AUTOTAGS */
+    'autotags' => array(
+        'autotags_active' => array(
+			'type' => 'checkbox',
+			'title' => 'Разрешить использование',
+			'value' => '1',
+			'checked' => '1',
+      	),
+        'autotags_exception' => array(
+            'type' => 'text',
+            'title' => 'Исключения',
+            'description' => 'Слова которые не будут учитываться',
+      	),
+        'autotags_priority' => array(
+            'type' => 'text',
+            'title' => 'Приоритет',
+            'description' => 'Слова с приоритетом',
+       	),
+    ),
 );
 $sysMods = array(
 	'sys',
 	'hlu',
 	'secure',
 	'common',
+	'sitemap',
+	'watermark',
+	'autotags',
 );
 $noSub = array(
 	'sys',
 	'hlu',
+	'sitemap',
+	'watermark',
+	'autotags',
 );
+
+
+
+if (!function_exists('saveWaterMarkImage')) {
+	function saveWaterMarkImage($settings)
+	{
+		if (isImageFile($_FILES['watermark_img']['type'])) {
+			$ext = strchr($_FILES['watermark_img']['name'], '.');
+			if (move_uploaded_file($_FILES['watermark_img']['tmp_name'], ROOT . '/sys/img/watermark'.$ext)) {
+				$settings['watermark_img'] = 'watermark'.$ext;
+			}
+		}
+	}
+}
+
+if (!function_exists('showWaterMarkImage')) {
+	function showWaterMarkImage($settings)
+	{
+		$params = array(
+			'style' => 'max-width:200px; max-height:200px;',
+		);
+
+		if (!empty($settings['watermark_img']) 
+		&& file_exists(ROOT . '/sys/img/' . $settings['watermark_img'])) {
+			return get_img('/sys/img/' . $settings['watermark_img'], $params);
+		}
+		return '';
+	}
+}
+
+if (!function_exists('saveWaterMarkText')) {
+	function saveWaterMarkText($settings)
+	{
+		$font = ROOT . '/sys/fonts/' . $settings['watermark_text_font'];
+		$size = isset($settings['watermark_text_size']) && is_numeric($settings['watermark_text_size']) ? intval($settings['watermark_text_size']) : 14;
+		$angle = intval($settings['watermark_text_angle']);
+		$text = $settings['watermark_text'];
+
+		$delta = round($size / 50 + 1);
+
+		// Вариант 1
+		$text_size = imagettfbbox($size, $angle, $font, $text);
+
+		// Вариант 2
+		/*
+		$text_size = imagettfbbox($size, 0, $font, $text);
+		$rangle = deg2rad($angle);
+		for ($i = 0; $i < 8; $i = $i + 2) {
+			$x = $text_size[$i];
+			$y = $text_size[$i + 1];
+			$text_size[$i] = round($x * cos($rangle) + $y * sin($rangle));
+			$text_size[$i + 1] = round(- $x * sin($rangle) + $y * cos($rangle));
+		}
+		*/
+		
+		$x_ar = array($text_size[0], $text_size[2], $text_size[4], $text_size[6]);
+		$y_ar = array($text_size[1], $text_size[3], $text_size[5], $text_size[7]);
+
+		unset($text_size);
+
+		$img_w = round((max($x_ar) - min($x_ar)) * 1.025) + 10 * $delta;
+		$img_h = round((max($y_ar) - min($y_ar)) * 1.025) + 10 * $delta;
+
+		$x_center = array_sum($x_ar) / 4;
+		$y_center = array_sum($y_ar) / 4;
+
+		for ($i = 0; $i < 4; $i++) {
+			$x_ar[$i] = round($x_ar[$i] + $img_w / 2 - $x_center);
+			$y_ar[$i] = round($y_ar[$i] + $img_h / 2 - $y_center);
+		}
+
+		unset($x_center);
+		unset($y_center);
+
+		$pos_x = $x_ar[0];
+		$pos_y = $y_ar[0];
+
+		unset($x_ar);
+		unset($y_ar);
+
+		$img = imagecreatetruecolor($img_w, $img_h);
+		
+		$bg_color = imagecolorallocate($img, 254, 254, 254);
+
+		$color = isset($settings['watermark_text_color']) ? hexdec($settings['watermark_text_color']) : 0xFFFFFF;
+		$text_color = imagecolorallocate($img, ($color >> 16) & 0xFF, ($color >> 8) & 0xFF, $color & 0xFF);
+		
+		$color = isset($settings['watermark_text_border']) ? hexdec($settings['watermark_text_border']) : 0x000000;
+		$border_color = imagecolorallocate($img, ($color >> 16) & 0xFF, ($color >> 8) & 0xFF, $color & 0xFF);
+
+		imagecolortransparent($img, $bg_color);
+		imagefilledrectangle($img, 0, 0, $img_w - 1, $img_h - 1, $bg_color);
+
+		imagettftext($img, $size, $angle, $pos_x + $delta, $pos_y, $border_color, $font, $text);
+		imagettftext($img, $size, $angle, $pos_x - $delta, $pos_y, $border_color, $font, $text);
+		imagettftext($img, $size, $angle, $pos_x, $pos_y + $delta, $border_color, $font, $text);
+		imagettftext($img, $size, $angle, $pos_x, $pos_y - $delta, $border_color, $font, $text);
+
+		imagettftext($img, $size, $angle, $pos_x, $pos_y, $text_color, $font, $text);
+		
+
+		imagepng($img, ROOT . '/sys/img/watermark_text.png', 9);
+		imagedestroy($img);
+	}
+}
+
+if (!function_exists('showWaterMarkText')) {
+	function showWaterMarkText($settings)
+	{
+		$params = array(
+			'style' => 'max-width:200px; max-height:200px;',
+		);
+		$file = '/sys/img/watermark_text.png';
+		if (file_exists(ROOT . $file)) {
+			return get_img('/sys/img/watermark_text.png', $params);
+		}
+		return '';
+	}
+}

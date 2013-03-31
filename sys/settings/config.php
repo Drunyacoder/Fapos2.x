@@ -6,7 +6,7 @@ $set = array (
   'cookie_time' => '30',
   'start_mod' => '',
   'open_reg' => '1',
-  'debug_mode' => '0',
+  'debug_mode' => '1',
   'max_file_size' => '15000000',
   'min_password_lenght' => '6',
   'admin_email' => 'test@email.cms',
@@ -23,6 +23,21 @@ $set = array (
   'autotags_exception' => 'для,его,при,При,свои,как,все,так,что,это',
   'autotags_priority' => 'fapos cms,fapos,free cms',
   'img_preview_size' => 200,
+  'date_format' => 'Y-m-d/D H:i:s',
+  'use_watermarks' => 1,
+  'watermark_img' => 'watermark.png',
+  'quality_jpeg' => '75',
+  'quality_png' => '9',
+  'watermark_hpos' => '3',
+  'watermark_vpos' => '2',
+  'watermark_alpha' => '50',
+  'watermark_type' => '1',
+  'watermark_text' => 'fapos.net',
+  'watermark_text_angle' => '90',
+  'watermark_text_size' => '10',
+  'watermark_text_color' => 'FFFFFF',
+  'watermark_text_border' => '0000FF',
+  'watermark_text_font' => 'Scada-Bold.ttf',
   'latest_on_home' => 
   array (
     0 => 'news',
@@ -36,7 +51,7 @@ $set = array (
     'description' => 'CMS форум',
     'not_reg_user' => 'Гостелло',
     'max_post_lenght' => '3000',
-    'themes_per_page' => '20',
+    'themes_per_page' => '5',
     'posts_per_page' => '10',
     'active' => 1,
   ),
@@ -149,8 +164,6 @@ $set = array (
     'description' => 'Каталог Фотографий',
     'per_page' => 20,
     'max_file_size' => 5000000,
-    'use_watermarks' => 1,
-    'watermark_img' => 'watermark.png',
   ),
   'statistics' => 
   array (
@@ -159,7 +172,7 @@ $set = array (
   'db' => 
   array (
     'host' => 'localhost',
-    'name' => '',
+    'name' => 'aa',
     'user' => 'root',
     'pass' => '',
     'prefix' => '',
@@ -187,7 +200,7 @@ $set = array (
     'rss_lenght' => 300,
     'rss_cnt' => 10,
   ),
-  'auto_sitemap' => '1',
+  'auto_sitemap' => 1,
   'allow_smiles' => 1,
 )
 ?>
