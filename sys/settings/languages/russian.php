@@ -357,6 +357,8 @@ $language = array(
 	'Posts cnt must be numeric' 	=> 'Кол-во сообщений должно быть числом',
 	'Recalculation forum' 			=> 'Пересчет данных форума',
 	'All done' 						=> 'Все готово.',
+	'Autotags settings' 			=> 'Настройки автотегов',
+	'Watermark settings' 			=> 'Настройки watermark',
 	
 	
 	// Templates name
