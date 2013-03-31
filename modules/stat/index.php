@@ -4,12 +4,12 @@
 | @Author:       Andrey Brykin (Drunya)        |
 | @Email:        drunyacoder@gmail.com         |
 | @Site:         http://fapos.net              |
-| @Version:      1.7.8                         |
+| @Version:      1.8.0                         |
 | @Project:      CMS                           |
 | @Package       CMS Fapos                     |
-| @Subpackege    Stats Module                  |
+| @Subpackege    News Module                   |
 | @Copyright     ©Andrey Brykin 2010-2013      |
-| @Last mod      2013/02/22                    |
+| @Last mod      2013/03/31                    |
 |----------------------------------------------|
 |											   |
 | any partial or not partial extension         |
@@ -23,30 +23,34 @@
 
 
 
-
+/**
+ *
+ */
 Class StatModule extends Module {
 
 	/**
 	* @module_title  title of module
 	*/
-	var $module_title = 'Статьи';
+	public $module_title = 'Статьи';
 	/**
 	* @template  layout for module
 	*/
-	var $template = 'stat';
+	public $template = 'stat';
 	/**
 	* @module module indentifier
 	*/
-	var $module = 'stat';
-
-
+	public $module = 'stat';
 	
+	
+
+
 	/**
-	* default action ( show main page )
-	*/
-	function index($tag = null) {
+	 * Default NewsModule action
+	 */
+	public function index($tag = null)
+    {
 		//turn access
-		$this->ACL->turn(array('stat', 'view_list'));
+		$this->ACL->turn(array($this->module, 'view_list'));
 		
 		
 		//формируем блок со списком  разделов
@@ -67,7 +71,7 @@ Class StatModule extends Module {
 		
 
 		$total = $this->Model->getTotal($query_params);
-		list ($pages, $page) = pagination( $total, Config::read('per_page', 'stat'), '/stat/');
+		list ($pages, $page) = pagination($total, Config::read('per_page', $this->module), '/' . $this->module . '/');
 		$this->Register['pages'] = $pages;
 		$this->Register['page'] = $page;
 		$this->page_title .= ' (' . $page . ')';
@@ -75,8 +79,8 @@ Class StatModule extends Module {
 
 		
 		$navi = array();
-		$navi['add_link'] = ($this->ACL->turn(array('stat', 'add_materials'), false)) 
-			? get_link(__('Add material'), '/stat/add_form/') : '';
+		$navi['add_link'] = ($this->ACL->turn(array($this->module, 'add_materials'), false)) 
+			? get_link(__('Add material'), '/' . $this->module . '/add_form/') : '';
 		$navi['navigation'] = $this->_buildBreadCrumbs();
 		$navi['pagination'] = $pages;
 		$navi['meta'] = __('Count all material') . $total;
@@ -91,14 +95,14 @@ Class StatModule extends Module {
 	  
 		$params = array(
 			'page' => $page,
-			'limit' => Config::read('per_page', 'stat'),
+			'limit' => $this->Register['Config']->read('per_page', $this->module),
 			'order' => getOrderParam(__CLASS__),
 		);
 		$where = array();
 		if (!$this->ACL->turn(array('other', 'can_see_hidden'), false)) $where['available'] = '1';
 		if (!empty($tag)) $where[] = "`tags` LIKE '%{$tag}%'";
 
-
+		
 		$this->Model->bindModel('attaches');
 		$this->Model->bindModel('author');
 		$this->Model->bindModel('category');
@@ -112,24 +116,21 @@ Class StatModule extends Module {
 
 
 		// create markets
-		$addParams = array();
 		foreach ($records as $result) {
 			$this->Register['current_vars'] = $result;
-			$_addParams = array();
+			$markers = array();
 			
 			
-			$_addParams['moder_panel'] = $this->_getAdminBar($result);
+			$markers['moder_panel'] = $this->_getAdminBar($result);
 			$entry_url = get_url(entryUrl($result, $this->module));
-			$_addParams['entry_url'] = $entry_url;
+			$markers['entry_url'] = $entry_url;
 			
-			
-			$announce = $result->getMain();
-			
-			
-			$announce = $this->Textarier->getAnnounce($announce
+
+			// Cut announce
+			$announce = $this->Textarier->getAnnounce($result->getMain()
 				, $entry_url
 				, 0 
-				, $this->Register['Config']->read('announce_lenght', 'stat')
+				, $this->Register['Config']->read('announce_lenght', $this->module)
 				, $result
 			);
 			
@@ -140,8 +141,8 @@ Class StatModule extends Module {
 				$attachDir = ROOT . '/sys/files/' . $this->module . '/';
 				foreach ($attaches as $attach) {
 					if ($attach->getIs_image() == 1 && file_exists($attachDir . $attach->getFilename())) {
-						
-						
+					
+					
 						$announce = $this->insertImageAttach(
 							$announce, 
 							$attach->getFilename(), 
@@ -150,12 +151,13 @@ Class StatModule extends Module {
 					}
 				}
 			}
+			
 
-			$_addParams['announce'] = $announce;
+			$markers['announce'] = $announce;
 			
 			
-			$_addParams['category_url'] = get_url('/stat/category/' . $result->getCategory_id());
-			$_addParams['profile_url'] = getProfileUrl($result->getAuthor()->getId());
+			$markers['category_url'] = get_url('/' . $this->module . '/category/' . $result->getCategory_id());
+			$markers['profile_url'] = getProfileUrl($result->getAuthor()->getId());
 			$result->setTags(explode(',', $result->getTags()));
 
 
@@ -166,7 +168,7 @@ Class StatModule extends Module {
 			));
 		
 
-			$result->setAdd_markers($_addParams);
+			$result->setAdd_markers($markers);
 		}
 		
 		
@@ -182,22 +184,24 @@ Class StatModule extends Module {
 	}
 
 
-	
 
-	 
-	function category($id = null) {
+	/**
+	 * Show materials in category. Category ID must be integer and not null.
+	 */
+	public function category($id = null)
+    {
 		//turn access
-		$this->ACL->turn(array('stat', 'view_list'));
+		$this->ACL->turn(array($this->module, 'view_list'));
 		$id = intval($id);
 		if (empty($id) || $id < 1) redirect('/');
 
 		
-		$SectionsModel = $this->_loadModel(ucfirst($this->module) . 'Sections');
+		$SectionsModel = $this->Register['ModManager']->getModelInstance($this->module . 'Sections');
 		$category = $SectionsModel->getById($id);
 		if (!$category)
-			return showInfoMessage(__('Can not find category'), '/stat/');
+			return $this->showInfoMessage(__('Can not find category'), '/' . $this->module . '/');
 		if (!$this->ACL->checkCategoryAccess($category->getNo_access())) 
-			return showInfoMessage(__('Permission denied'), '/stat/');
+			return $this->showInfoMessage(__('Permission denied'), '/' . $this->module . '/');
 		
 		
 		$this->page_title = h($category->getTitle()) . ' - ' . $this->page_title;
@@ -220,15 +224,13 @@ Class StatModule extends Module {
 			'`category_id` IN (' . $childCats . ')'
 		));
 		
-		
-		
 		if (!$this->ACL->turn(array('other', 'can_see_hidden'), false)) {
 			$query_params['cond']['available'] = 1;
 		}
 		
 
 		$total = $this->Model->getTotal($query_params);
-		list ($pages, $page) = pagination( $total, Config::read('per_page', 'stat'), '/stat/');
+		list ($pages, $page) = pagination( $total, Config::read('per_page', $this->module), '/' . $this->model . '/');
 		$this->Register['pages'] = $pages;
 		$this->Register['page'] = $page;
 		$this->page_title .= ' (' . $page . ')';
@@ -236,8 +238,8 @@ Class StatModule extends Module {
 
 		
 		$navi = array();
-		$navi['add_link'] = ($this->ACL->turn(array('stat', 'add_materials'), false)) 
-			? get_link(__('Add material'), '/stat/add_form/') : '';
+		$navi['add_link'] = ($this->ACL->turn(array($this->module, 'add_materials'), false)) 
+			? get_link(__('Add material'), '/' . $this->module . '/add_form/') : '';
 		$navi['navigation'] = $this->_buildBreadCrumbs($id);
 		$navi['pagination'] = $pages;
 		$navi['meta'] = __('Count material in cat') . $total;
@@ -253,7 +255,7 @@ Class StatModule extends Module {
 	  
 		$params = array(
 			'page' => $page,
-			'limit' => Config::read('per_page', 'stat'),
+			'limit' => Config::read('per_page', $this->module),
 			'order' => getOrderParam(__CLASS__),
 		);
 		$where = $query_params['cond'];
@@ -272,24 +274,20 @@ Class StatModule extends Module {
 
 
 		// create markets
-		$addParams = array();
 		foreach ($records as $result) {
 			$this->Register['current_vars'] = $result;
-			$_addParams = array();
+			$markers = array();
 			
 			
-			$_addParams['moder_panel'] = $this->_getAdminBar($result);
+			$markers['moder_panel'] = $this->_getAdminBar($result);
 			$entry_url = get_url(entryUrl($result, $this->module));
-			$_addParams['entry_url'] = $entry_url;
+			$markers['entry_url'] = $entry_url;
 			
 			
-			$announce = $result->getMain();
-			
-			
-			$announce = $this->Textarier->getAnnounce($announce
+			$announce = $this->Textarier->getAnnounce($result->getMain()
 				, $entry_url
 				, 0 
-				, $this->Register['Config']->read('announce_lenght', 'stat')
+				, $this->Register['Config']->read('announce_lenght', $this->module)
 				, $result
 			);
 			
@@ -300,8 +298,8 @@ Class StatModule extends Module {
 				$attachDir = ROOT . '/sys/files/' . $this->module . '/';
 				foreach ($attaches as $attach) {
 					if ($attach->getIs_image() == 1 && file_exists($attachDir . $attach->getFilename())) {
-						
-						
+					
+					
 						$announce = $this->insertImageAttach(
 							$announce, 
 							$attach->getFilename(), 
@@ -311,11 +309,11 @@ Class StatModule extends Module {
 				}
 			}
 
-			$_addParams['announce'] = $announce;
+			$markers['announce'] = $announce;
 			
 			
-			$_addParams['category_url'] = get_url('/stat/category/' . $result->getCategory_id());
-			$_addParams['profile_url'] = getProfileUrl($result->getAuthor()->getId());
+			$markers['category_url'] = get_url('/' . $this->module . '/category/' . $result->getCategory_id());
+			$markers['profile_url'] = getProfileUrl($result->getAuthor()->getId());
 			$result->setTags(explode(',', $result->getTags()));
 
 
@@ -326,7 +324,7 @@ Class StatModule extends Module {
 			));
 		
 
-			$result->setAdd_markers($_addParams);
+			$result->setAdd_markers($markers);
 		}
 		
 		
@@ -340,13 +338,16 @@ Class StatModule extends Module {
 	
 		return $this->_view($source);
 	}
-	  
-	  
 
 
-	function view ($id = null) {
+
+	/**
+     * @param null|int $id
+     */
+	public function view ($id = null)
+    {
 		//turn access
-		$this->ACL->turn(array('stat', 'view_materials'));
+		$this->ACL->turn(array($this->module, 'view_materials'));
 		$id = intval($id);
 		if (empty($id) || $id < 1) redirect('/');
 
@@ -359,9 +360,9 @@ Class StatModule extends Module {
 		
 		if (empty($entity)) redirect('/error.php?ac=404');
 		if ($entity->getAvailable() == 0 && !$this->ACL->turn(array('other', 'can_see_hidden'), false)) 
-			return showInfoMessage(__('Permission denied'), '/stat/');
+			return showInfoMessage(__('Permission denied'), '/' . $this->module . '/');
 		if (!$this->ACL->checkCategoryAccess($entity->getCategory()->getNo_access())) 
-			return showInfoMessage(__('Permission denied'), '/stat/');
+			return showInfoMessage(__('Permission denied'), '/' . $this->module . '/');
 			
 		
 		// Some gemor with add fields
@@ -371,6 +372,7 @@ Class StatModule extends Module {
 		}
 		
 		
+		
 		$max_attaches = $this->Register['Config']->read('max_attaches', $this->module);
 		if (empty($max_attaches) || !is_numeric($max_attaches)) $max_attaches = 5;
 		
@@ -378,12 +380,12 @@ Class StatModule extends Module {
 		//category block
 		$this->_getCatsTree($entity->getCategory()->getId());
 		/* COMMENT BLOCK */
-		if (Config::read('comment_active', 'stat') == 1 
-		&& $this->ACL->turn(array('stat', 'view_comments'), false) 
+		if (Config::read('comment_active', $this->module) == 1 
+		&& $this->ACL->turn(array($this->module, 'view_comments'), false) 
 		&& $entity->getCommented() == 1) {
-			if ($this->ACL->turn(array('stat', 'add_comments'), false)) 
-				$this->comments_form = $this->_add_comment_form($id);
-			$this->comments = $this->_get_comments($entity);
+			if ($this->ACL->turn(array($this->module, 'add_comments'), false)) 
+				$this->comments_form  = $this->_add_comment_form($id);
+			$this->comments  = $this->_get_comments($entity);
 		}
 		$this->Register['current_vars'] = $entity;
 		
@@ -396,8 +398,8 @@ Class StatModule extends Module {
 		if (!empty($description)) $this->page_meta_description = h($description);
 		
 		$navi = array();
-		$navi['module_url'] = get_url('/stat/');
-		$navi['category_url'] = get_url('/stat/category/' . $entity->getCategory()->getId());
+		$navi['module_url'] = get_url('/' . $this->module . '/');
+		$navi['category_url'] = get_url('/' . $this->module . '/category/' . $entity->getCategory()->getId());
 		$navi['category_name'] = h($entity->getCategory()->getTitle());
 		$navi['navigation'] = $this->_buildBreadCrumbs($entity->getCategory()->getId());
 		$this->_globalize($navi);
@@ -415,14 +417,15 @@ Class StatModule extends Module {
 		$announce = $entity->getMain();
 		$announce = $this->Textarier->print_page($announce, $entity->getAuthor()->getStatus(), $entity->getTitle());
 		
+		
 		// replace image tags in text
 		$attaches = $entity->getAttaches();
 		if (!empty($attaches) && count($attaches) > 0) {
 			$attachDir = ROOT . '/sys/files/' . $this->module . '/';
 			foreach ($attaches as $attach) {
 				if ($attach->getIs_image() == 1 && file_exists($attachDir . $attach->getFilename())) {
-					
-					
+				
+				
 					$announce = $this->insertImageAttach(
 						$announce, 
 						$attach->getFilename(), 
@@ -433,15 +436,9 @@ Class StatModule extends Module {
 		}
 
 		$markers['mainText'] = $announce;
+		$markers['main_text'] = $announce;
 		$entity->setAdd_markers($markers);
 		$entity->setTags(explode(',', $entity->getTags()));
-		
-		
-		$this->setCacheTag(array(
-			'user_id_' . $entity->getAuthor()->getId(),
-			'record_id_' . $entity->getId(),
-			(!empty($_SESSION['user']['status'])) ? 'user_group_' . $_SESSION['user']['status'] : 'user_group_' . 'guest',
-		));
 		
 		
 		$source = $this->render('material.html', array('entity' => $entity));
@@ -449,20 +446,20 @@ Class StatModule extends Module {
 		
 		$entity->setViews($entity->getViews() + 1);
 		$entity->save();
-		$this->Register['DB']->cleanSqlCache();
+		$this->DB->cleanSqlCache();
 		
 		return $this->_view($source);
 	}
 
 
 
-
 	/**
 	 *
 	 */
-	public function add_form () {
+	public function add_form ()
+    {
 		//turn access
-		$this->ACL->turn(array('stat', 'add_materials'));
+		$this->ACL->turn(array($this->module, 'add_materials'));
 		$writer_status = (!empty($_SESSION['user']['status'])) ? $_SESSION['user']['status'] : 0;
 		
 		
@@ -484,8 +481,6 @@ Class StatModule extends Module {
         $data = array('title' => null, 'mainText' => null, 'in_cat' => null, 'description' => null, 'tags' => null, 'sourse' => null, 'sourse_email' => null, 'sourse_site' => null, 'commented' => null, 'available' => null);
 		$data = array_merge($data, $markers);
         $data = Validate::getCurrentInputsValues($data);
-        $add = $data['mainText'];
-        
 		
 		
         $data['preview'] = $this->Parser->getPreview($data['mainText']);
@@ -494,19 +489,19 @@ Class StatModule extends Module {
         if (isset($_SESSION['FpsForm'])) unset($_SESSION['FpsForm']);
 		
 		
-		$SectionsModel = $this->_loadModel(ucfirst($this->module) . 'Sections');
+		$SectionsModel = $this->Register['ModManager']->getModelInstance($this->module . 'Sections');
 		$sql = $SectionsModel->getCollection();
 		$data['cats_selector'] = $this->_buildSelector($sql, ((!empty($data['in_cat'])) ? $data['in_cat'] : false));
 		
 		
 		//comments and hide
 		$data['commented'] = (!empty($commented) || !isset($_POST['submitForm'])) ? 'checked="checked"' : '';
-		if (!$this->ACL->turn(array('stat', 'record_comments_management'), false)) $data['commented'] .= ' disabled="disabled"';
+		if (!$this->ACL->turn(array($this->module, 'record_comments_management'), false)) $data['commented'] .= ' disabled="disabled"';
 		$data['available'] = (!empty($available) || !isset($_POST['submitForm'])) ? 'checked="checked"' : '';
-		if (!$this->ACL->turn(array('stat', 'hide_material'), false)) $data['available'] .= ' disabled="disabled"';
+		if (!$this->ACL->turn(array($this->module, 'hide_material'), false)) $data['available'] .= ' disabled="disabled"';
 		
 		
-		$data['action'] = get_url('/stat/add/');
+		$data['action'] = get_url('/' . $this->module . '/add/');
 		$data['max_attaches'] = $this->Register['Config']->read('max_attaches', $this->module);
 		if (empty($data['max_attaches']) || !is_numeric($data['max_attaches'])) $data['max_attaches'] = 5;
 			
@@ -531,16 +526,16 @@ Class StatModule extends Module {
 	 * errors in the future
 	 * 
 	 */
-	public function add() {
-		
+	public function add()
+    {
 		//turn access
-		$this->ACL->turn(array('stat', 'add_materials'));
+		$this->ACL->turn(array($this->module, 'add_materials'));
 		if (!isset($_POST['title']) 
 		|| !isset($_POST['mainText']) 
-		|| !isset($_POST['cats_selector'])) {
+		|| !isset($_POST['cats_selector'])
+		|| !is_numeric($_POST['cats_selector'])) {
 			redirect('/');
 		}
-		if (!is_numeric($_POST['cats_selector'])) redirect('/');
 		$error  = '';
 		
 		
@@ -553,10 +548,10 @@ Class StatModule extends Module {
 		
 		
 		$fields = array('description', 'tags', 'sourse', 'sourse_email', 'sourse_site');
-		$fields_settings = $this->Register['Config']->read('fields', 'stat');
+		$fields_settings = $this->Register['Config']->read('fields', $this->module);
 		foreach ($fields as $field) {
 			if (empty($_POST[$field]) && in_array($field, $fields_settings)) {
-				$error = $error.'<li>' . __('Empty field') . ' "' . $field . '"</li>'."\n";
+				$error = $error . '<li>' . __('Empty field') . ' "' . $field . '"</li>' . "\n";
 				$$field = null;
 			} else {
 				$$field = trim($_POST[$field]);
@@ -575,7 +570,7 @@ Class StatModule extends Module {
 			$_SESSION['viewMessage'] = array_merge(array('title' => null, 'mainText' => null, 'in_cat' => $in_cat,
 				'description' => null, 'tags' => null, 'sourse' => null, 'sourse_email' => null, 
 				'sourse_site' => null, 'commented' => null, 'available' => null), $_POST);
-			redirect('/stat/add_form/');
+			redirect('/' . $this->module . '/add_form/');
 		}
 
 		// Check fields
@@ -586,18 +581,23 @@ Class StatModule extends Module {
 			$error = $error.'<li>' . __('Empty field "title"') . '</li>'."\n";
 		elseif (!$valobj->cha_val($title, V_TITLE))  
 			$error = $error.'<li>' . __('Wrong chars in "title"') . '</li>'."\n";
+			
+			
+		$max_lenght = $this->Register['Config']->read('max_lenght', $this->module);
+		if ($max_lenght <= 0) $max_lenght = 1000;
+			
 		if (empty($add))                    		 
-			$error = $error.'<li>' . __('Empty field "material"') . '</li>'."\n";
-		else if (mb_strlen($add) > Config::read('max_lenght', 'stat'))
-			$error = $error .'<li>'. sprintf(__('Wery big "material"'), Config::read('max_lenght', 'stat')) .'</li>'."\n";
+			$error = $error . '<li>' . __('Empty field "material"') . '</li>' . "\n";
+		else if (mb_strlen($add) > $max_lenght)
+			$error = $error . '<li>' . sprintf(__('Wery big "material"'), $max_lenght) . '</li>' . "\n";
 		if (!empty($tags) && !$valobj->cha_val($tags, V_TITLE)) 
-			$error = $error.'<li>' . __('Wrong chars in "tags"') . '</li>'."\n";
+			$error = $error . '<li>' . __('Wrong chars in "tags"') . '</li>' . "\n";
 		if (!empty($sourse) && !$valobj->cha_val($sourse, V_TITLE)) 
-			$error = $error.'<li>' . __('Wrong chars in "sourse"') . '</li>'."\n";
+			$error = $error . '<li>' . __('Wrong chars in "sourse"') . '</li>' . "\n";
 		if (!empty($sourse_email) && !$valobj->cha_val($sourse_email, V_MAIL)) 
-			$error = $error.'<li>' . __('Wrong chars in "email"') . '</li>'."\n";
+			$error = $error . '<li>' . __('Wrong chars in "email"') . '</li>' . "\n";
 		if (!empty($sourse_site) && !$valobj->cha_val($sourse_site, V_URL)) 
-			$error = $error.'<li>' . __('Wrong chars in "sourse site"') . '</li>'."\n";
+			$error = $error . '<li>' . __('Wrong chars in "sourse site"') . '</li>' . "\n";
 
 			
 		// Check attaches size and format
@@ -621,16 +621,17 @@ Class StatModule extends Module {
 				&& $_FILES[$attach_name]['type'] != 'image/gif'
 				&& $_FILES[$attach_name]['type'] != 'image/png')
 				|| !in_array(strtolower($ext), $img_extentions)) {
-					$error .= '<li>' . __('Wrong file format') . '</li>'."\n";
+					$error .= '<li>' . __('Wrong file format') . '</li>' . "\n";
 				}
 			}
 		}
 			
-		
-		$categoryModel = ucfirst($this->module) . 'SectionsModel';
-		$categoryModel = new $categoryModel;
-		$cat = $categoryModel->getCollection(array('id' => $in_cat));
-		if (empty($cat)) $error .= '<li>' . __('Can not find category') . '</li>'."\n";
+			
+		if (!empty($in_cat)) {
+			$categoryModel = $this->Register['ModManager']->getModelInstance($this->module . 'Sections');
+			$cat = $categoryModel->getById($in_cat);
+			if (empty($cat)) $error .= '<li>' . __('Can not find category') . '</li>'."\n";
+		}
 			
 			
 		// Errors
@@ -640,34 +641,33 @@ Class StatModule extends Module {
 				'sourse_site' => null, 'commented' => null, 'available' => null), $_POST);
 			$_SESSION['FpsForm']['error']   = '<p class="errorMsg">' . __('Some error in form') . '</p>'.
 				"\n".'<ul class="errorMsg">' . "\n" . $error . '</ul>' . "\n";
-			redirect('/stat/add_form/');
+			redirect('/' . $this->module . '/add_form/');
 		}
 
 		
-		if (!$this->ACL->turn(array('stat', 'record_comments_management'), false)) $commented = '1';
-		if (!$this->ACL->turn(array('stat', 'hide_material'), false)) $available = '1';
+		if (!$this->ACL->turn(array($this->module, 'record_comments_management'), false)) $commented = '1';
+		if (!$this->ACL->turn(array($this->module, 'hide_material'), false)) $available = '1';
 
 		// Защита от того, чтобы один пользователь не добавил
 		// 100 материалов за одну минуту
 		if ( isset( $_SESSION['unix_last_post'] ) and ( time()-$_SESSION['unix_last_post'] < 10 ) ) {
-			return $this->showInfoMessage(__('Your message has been added'), '/stat/');
+			return $this->showInfoMessage(__('Your message has been added'), '/' . $this->module . '/');
 		}
 		
-
 		
 		// Auto tags generation
 		if (empty($tags)) {
 			$TagGen = new MetaTags;
 			$tags = $TagGen->getTags($add);
 			$tags = (!empty($tags) && is_array($tags)) ? implode(',', array_keys($tags)) : '';
-		}		
-	
+		}
+		
 		
 		//remove cache
 		$this->Register['Cache']->clean(CACHE_MATCHING_ANY_TAG, array('module_' . $this->module));
-		$this->Register['DB']->cleanSqlCache();
+		$this->DB->cleanSqlCache();
 		// Формируем SQL-запрос на добавление темы	
-		$add = mb_substr($add, 0, $this->Register['Config']->read('max_lenght', $this->module));
+		$add = mb_substr($add, 0, $max_lenght);
 		$res = array(
 			'title'        => $title,
 			'main'         => $add,
@@ -681,7 +681,7 @@ Class StatModule extends Module {
 			'sourse_site'  => $sourse_site,
 			'commented'    => $commented,
 			'available'    => $available,
-			'view_on_home' => '1',
+			'view_on_home' => $cat->getView_on_home(),
 		);
 		$className = ucfirst($this->module) . 'Entity';
 		$new = new $className($res);
@@ -701,9 +701,9 @@ Class StatModule extends Module {
 		
 		//clean cache
 		$this->Register['Cache']->clean(CACHE_MATCHING_TAG, array('module_' . $this->module));
-		$this->Register['DB']->cleanSqlCache();
-		if ($this->Log) $this->Log->write('adding stat', 'ent. id(' . $last_id . ')');
-		return $this->showInfoMessage(__('Material successful added'), '/stat/view/' . $last_id);				  
+		$this->DB->cleanSqlCache();
+		if ($this->Log) $this->Log->write('adding ' . $this->module, $this->module . ' id(' . $last_id . ')');
+		return $this->showInfoMessage(__('Material successful added'), '/' . $this->module . '/view/' . $last_id);				  
 	}
 
 
@@ -729,7 +729,7 @@ Class StatModule extends Module {
 		$this->Model->bindModel('category');
 		$entity = $this->Model->getById($id);
 		
-		if (count($entity) == 0) redirect('/stat/');
+		if (!$entity) redirect('/' . $this->module . '/');
 		
 		
 		if (is_object($this->AddFields) && count($entity) > 0) {
@@ -739,14 +739,12 @@ Class StatModule extends Module {
 		
 		
 		//turn access
-		if (!$this->ACL->turn(array('stat', 'edit_materials'), false) 
+		if (!$this->ACL->turn(array($this->module, 'edit_materials'), false) 
 		&& (!empty($_SESSION['user']['id']) && $entity->getAuthor()->getId() == $_SESSION['user']['id'] 
-		&& $this->ACL->turn(array('stat', 'edit_mine_materials'), false)) === false) {
-			return $this->showInfoMessage(__('Permission denied'), '/stat/');
+		&& $this->ACL->turn(array($this->module, 'edit_mine_materials'), false)) === false) {
+			return $this->showInfoMessage(__('Permission denied'), '/' . $this->module . '/');
 		}
-		
-		
-		$attaches = $entity->getAttaches();
+
 		
 		$this->Register['current_vars'] = $entity;
 		
@@ -766,38 +764,34 @@ Class StatModule extends Module {
 			'commented' 	=> '', 
 			'available' 	=> '',
 		);
-		$data = Validate::getCurrentInputsValues($entity, $data);
-
+		$markers = Validate::getCurrentInputsValues($entity, $data);
 		
-        $preview = $this->Parser->getPreview($data->getMain());
-        $errors = $this->Parser->getErrors();
+		
+        $markers->setPreview($this->Parser->getPreview($markers->getMain()));
+        $markers->setErrors($this->Parser->getErrors());
         if (isset($_SESSION['viewMessage'])) unset($_SESSION['viewMessage']);
         if (isset($_SESSION['FpsForm'])) unset($_SESSION['FpsForm']);
-		
-		$html = '';
-        if (!empty($preview)) $html .= $preview;
-        else if (!empty($errors)) $html .= $errors;
 
 		
-		$className = $this->Register['ModManager']->getModelNameFromModule($this->module . 'Sections');
-		$sectionModel = new $className;
-		$cats = $sectionModel->getCollection();
-		$selectedCatId = ($data->getIn_cat()) ? $data->getIn_cat() : $data->getCategory_id();
+		$sectionsModel = $this->Register['ModManager']->getModelInstance($this->module . 'Sections');
+		$cats = $sectionsModel->getCollection();
+		$selectedCatId = ($markers->getIn_cat()) ? $markers->getIn_cat() : $markers->getCategory_id();
 		$cats_change = $this->_buildSelector($cats, $selectedCatId);
 		
 		
 		//comments and hide
-		$commented = ($data->getCommented()) ? 'checked="checked"' : '';
-		if (!$this->ACL->turn(array('stat', 'record_comments_management'), false)) $commented .= ' disabled="disabled"';
-		$available = ($data->getAvailable()) ? 'checked="checked"' : '';
-		$action = get_url('/stat/update/' . $data->getId());
+		$commented = ($markers->getCommented()) ? 'checked="checked"' : '';
+		if (!$this->ACL->turn(array($this->module, 'record_comments_management'), false)) $commented .= ' disabled="disabled"';
+		$available = ($markers->getAvailable()) ? 'checked="checked"' : '';
+        if (!$this->ACL->turn(array('loads', 'hide_material'), false)) $available .= ' disabled="disabled"';
+		$markers->setAction(get_url('/' . $this->module . '/update/' . $markers->getId()));
 		
 		
-		$data->setCommented($commented);
-		$data->setAvailable($available);
+		$markers->setCommented($commented);
+		$markers->setAvailable($available);
 		
 		
-		$attaches = $data->getAttaches();
+		$attaches = $markers->getAttaches();
 		$attDelButtons = '';
         if (count($attaches)) {
             foreach ($attaches as $key => $attach) {
@@ -807,9 +801,8 @@ Class StatModule extends Module {
         }
 		
 		
-		$markers = $data;
-		$markers->setMain_text($data->getMaintext());
-		$markers->setAction($action);
+
+
 		$markers->setCats_selector($cats_change);
 		$markers->setAttaches_delete($attDelButtons);
 		$markers->setMax_attaches($this->Register['Config']->read('max_attaches', $this->module));
@@ -835,7 +828,8 @@ Class StatModule extends Module {
 	 * errors in the future
 	 * 
 	 */
-	public function update($id = null) {
+	public function update($id = null)
+    {
 		// Если не переданы данные формы - функция вызвана по ошибке
 		if (!isset($id) 
 		|| !isset($_POST['title']) 
@@ -844,19 +838,19 @@ Class StatModule extends Module {
 			redirect('/');
 		}
 		$id = (int)$id;
-		if ($id < 1) redirect('/stat/');
+		if ($id < 1) redirect('/' . $this->module . '/');
 		$error = '';
 		
 
 		$target = $this->Model->getbyId($id);
-		if (!$target) redirect('/stat/');
+		if (!$target) redirect('/' . $this->module . '/');
 		
 		
 		//turn access
-		if (!$this->ACL->turn(array('stat', 'edit_materials'), false) 
+		if (!$this->ACL->turn(array($this->module, 'edit_materials'), false) 
 		&& (!empty($_SESSION['user']['id']) && $target->getAuthor_id() == $_SESSION['user']['id'] 
-		&& $this->ACL->turn(array('stat', 'edit_mine_materials'), false)) === false) {
-			return $this->showInfoMessage(__('Permission denied'), '/stat/');
+		&& $this->ACL->turn(array($this->module, 'edit_mine_materials'), false)) === false) {
+			return $this->showInfoMessage(__('Permission denied'), '/' . $this->module . '/');
 		}
 		
 		
@@ -870,7 +864,7 @@ Class StatModule extends Module {
 		
 		$valobj = $this->Register['Validate'];
 		$fields = array('description', 'tags', 'sourse', 'sourse_email', 'sourse_site');
-		$fields_settings = $this->Register['Config']->read('fields', 'stat');
+		$fields_settings = $this->Register['Config']->read('fields', $this->module);
 		foreach ($fields as $field) {
 			if (empty($_POST[$field]) && in_array($field, $fields_settings)) {
 				$error = $error.'<li>' . __('Empty field') . '"' . $field . '"</li>'."\n";
@@ -893,34 +887,41 @@ Class StatModule extends Module {
 			$_SESSION['viewMessage'] = array_merge(array('title' => null, 'mainText' => null, 'in_cat' => $in_cat,
 				'description' => null, 'tags' => null, 'sourse' => null, 'sourse_email' => null, 
 				'sourse_site' => null, 'commented' => null, 'available' => null), $_POST);
-			redirect('/stat/edit_form/' . $id);
+			redirect('/' . $this->module . '/edit_form/' . $id);
 		}
 		
 		
 		// Check fields
+		if (empty($in_cat))                     	
+			$error = $error . '<li>' . __('Category not selected') . '</li>'."\n";
 		if (empty($title))                   	
 			$error = $error.'<li>' . __('Empty field "title"') . '</li>'."\n";
-		if (!$valobj->cha_val($title, V_TITLE))  	
+		else if (!$valobj->cha_val($title, V_TITLE))  	
 			$error = $error.'<li>' . __('Wrong chars in "title"') . '</li>'."\n";
+			
+			
+		$max_lenght = $this->Register['Config']->read('max_lenght', $this->module);
+		if ($max_lenght <= 0) $max_lenght = 10000;
+			
 		if (empty($edit))                 		
-			$error = $error.'<li>' . __('Empty field "material"') . '</li>'."\n";
-		else if (mb_strlen($edit) > Config::read('max_lenght', 'stat'))
-			$error = $error . '<li>' . sprintf(__('Wery big "material"'), Config::read('max_lenght', 'stat')) .'</li>'."\n";
+			$error = $error . '<li>' . __('Empty field "material"') . '</li>' . "\n";
+		else if (mb_strlen($edit) > $max_lenght)
+			$error = $error . '<li>' . sprintf(__('Wery big "material"'), $max_lenght) .'</li>' . "\n";
 		if (!empty($tags) && !$valobj->cha_val($tags, V_TITLE)) 
-			$error = $error.'<li>' . __('Wrong chars in "tags"') . '</li>'."\n";
+			$error = $error . '<li>' . __('Wrong chars in "tags"') . '</li>' . "\n";
 		if (!empty($sourse) && !$valobj->cha_val($sourse, V_TITLE)) 
-			$error = $error.'<li>' . __('Wrong chars in "sourse"') . '</li>'."\n";
+			$error = $error . '<li>' . __('Wrong chars in "sourse"') . '</li>' . "\n";
 		if (!empty($sourse_email) && !$valobj->cha_val($sourse_email, V_MAIL)) 
-			$error = $error.'<li>' . __('Wrong chars in "email"') . '</li>'."\n";
+			$error = $error . '<li>' . __('Wrong chars in "email"') . '</li>' . "\n";
 		if (!empty($sourse_site) && !$valobj->cha_val($sourse_site, V_URL)) 
-			$error = $error.'<li>' . __('Wrong chars in "sourse site"') . '</li>'."\n";
+			$error = $error . '<li>' . __('Wrong chars in "sourse site"') . '</li>' . "\n";
 		
 		
-		
-		$className = $this->Register['ModManager']->getModelNameFromModule($this->module . 'Sections');
-		$catModel = new $className;
-		$category = $catModel->getById($in_cat);
-		if (!$category) $error = $error.'<li>' . __('Can not find category') . '</li>'."\n";
+		if (!empty($in_cat)) {
+			$catModel = $this->Register['ModManager']->getModelInstance($this->module . 'Sections');
+			$category = $catModel->getById($in_cat);
+			if (!$category) $error = $error . '<li>' . __('Can not find category') . '</li>' . "\n";
+		}
 		
 
         // Check attaches size and format
@@ -943,14 +944,14 @@ Class StatModule extends Module {
 
 
                 if ($_FILES[$attach_name]['size'] > $max_attach_size) {
-                    $error .= '<li>' . sprintf(__('Wery big file'), $i, round(($max_attach_size / 1000), 2)) . '</li>'."\n";
+                    $error .= '<li>' . sprintf(__('Wery big file'), $i, round(($max_attach_size / 1000), 2)) . '</li>' . "\n";
                 }
                 if (($_FILES[$attach_name]['type'] != 'image/jpeg'
                 && $_FILES[$attach_name]['type'] != 'image/jpg'
                 && $_FILES[$attach_name]['type'] != 'image/gif'
                 && $_FILES[$attach_name]['type'] != 'image/png')
                 || !in_array(strtolower($ext), $img_extentions)) {
-                    $error .= '<li>' . __('Wrong file format') . '</li>'."\n";
+                    $error .= '<li>' . __('Wrong file format') . '</li>' . "\n";
                 }
             }
         }
@@ -958,19 +959,23 @@ Class StatModule extends Module {
 		
 
 		// Errors
-		if (!empty( $error )) {
+		if (!empty($error)) {
 			$_SESSION['FpsForm'] = array_merge(array('title' => null, 'mainText' => null, 'in_cat' => $in_cat, 
 				'description' => null, 'tags' => null, 'sourse' => null, 'sourse_email' => null, 
 				'sourse_site' => null, 'commented' => null, 'available' => null), $_POST);
 			$_SESSION['FpsForm']['error']   = '<p class="errorMsg">' . __('Some error in form') . '</p>'
 				."\n".'<ul class="errorMsg">'."\n".$error.'</ul>'."\n";
-			redirect('/stat/edit_form/' . $id);
+			redirect('/' . $this->module . '/edit_form/' . $id);
 		}
 		
 
-		if (!$this->ACL->turn(array('stat', 'record_comments_management'), false)) $commented = '1';
-		if (!$this->ACL->turn(array('stat', 'hide_material'), false)) $available = '1';
+		if (!$this->ACL->turn(array($this->module, 'record_comments_management'), false)) $commented = '1';
+		if (!$this->ACL->turn(array($this->module, 'hide_material'), false)) $available = '1';
 		
+		
+		//remove cache
+		$this->Cache->clean(CACHE_MATCHING_TAG, array('module_' . $this->module, 'record_id_' . $id));
+		$this->DB->cleanSqlCache();
 		
 		
 		// Auto tags generation
@@ -980,12 +985,7 @@ Class StatModule extends Module {
 			$tags = (!empty($tags) && is_array($tags)) ? implode(',', array_keys($tags)) : '';
 		}
 		
-		
-		//remove cache
-		$this->Cache->clean(CACHE_MATCHING_TAG, array('module_stat', 'record_id_' . $id));
-		$this->Register['DB']->cleanSqlCache();
-		
-		$edit = mb_substr($edit, 0, $this->Register['Config']->read('max_lenght', 'stat'));
+		$edit = mb_substr($edit, 0, $max_lenght);
 		$data = array(
 			'title' 	   => $title,
 			'main' 		   => $edit,
@@ -996,7 +996,7 @@ Class StatModule extends Module {
 			'sourse_email' => $sourse_email,
 			'sourse_site'  => $sourse_site,
 			'commented'    => $commented,
-			'available'    => $available,
+			'available'    => $category->getView_on_home(),
 		);
 		$target->__construct($data);
 		$target->save();
@@ -1005,7 +1005,7 @@ Class StatModule extends Module {
 		}
 		
 		
-		if ($this->Log) $this->Log->write('editing stat', 'ent. id(' . $id . ')');
+		if ($this->Log) $this->Log->write('editing ' . $this->module, $this->module . ' id(' . $id . ')');
 		return $this->showInfoMessage(__('Operation is successful'), getReferer());
 	}
 
@@ -1017,7 +1017,8 @@ Class StatModule extends Module {
 	 *
 	 * @param int $id
 	 */
-	public function delete($id = null) {
+	public function delete($id = null)
+    {
 		$this->cached = false;
 		$id = (int)$id;
 		if ($id < 1) redirect('/');
@@ -1028,44 +1029,46 @@ Class StatModule extends Module {
 		
 		
 		//turn access
-		if (!$this->ACL->turn(array('stat', 'delete_materials'), false) 
+		if (!$this->ACL->turn(array($this->module, 'delete_materials'), false) 
 		&& (!empty($_SESSION['user']['id']) && $target->getAuthor_id() == $_SESSION['user']['id'] 
-		&& $this->ACL->turn(array('stat', 'delete_mine_materials'), false)) === false) {
-			return showInfoMessage(__('Permission denied'), '/stat/');
+		&& $this->ACL->turn(array($this->module, 'delete_mine_materials'), false)) === false) {
+			return showInfoMessage(__('Permission denied'), '/' . $this->module . '/');
 		}
 		
 		
 		//remove cache
-		$this->Cache->clean(CACHE_MATCHING_TAG, array('module_stat', 'record_id_' . $id));
-		$this->Register['DB']->cleanSqlCache();
+		$this->Cache->clean(CACHE_MATCHING_TAG, array('module_' . $this->module, 'record_id_' . $id));
+		$this->DB->cleanSqlCache();
 
 		$target->delete();
 		
 		$user_id = (!empty($_SESSION['user']['id'])) ? intval($_SESSION['user']['id']) : 0;
-		if ($this->Log) $this->Log->write('delete stat', 'ent. id(' . $id . ') user id('.$user_id.')');
-		return $this->showInfoMessage(__('Operation is successful'), getReferer());
+		if ($this->Log) $this->Log->write('delete ' . $this->module, $this->module . ' id(' . $id . ') user id('.$user_id.')');
+		return $this->showInfoMessage(__('Operation is successful'), '/' . $this->module . '/');
 	}
 
-
+	
 	
 	/**
-	* add comment to stat
+	* add comment to entity
 	*
-	* @id (int)    stat ID
+	* @id (int)    entity ID
 	* @return      info message
 	*/
-	public function add_comment($id = null) {
+	public function add_comment($id = null)
+    {
 		include_once(ROOT . '/sys/inc/includes/add_comment.php');
 	}
 	
 	
 	/**
-	* add comment form to stat
+	* add comment form to entity
 	*
-	* @id (int)    stat ID
+	* @id (int)    entity ID
 	* @return      html form
 	*/
-	private function _add_comment_form($id = null) {
+	private function _add_comment_form($id = null)
+    {
 		include_once(ROOT . '/sys/inc/includes/_add_comment_form.php');
 		return $html;
 	}
@@ -1073,12 +1076,13 @@ Class StatModule extends Module {
 	
 	
 	/**
-	* edit comment form to stat
+	* edit comment form to entity
 	*
 	* @id (int)    comment ID
 	* @return      html form
 	*/
-	public function edit_comment_form($id = null) {
+	public function edit_comment_form($id = null)
+    {
 		include_once(ROOT . '/sys/inc/includes/edit_comment_form.php');
 	}
 	
@@ -1090,19 +1094,21 @@ Class StatModule extends Module {
 	* @id (int)    comment ID
 	* @return      info message
 	*/
-	public function update_comment($id = null) {
+	public function update_comment($id = null)
+    {
 		include_once(ROOT . '/sys/inc/includes/update_comment.php');
 	}
 	
 	
 	
 	/**
-	* get comments for stat
+	* get comments for entity
 	*
-	* @id (int)    stat ID
+	* @id (int)    entity ID
 	* @return      html comments list
 	*/
-	private function _get_comments($entity = null) {
+	private function _get_comments($entity = null)
+    {
 		include_once(ROOT . '/sys/inc/includes/_get_comments.php');
 		return $html;
 	}
@@ -1115,7 +1121,8 @@ Class StatModule extends Module {
 	* @id (int)    comment ID
 	* @return      info message
 	*/
-	public function delete_comment($id = null) {
+	public function delete_comment($id = null)
+    {
 		include_once(ROOT . '/sys/inc/includes/delete_comment.php');
 	}	
 	
@@ -1126,19 +1133,20 @@ Class StatModule extends Module {
 	*
 	* update date by record also up record in recods list
 	*/
-	public function upper($id) {
+	public function upper($id)
+    {
 		//turn access
-		$this->ACL->turn(array('stat', 'up_materials'));
+		$this->ACL->turn(array($this->module, 'up_materials'));
 		$id = (int)$id;
-		if ($id < 1) redirect('/stat/');
+		if ($id < 1) redirect('/' . $this->module . '/');
 
 		
 		$entity = $this->Model->getById($id);
-		if (!$entity) redirect('/stat/');
+		if (!$entity) redirect('/' . $this->module . '/');
 		
 		$entity->setDate(date("Y-m-d H-i-s"));
 		$entity->save();
-		return $this->showInfoMessage(__('Operation is successful'), '/stat/');
+		return $this->showInfoMessage(__('Operation is successful'), '/' . $this->module . '/');
 	}
 
 	
@@ -1148,19 +1156,20 @@ Class StatModule extends Module {
 	*
 	* allow record be on home page
 	*/
-	public function on_home($id) {
+	public function on_home($id)
+    {
 		//turn access
-		$this->ACL->turn(array('stat', 'on_home'));
+		$this->ACL->turn(array($this->module, 'on_home'));
 		$id = (int)$id;
-		if ($id < 1) redirect('/stat/');
+		if ($id < 1) redirect('/' . $this->module . '/');
 
 		
 		$entity = $this->Model->getById($id);
-		if (!$entity) redirect('/stat/');
+		if (!$entity) redirect('/' . $this->module . '/');
 		
 		$entity->setView_on_home('1');
 		$entity->save();
-		return $this->showInfoMessage(__('Operation is successful'), '/stat/');
+		return $this->showInfoMessage(__('Operation is successful'), '/' . $this->module . '/');
 	}
 
 
@@ -1170,19 +1179,20 @@ Class StatModule extends Module {
 	*
 	* denied record be on home page
 	*/
-	public function off_home($id) {
+	public function off_home($id)
+    {
 		//turn access
-		$this->ACL->turn(array('stat', 'on_home'));
+		$this->ACL->turn(array($this->module, 'on_home'));
 		$id = (int)$id;
-		if ($id < 1) redirect('/stat/');
+		if ($id < 1) redirect('/' . $this->module . '/');
 
 		
 		$entity = $this->Model->getById($id);
-		if (!$entity) redirect('/stat/');
+		if (!$entity) redirect('/' . $this->module . '/');
 		
 		$entity->setView_on_home('0');
 		$entity->save();
-		return $this->showInfoMessage(__('Operation is successful'), '/stat/');
+		return $this->showInfoMessage(__('Operation is successful'), '/' . $this->module . '/');
 	}
 	
 	
@@ -1192,10 +1202,11 @@ Class StatModule extends Module {
 	*
 	* fix or unfix record on top on home page
 	*/
-	public function fix_on_top($id) {
-		$this->ACL->turn(array('stat', 'on_home'));
+	public function fix_on_top($id)
+    {
+		$this->ACL->turn(array($this->module, 'on_home'));
 		$id = (int)$id;
-		if ($id < 1) redirect('/stat/');
+		if ($id < 1) redirect('/' . $this->module . '/');
 
 		$target = $this->Model->getById($id);
 		if (!$target) redirect('/');
@@ -1204,10 +1215,11 @@ Class StatModule extends Module {
 		$dest = ($curr_state) ? '0' : '1';
 		$target->setOn_home_top($dest);
 		$target->save();
-		return $this->showInfoMessage(__('Operation is successful'), '/stat/');
+		return $this->showInfoMessage(__('Operation is successful'), '/' . $this->module . '/');
 	}
 	
-		
+	
+	
 	
 	
 	/**
@@ -1216,50 +1228,57 @@ Class StatModule extends Module {
 	*
 	* create and return admin bar
 	*/
-	protected function _getAdminBar($record) {
+	protected function _getAdminBar($record)
+    {
 		$moder_panel = '';
-		$id = $record->getId();
-		
-		if ($this->ACL->turn(array('stat', 'edit_materials'), false) 
-		|| (!empty($_SESSION['user']['id']) && $record->getAuthor_id() == $_SESSION['user']['id'] 
-		&& $this->ACL->turn(array('stat', 'edit_mine_materials'), false))) {
-			$moder_panel .= get_link(get_img('/sys/img/edit_16x16.png'), '/stat/edit_form/' . $id) . '&nbsp;';
+        $uid = $record->getAuthor_id();
+        $id = $record->getId();
+
+
+		if ($this->ACL->turn(array($this->module, 'edit_materials'), false) 
+		|| (!empty($_SESSION['user']['id']) && $uid == $_SESSION['user']['id']
+		&& $this->ACL->turn(array($this->module, 'edit_mine_materials'), false))) {
+			$moder_panel .= get_link(get_img('/sys/img/edit_16x16.png'), '/' . $this->module . '/edit_form/' . $id) . '&nbsp;';
 		}
 		
-		if ($this->ACL->turn(array('stat', 'up_materials'), false)) {
-			$moder_panel .= get_link(get_img('/sys/img/star.png'), 
-			'/stat/fix_on_top/' . $id, array('onClick' => "return confirm('" . __('Are you sure') . "')")) . '&nbsp;';
-			$moder_panel .= get_link(get_img('/sys/img/up_arrow_16x16.png'), 
-			'/stat/upper/' . $id, array('onClick' => "return confirm('" . __('Are you sure') . "')")) . '&nbsp;';
+		if ($this->ACL->turn(array($this->module, 'up_materials'), false)) {
+			$moder_panel .= get_link(get_img('/sys/img/star.png'), '/' . $this->module . '/fix_on_top/' . $id,
+				array('onClick' => "return confirm('" . __('Are you sure') . "')")) . '&nbsp;';
+			$moder_panel .= get_link(get_img('/sys/img/up_arrow_16x16.png'), '/' . $this->module . '/upper/' . $id,
+				array('onClick' => "return confirm('" . __('Are you sure') . "')")) . '&nbsp;';
 		}
-		if ($this->ACL->turn(array('stat', 'on_home'), false)) {
-				if ($record->getView_on_home() == 1) {
-					$moder_panel .= get_link(get_img('/sys/img/round_ok.png', array('title' => __('On home'))), 
-					'/stat/off_home/' . $id, array('onClick' => "return confirm('" . __('Are you sure') . "')")) . '&nbsp;';
+		
+		if ($this->ACL->turn(array($this->module, 'on_home'), false)) {
+				if ($record->getvView_on_home() == 1) {
+					$moder_panel .= get_link(get_img('/sys/img/round_ok.png', array('alt' => __('On home'), 'title' => __('On home'))), 
+						'/' . $this->module . '/off_home/' . $id, array('onClick' => "return confirm('" . __('Are you sure') . "')")) . '&nbsp;';
 				} else {
-					$moder_panel .= get_link(get_img('/sys/img/round_not_ok.png', array('title' => __('On home'))), 
-					'/stat/on_home/' . $id, array('onClick' => "return confirm('" . __('Are you sure') . "')")) . '&nbsp;';
+					$moder_panel .= get_link(get_img('/sys/img/round_not_ok.png', array('alt' => __('On home'), 'title' => __('On home'))), 
+						'/' . $this->module . '/on_home/' . $id, array('onClick' => "return confirm('" . __('Are you sure') . "')")) . '&nbsp;';
 				}
 		}
 		
-		if ($this->ACL->turn(array('stat', 'delete_materials'), false) 
-		|| (!empty($_SESSION['user']['id']) && $record->getAuthor_id() == $_SESSION['user']['id'] 
-		&& $this->ACL->turn(array('stat', 'delete_mine_materials'), false))) {
-			$moder_panel .= get_link(get_img('/sys/img/delete_16x16.png'), 
-			'/stat/delete/' . $id, array('onClick' => "return confirm('" . __('Are you sure') . "')")) . '&nbsp;';
+		if ($this->ACL->turn(array($this->module, 'delete_materials'), false) 
+		|| (!empty($_SESSION['user']['id']) && $uid == $_SESSION['user']['id']
+		&& $this->ACL->turn(array($this->module, 'delete_mine_materials'), false))) {
+			$moder_panel .= get_link(get_img('/sys/img/delete_16x16.png'), '/' . $this->module . '/delete/' . $id,
+				array('onClick' => "return confirm('" . __('Are you sure') . "')")) . '&nbsp;';
 		}
+		
 		return $moder_panel;
 	}
-	
-	
-	
+
+
+
 
     /**
-     * RSS 
+     * RSS for news
 	 *
      */
-    function rss() {
+    public function rss() {
 		include_once ROOT . '/sys/inc/includes/rss.php';
-    }	
+    }
+	
 	
 }
+

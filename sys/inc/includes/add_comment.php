@@ -85,7 +85,7 @@ if (isset($_SESSION['unix_last_post']) and (time()-$_SESSION['unix_last_post'] <
 
 /* remove cache */
 $this->Cache->clean(CACHE_MATCHING_TAG, array('module_' . $this->module, 'record_id_' . $id));
-$this->Register['DB']->cleanSqlCache();
+$this->DB->cleanSqlCache();
 
 
 /* save data */	

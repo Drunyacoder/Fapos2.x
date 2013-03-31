@@ -4,12 +4,12 @@
 | @Author:       Andrey Brykin (Drunya)        |
 | @Email:        drunyacoder@gmail.com         |
 | @Site:         http://fapos.net              |
-| @Version:      1.7.9                         |
+| @Version:      1.8.0                         |
 | @Project:      CMS                           |
 | @Package       CMS Fapos                     |
 | @Subpackege    News Module                   |
 | @Copyright     ©Andrey Brykin 2010-2013      |
-| @Last mod      2013/02/22                    |
+| @Last mod      2013/03/31                    |
 |----------------------------------------------|
 |											   |
 | any partial or not partial extension         |
@@ -50,7 +50,7 @@ Class NewsModule extends Module {
 	public function index($tag = null)
     {
 		//turn access
-		$this->ACL->turn(array('news', 'view_list'));
+		$this->ACL->turn(array($this->module, 'view_list'));
 		
 		
 		//формируем блок со списком  разделов
@@ -71,7 +71,7 @@ Class NewsModule extends Module {
 		
 
 		$total = $this->Model->getTotal($query_params);
-		list ($pages, $page) = pagination( $total, Config::read('per_page', 'news'), '/news');
+		list ($pages, $page) = pagination($total, Config::read('per_page', $this->module), '/' . $this->module . '/');
 		$this->Register['pages'] = $pages;
 		$this->Register['page'] = $page;
 		$this->page_title .= ' (' . $page . ')';
@@ -79,8 +79,8 @@ Class NewsModule extends Module {
 
 		
 		$navi = array();
-		$navi['add_link'] = ($this->ACL->turn(array('news', 'add_materials'), false)) 
-			? get_link(__('Add material'), '/news/add_form/') : '';
+		$navi['add_link'] = ($this->ACL->turn(array($this->module, 'add_materials'), false)) 
+			? get_link(__('Add material'), '/' . $this->module . '/add_form/') : '';
 		$navi['navigation'] = $this->_buildBreadCrumbs();
 		$navi['pagination'] = $pages;
 		$navi['meta'] = __('Count all material') . $total;
@@ -95,7 +95,7 @@ Class NewsModule extends Module {
 	  
 		$params = array(
 			'page' => $page,
-			'limit' => $this->Register['Config']->read('per_page', 'news'),
+			'limit' => $this->Register['Config']->read('per_page', $this->module),
 			'order' => getOrderParam(__CLASS__),
 		);
 		$where = array();
@@ -116,25 +116,21 @@ Class NewsModule extends Module {
 
 
 		// create markets
-		$addParams = array();
 		foreach ($records as $result) {
 			$this->Register['current_vars'] = $result;
-			$_addParams = array();
+			$markers = array();
 			
 			
-			$_addParams['moder_panel'] = $this->_getAdminBar($result);
+			$markers['moder_panel'] = $this->_getAdminBar($result);
 			$entry_url = get_url(entryUrl($result, $this->module));
-			$_addParams['entry_url'] = $entry_url;
+			$markers['entry_url'] = $entry_url;
 			
-			
-			$announce = $result->getMain();
-			
-			
+
 			// Cut announce
-			$announce = $this->Textarier->getAnnounce($announce
+			$announce = $this->Textarier->getAnnounce($result->getMain()
 				, $entry_url
 				, 0 
-				, $this->Register['Config']->read('announce_lenght', 'news')
+				, $this->Register['Config']->read('announce_lenght', $this->module)
 				, $result
 			);
 			
@@ -157,11 +153,11 @@ Class NewsModule extends Module {
 			}
 			
 
-			$_addParams['announce'] = $announce;
+			$markers['announce'] = $announce;
 			
 			
-			$_addParams['category_url'] = get_url('/news/category/' . $result->getCategory_id());
-			$_addParams['profile_url'] = getProfileUrl($result->getAuthor()->getId());
+			$markers['category_url'] = get_url('/' . $this->module . '/category/' . $result->getCategory_id());
+			$markers['profile_url'] = getProfileUrl($result->getAuthor()->getId());
 			$result->setTags(explode(',', $result->getTags()));
 
 
@@ -172,7 +168,7 @@ Class NewsModule extends Module {
 			));
 		
 
-			$result->setAdd_markers($_addParams);
+			$result->setAdd_markers($markers);
 		}
 		
 		
@@ -195,17 +191,17 @@ Class NewsModule extends Module {
 	public function category($id = null)
     {
 		//turn access
-		$this->ACL->turn(array('news', 'view_list'));
+		$this->ACL->turn(array($this->module, 'view_list'));
 		$id = intval($id);
 		if (empty($id) || $id < 1) redirect('/');
 
 		
-		$SectionsModel = $this->_loadModel(ucfirst($this->module) . 'Sections');
+		$SectionsModel = $this->Register['ModManager']->getModelInstance($this->module . 'Sections');
 		$category = $SectionsModel->getById($id);
 		if (!$category)
-			return $this->showInfoMessage(__('Can not find category'), '/news/');
+			return $this->showInfoMessage(__('Can not find category'), '/' . $this->module . '/');
 		if (!$this->ACL->checkCategoryAccess($category->getNo_access())) 
-			return $this->showInfoMessage(__('Permission denied'), '/news/');
+			return $this->showInfoMessage(__('Permission denied'), '/' . $this->module . '/');
 		
 		
 		$this->page_title = h($category->getTitle()) . ' - ' . $this->page_title;
@@ -234,7 +230,7 @@ Class NewsModule extends Module {
 		
 
 		$total = $this->Model->getTotal($query_params);
-		list ($pages, $page) = pagination( $total, Config::read('per_page', 'news'), '/news');
+		list ($pages, $page) = pagination( $total, Config::read('per_page', $this->module), '/' . $this->model . '/');
 		$this->Register['pages'] = $pages;
 		$this->Register['page'] = $page;
 		$this->page_title .= ' (' . $page . ')';
@@ -242,8 +238,8 @@ Class NewsModule extends Module {
 
 		
 		$navi = array();
-		$navi['add_link'] = ($this->ACL->turn(array('news', 'add_materials'), false)) 
-			? get_link(__('Add material'), '/news/add_form/') : '';
+		$navi['add_link'] = ($this->ACL->turn(array($this->module, 'add_materials'), false)) 
+			? get_link(__('Add material'), '/' . $this->module . '/add_form/') : '';
 		$navi['navigation'] = $this->_buildBreadCrumbs($id);
 		$navi['pagination'] = $pages;
 		$navi['meta'] = __('Count material in cat') . $total;
@@ -259,7 +255,7 @@ Class NewsModule extends Module {
 	  
 		$params = array(
 			'page' => $page,
-			'limit' => Config::read('per_page', 'news'),
+			'limit' => Config::read('per_page', $this->module),
 			'order' => getOrderParam(__CLASS__),
 		);
 		$where = $query_params['cond'];
@@ -278,24 +274,20 @@ Class NewsModule extends Module {
 
 
 		// create markets
-		$addParams = array();
 		foreach ($records as $result) {
 			$this->Register['current_vars'] = $result;
-			$_addParams = array();
+			$markers = array();
 			
 			
-			$_addParams['moder_panel'] = $this->_getAdminBar($result);
+			$markers['moder_panel'] = $this->_getAdminBar($result);
 			$entry_url = get_url(entryUrl($result, $this->module));
-			$_addParams['entry_url'] = $entry_url;
+			$markers['entry_url'] = $entry_url;
 			
 			
-			$announce = $result->getMain();
-			
-			
-			$announce = $this->Textarier->getAnnounce($announce
+			$announce = $this->Textarier->getAnnounce($result->getMain()
 				, $entry_url
 				, 0 
-				, $this->Register['Config']->read('announce_lenght', 'news')
+				, $this->Register['Config']->read('announce_lenght', $this->module)
 				, $result
 			);
 			
@@ -317,11 +309,11 @@ Class NewsModule extends Module {
 				}
 			}
 
-			$_addParams['announce'] = $announce;
+			$markers['announce'] = $announce;
 			
 			
-			$_addParams['category_url'] = get_url('/news/category/' . $result->getCategory_id());
-			$_addParams['profile_url'] = getProfileUrl($result->getAuthor()->getId());
+			$markers['category_url'] = get_url('/' . $this->module . '/category/' . $result->getCategory_id());
+			$markers['profile_url'] = getProfileUrl($result->getAuthor()->getId());
 			$result->setTags(explode(',', $result->getTags()));
 
 
@@ -332,7 +324,7 @@ Class NewsModule extends Module {
 			));
 		
 
-			$result->setAdd_markers($_addParams);
+			$result->setAdd_markers($markers);
 		}
 		
 		
@@ -355,7 +347,7 @@ Class NewsModule extends Module {
 	public function view ($id = null)
     {
 		//turn access
-		$this->ACL->turn(array('news', 'view_materials'));
+		$this->ACL->turn(array($this->module, 'view_materials'));
 		$id = intval($id);
 		if (empty($id) || $id < 1) redirect('/');
 
@@ -368,9 +360,9 @@ Class NewsModule extends Module {
 		
 		if (empty($entity)) redirect('/error.php?ac=404');
 		if ($entity->getAvailable() == 0 && !$this->ACL->turn(array('other', 'can_see_hidden'), false)) 
-			return showInfoMessage(__('Permission denied'), '/news/');
+			return showInfoMessage(__('Permission denied'), '/' . $this->module . '/');
 		if (!$this->ACL->checkCategoryAccess($entity->getCategory()->getNo_access())) 
-			return showInfoMessage(__('Permission denied'), '/news/');
+			return showInfoMessage(__('Permission denied'), '/' . $this->module . '/');
 			
 		
 		// Some gemor with add fields
@@ -388,10 +380,10 @@ Class NewsModule extends Module {
 		//category block
 		$this->_getCatsTree($entity->getCategory()->getId());
 		/* COMMENT BLOCK */
-		if (Config::read('comment_active', 'news') == 1 
-		&& $this->ACL->turn(array('news', 'view_comments'), false) 
+		if (Config::read('comment_active', $this->module) == 1 
+		&& $this->ACL->turn(array($this->module, 'view_comments'), false) 
 		&& $entity->getCommented() == 1) {
-			if ($this->ACL->turn(array('news', 'add_comments'), false)) 
+			if ($this->ACL->turn(array($this->module, 'add_comments'), false)) 
 				$this->comments_form  = $this->_add_comment_form($id);
 			$this->comments  = $this->_get_comments($entity);
 		}
@@ -406,8 +398,8 @@ Class NewsModule extends Module {
 		if (!empty($description)) $this->page_meta_description = h($description);
 		
 		$navi = array();
-		$navi['module_url'] = get_url('/news/');
-		$navi['category_url'] = get_url('/news/category/' . $entity->getCategory()->getId());
+		$navi['module_url'] = get_url('/' . $this->module . '/');
+		$navi['category_url'] = get_url('/' . $this->module . '/category/' . $entity->getCategory()->getId());
 		$navi['category_name'] = h($entity->getCategory()->getTitle());
 		$navi['navigation'] = $this->_buildBreadCrumbs($entity->getCategory()->getId());
 		$this->_globalize($navi);
@@ -423,8 +415,6 @@ Class NewsModule extends Module {
 		
 		
 		$announce = $entity->getMain();
-		
-		
 		$announce = $this->Textarier->print_page($announce, $entity->getAuthor()->getStatus(), $entity->getTitle());
 		
 		
@@ -446,6 +436,7 @@ Class NewsModule extends Module {
 		}
 
 		$markers['mainText'] = $announce;
+		$markers['main_text'] = $announce;
 		$entity->setAdd_markers($markers);
 		$entity->setTags(explode(',', $entity->getTags()));
 		
@@ -455,7 +446,7 @@ Class NewsModule extends Module {
 		
 		$entity->setViews($entity->getViews() + 1);
 		$entity->save();
-		$this->Register['DB']->cleanSqlCache();
+		$this->DB->cleanSqlCache();
 		
 		return $this->_view($source);
 	}
@@ -468,7 +459,7 @@ Class NewsModule extends Module {
 	public function add_form ()
     {
 		//turn access
-		$this->ACL->turn(array('news', 'add_materials'));
+		$this->ACL->turn(array($this->module, 'add_materials'));
 		$writer_status = (!empty($_SESSION['user']['status'])) ? $_SESSION['user']['status'] : 0;
 		
 		
@@ -490,35 +481,27 @@ Class NewsModule extends Module {
         $data = array('title' => null, 'mainText' => null, 'in_cat' => null, 'description' => null, 'tags' => null, 'sourse' => null, 'sourse_email' => null, 'sourse_site' => null, 'commented' => null, 'available' => null);
 		$data = array_merge($data, $markers);
         $data = Validate::getCurrentInputsValues($data);
-        $add = $data['mainText'];
-        //$entity = new NewsEntity($data);
 		
 		
         $data['preview'] = $this->Parser->getPreview($data['mainText']);
         $data['errors'] = $this->Parser->getErrors();
-        if (isset($_SESSION['viewMessage'])) {
-			$data = array_merge($data, $_SESSION['viewMessage']);
-			unset($_SESSION['viewMessage']);
-		}
-        if (isset($_SESSION['FpsForm'])) {
-			$data = array_merge($data, $_SESSION['FpsForm']);
-			unset($_SESSION['FpsForm']);
-		}
+        if (isset($_SESSION['viewMessage'])) unset($_SESSION['viewMessage']);
+        if (isset($_SESSION['FpsForm'])) unset($_SESSION['FpsForm']);
 		
 		
-		$SectionsModel = $this->_loadModel(ucfirst($this->module) . 'Sections');
+		$SectionsModel = $this->Register['ModManager']->getModelInstance($this->module . 'Sections');
 		$sql = $SectionsModel->getCollection();
 		$data['cats_selector'] = $this->_buildSelector($sql, ((!empty($data['in_cat'])) ? $data['in_cat'] : false));
 		
 		
 		//comments and hide
 		$data['commented'] = (!empty($commented) || !isset($_POST['submitForm'])) ? 'checked="checked"' : '';
-		if (!$this->ACL->turn(array('news', 'record_comments_management'), false)) $data['commented'] .= ' disabled="disabled"';
+		if (!$this->ACL->turn(array($this->module, 'record_comments_management'), false)) $data['commented'] .= ' disabled="disabled"';
 		$data['available'] = (!empty($available) || !isset($_POST['submitForm'])) ? 'checked="checked"' : '';
-		if (!$this->ACL->turn(array('news', 'hide_material'), false)) $data['available'] .= ' disabled="disabled"';
+		if (!$this->ACL->turn(array($this->module, 'hide_material'), false)) $data['available'] .= ' disabled="disabled"';
 		
 		
-		$data['action'] = get_url('/news/add/');
+		$data['action'] = get_url('/' . $this->module . '/add/');
 		$data['max_attaches'] = $this->Register['Config']->read('max_attaches', $this->module);
 		if (empty($data['max_attaches']) || !is_numeric($data['max_attaches'])) $data['max_attaches'] = 5;
 			
@@ -546,13 +529,13 @@ Class NewsModule extends Module {
 	public function add()
     {
 		//turn access
-		$this->ACL->turn(array('news', 'add_materials'));
+		$this->ACL->turn(array($this->module, 'add_materials'));
 		if (!isset($_POST['title']) 
 		|| !isset($_POST['mainText']) 
-		|| !isset($_POST['cats_selector'])) {
+		|| !isset($_POST['cats_selector'])
+		|| !is_numeric($_POST['cats_selector'])) {
 			redirect('/');
 		}
-		if (!is_numeric($_POST['cats_selector'])) redirect('/');
 		$error  = '';
 		
 		
@@ -565,10 +548,10 @@ Class NewsModule extends Module {
 		
 		
 		$fields = array('description', 'tags', 'sourse', 'sourse_email', 'sourse_site');
-		$fields_settings = $this->Register['Config']->read('fields', 'news');
+		$fields_settings = $this->Register['Config']->read('fields', $this->module);
 		foreach ($fields as $field) {
 			if (empty($_POST[$field]) && in_array($field, $fields_settings)) {
-				$error = $error.'<li>' . __('Empty field') . ' "' . $field . '"</li>'."\n";
+				$error = $error . '<li>' . __('Empty field') . ' "' . $field . '"</li>' . "\n";
 				$$field = null;
 			} else {
 				$$field = trim($_POST[$field]);
@@ -587,7 +570,7 @@ Class NewsModule extends Module {
 			$_SESSION['viewMessage'] = array_merge(array('title' => null, 'mainText' => null, 'in_cat' => $in_cat,
 				'description' => null, 'tags' => null, 'sourse' => null, 'sourse_email' => null, 
 				'sourse_site' => null, 'commented' => null, 'available' => null), $_POST);
-			redirect('/news/add_form/');
+			redirect('/' . $this->module . '/add_form/');
 		}
 
 		// Check fields
@@ -598,18 +581,23 @@ Class NewsModule extends Module {
 			$error = $error.'<li>' . __('Empty field "title"') . '</li>'."\n";
 		elseif (!$valobj->cha_val($title, V_TITLE))  
 			$error = $error.'<li>' . __('Wrong chars in "title"') . '</li>'."\n";
+			
+			
+		$max_lenght = $this->Register['Config']->read('max_lenght', $this->module);
+		if ($max_lenght <= 0) $max_lenght = 1000;
+			
 		if (empty($add))                    		 
-			$error = $error.'<li>' . __('Empty field "material"') . '</li>'."\n";
-		else if (mb_strlen($add) > Config::read('max_lenght', 'news'))
-			$error = $error .'<li>'. sprintf(__('Wery big "material"'), Config::read('max_lenght', 'news')) .'</li>'."\n";
+			$error = $error . '<li>' . __('Empty field "material"') . '</li>' . "\n";
+		else if (mb_strlen($add) > $max_lenght)
+			$error = $error . '<li>' . sprintf(__('Wery big "material"'), $max_lenght) . '</li>' . "\n";
 		if (!empty($tags) && !$valobj->cha_val($tags, V_TITLE)) 
-			$error = $error.'<li>' . __('Wrong chars in "tags"') . '</li>'."\n";
+			$error = $error . '<li>' . __('Wrong chars in "tags"') . '</li>' . "\n";
 		if (!empty($sourse) && !$valobj->cha_val($sourse, V_TITLE)) 
-			$error = $error.'<li>' . __('Wrong chars in "sourse"') . '</li>'."\n";
+			$error = $error . '<li>' . __('Wrong chars in "sourse"') . '</li>' . "\n";
 		if (!empty($sourse_email) && !$valobj->cha_val($sourse_email, V_MAIL)) 
-			$error = $error.'<li>' . __('Wrong chars in "email"') . '</li>'."\n";
+			$error = $error . '<li>' . __('Wrong chars in "email"') . '</li>' . "\n";
 		if (!empty($sourse_site) && !$valobj->cha_val($sourse_site, V_URL)) 
-			$error = $error.'<li>' . __('Wrong chars in "sourse site"') . '</li>'."\n";
+			$error = $error . '<li>' . __('Wrong chars in "sourse site"') . '</li>' . "\n";
 
 			
 		// Check attaches size and format
@@ -633,16 +621,17 @@ Class NewsModule extends Module {
 				&& $_FILES[$attach_name]['type'] != 'image/gif'
 				&& $_FILES[$attach_name]['type'] != 'image/png')
 				|| !in_array(strtolower($ext), $img_extentions)) {
-					$error .= '<li>' . __('Wrong file format') . '</li>'."\n";
+					$error .= '<li>' . __('Wrong file format') . '</li>' . "\n";
 				}
 			}
 		}
 			
-		
-		$categoryModel = ucfirst($this->module) . 'SectionsModel';
-		$categoryModel = new $categoryModel;
-		$cat = $categoryModel->getCollection(array('id' => $in_cat));
-		if (empty($cat)) $error .= '<li>' . __('Can not find category') . '</li>'."\n";
+			
+		if (!empty($in_cat)) {
+			$categoryModel = $this->Register['ModManager']->getModelInstance($this->module . 'Sections');
+			$cat = $categoryModel->getById($in_cat);
+			if (empty($cat)) $error .= '<li>' . __('Can not find category') . '</li>'."\n";
+		}
 			
 			
 		// Errors
@@ -652,17 +641,17 @@ Class NewsModule extends Module {
 				'sourse_site' => null, 'commented' => null, 'available' => null), $_POST);
 			$_SESSION['FpsForm']['error']   = '<p class="errorMsg">' . __('Some error in form') . '</p>'.
 				"\n".'<ul class="errorMsg">' . "\n" . $error . '</ul>' . "\n";
-			redirect('/news/add_form/');
+			redirect('/' . $this->module . '/add_form/');
 		}
 
 		
-		if (!$this->ACL->turn(array('news', 'record_comments_management'), false)) $commented = '1';
-		if (!$this->ACL->turn(array('news', 'hide_material'), false)) $available = '1';
+		if (!$this->ACL->turn(array($this->module, 'record_comments_management'), false)) $commented = '1';
+		if (!$this->ACL->turn(array($this->module, 'hide_material'), false)) $available = '1';
 
 		// Защита от того, чтобы один пользователь не добавил
 		// 100 материалов за одну минуту
 		if ( isset( $_SESSION['unix_last_post'] ) and ( time()-$_SESSION['unix_last_post'] < 10 ) ) {
-			return $this->showInfoMessage(__('Your message has been added'), '/news/');
+			return $this->showInfoMessage(__('Your message has been added'), '/' . $this->module . '/');
 		}
 		
 		
@@ -676,9 +665,9 @@ Class NewsModule extends Module {
 		
 		//remove cache
 		$this->Register['Cache']->clean(CACHE_MATCHING_ANY_TAG, array('module_' . $this->module));
-		$this->Register['DB']->cleanSqlCache();
+		$this->DB->cleanSqlCache();
 		// Формируем SQL-запрос на добавление темы	
-		$add = mb_substr($add, 0, $this->Register['Config']->read('max_lenght', $this->module));
+		$add = mb_substr($add, 0, $max_lenght);
 		$res = array(
 			'title'        => $title,
 			'main'         => $add,
@@ -692,7 +681,7 @@ Class NewsModule extends Module {
 			'sourse_site'  => $sourse_site,
 			'commented'    => $commented,
 			'available'    => $available,
-			'view_on_home' => '1',
+			'view_on_home' => $cat->getView_on_home(),
 		);
 		$className = ucfirst($this->module) . 'Entity';
 		$new = new $className($res);
@@ -712,9 +701,9 @@ Class NewsModule extends Module {
 		
 		//clean cache
 		$this->Register['Cache']->clean(CACHE_MATCHING_TAG, array('module_' . $this->module));
-		$this->Register['DB']->cleanSqlCache();
-		if ($this->Log) $this->Log->write('adding new', 'new id(' . $last_id . ')');
-		return $this->showInfoMessage(__('Material successful added'), '/news/view/' . $last_id);				  
+		$this->DB->cleanSqlCache();
+		if ($this->Log) $this->Log->write('adding ' . $this->module, $this->module . ' id(' . $last_id . ')');
+		return $this->showInfoMessage(__('Material successful added'), '/' . $this->module . '/view/' . $last_id);				  
 	}
 
 
@@ -740,7 +729,7 @@ Class NewsModule extends Module {
 		$this->Model->bindModel('category');
 		$entity = $this->Model->getById($id);
 		
-		if (!$entity) redirect('/news/');
+		if (!$entity) redirect('/' . $this->module . '/');
 		
 		
 		if (is_object($this->AddFields) && count($entity) > 0) {
@@ -750,10 +739,10 @@ Class NewsModule extends Module {
 		
 		
 		//turn access
-		if (!$this->ACL->turn(array('news', 'edit_materials'), false) 
+		if (!$this->ACL->turn(array($this->module, 'edit_materials'), false) 
 		&& (!empty($_SESSION['user']['id']) && $entity->getAuthor()->getId() == $_SESSION['user']['id'] 
-		&& $this->ACL->turn(array('news', 'edit_mine_materials'), false)) === false) {
-			return $this->showInfoMessage(__('Permission denied'), '/news/');
+		&& $this->ACL->turn(array($this->module, 'edit_mine_materials'), false)) === false) {
+			return $this->showInfoMessage(__('Permission denied'), '/' . $this->module . '/');
 		}
 
 		
@@ -775,35 +764,34 @@ Class NewsModule extends Module {
 			'commented' 	=> '', 
 			'available' 	=> '',
 		);
-		$data = Validate::getCurrentInputsValues($entity, $data);
+		$markers = Validate::getCurrentInputsValues($entity, $data);
 		
 		
-        $data->setPreview($this->Parser->getPreview($data->getMain()));
-        $data->setErrors($this->Parser->getErrors());
+        $markers->setPreview($this->Parser->getPreview($markers->getMain()));
+        $markers->setErrors($this->Parser->getErrors());
         if (isset($_SESSION['viewMessage'])) unset($_SESSION['viewMessage']);
         if (isset($_SESSION['FpsForm'])) unset($_SESSION['FpsForm']);
 
 		
-		$className = $this->Register['ModManager']->getModelNameFromModule($this->module . 'Sections');
-		$sectionModel = new $className;
-		$cats = $sectionModel->getCollection();
-		$selectedCatId = ($data->getIn_cat()) ? $data->getIn_cat() : $data->getCategory_id();
+		$sectionsModel = $this->Register['ModManager']->getModelInstance($this->module . 'Sections');
+		$cats = $sectionsModel->getCollection();
+		$selectedCatId = ($markers->getIn_cat()) ? $markers->getIn_cat() : $markers->getCategory_id();
 		$cats_change = $this->_buildSelector($cats, $selectedCatId);
 		
 		
 		//comments and hide
-		$commented = ($data->getCommented()) ? 'checked="checked"' : '';
-		if (!$this->ACL->turn(array('news', 'record_comments_management'), false)) $commented .= ' disabled="disabled"';
-		$available = ($data->getAvailable()) ? 'checked="checked"' : '';
+		$commented = ($markers->getCommented()) ? 'checked="checked"' : '';
+		if (!$this->ACL->turn(array($this->module, 'record_comments_management'), false)) $commented .= ' disabled="disabled"';
+		$available = ($markers->getAvailable()) ? 'checked="checked"' : '';
         if (!$this->ACL->turn(array('loads', 'hide_material'), false)) $available .= ' disabled="disabled"';
-		$action = get_url('/news/update/' . $data->getId());
+		$markers->setAction(get_url('/' . $this->module . '/update/' . $markers->getId()));
 		
 		
-		$data->setCommented($commented);
-		$data->setAvailable($available);
+		$markers->setCommented($commented);
+		$markers->setAvailable($available);
 		
 		
-		$attaches = $data->getAttaches();
+		$attaches = $markers->getAttaches();
 		$attDelButtons = '';
         if (count($attaches)) {
             foreach ($attaches as $key => $attach) {
@@ -813,9 +801,8 @@ Class NewsModule extends Module {
         }
 		
 		
-		$markers = $data;
-		$markers->setMain_text($data->getMaintext());
-		$markers->setAction($action);
+
+
 		$markers->setCats_selector($cats_change);
 		$markers->setAttaches_delete($attDelButtons);
 		$markers->setMax_attaches($this->Register['Config']->read('max_attaches', $this->module));
@@ -851,19 +838,19 @@ Class NewsModule extends Module {
 			redirect('/');
 		}
 		$id = (int)$id;
-		if ($id < 1) redirect('/news/');
+		if ($id < 1) redirect('/' . $this->module . '/');
 		$error = '';
 		
 
 		$target = $this->Model->getbyId($id);
-		if (!$target) redirect('/news/');
+		if (!$target) redirect('/' . $this->module . '/');
 		
 		
 		//turn access
-		if (!$this->ACL->turn(array('news', 'edit_materials'), false) 
+		if (!$this->ACL->turn(array($this->module, 'edit_materials'), false) 
 		&& (!empty($_SESSION['user']['id']) && $target->getAuthor_id() == $_SESSION['user']['id'] 
-		&& $this->ACL->turn(array('news', 'edit_mine_materials'), false)) === false) {
-			return $this->showInfoMessage(__('Permission denied'), '/news/');
+		&& $this->ACL->turn(array($this->module, 'edit_mine_materials'), false)) === false) {
+			return $this->showInfoMessage(__('Permission denied'), '/' . $this->module . '/');
 		}
 		
 		
@@ -877,7 +864,7 @@ Class NewsModule extends Module {
 		
 		$valobj = $this->Register['Validate'];
 		$fields = array('description', 'tags', 'sourse', 'sourse_email', 'sourse_site');
-		$fields_settings = $this->Register['Config']->read('fields', 'news');
+		$fields_settings = $this->Register['Config']->read('fields', $this->module);
 		foreach ($fields as $field) {
 			if (empty($_POST[$field]) && in_array($field, $fields_settings)) {
 				$error = $error.'<li>' . __('Empty field') . '"' . $field . '"</li>'."\n";
@@ -900,34 +887,41 @@ Class NewsModule extends Module {
 			$_SESSION['viewMessage'] = array_merge(array('title' => null, 'mainText' => null, 'in_cat' => $in_cat,
 				'description' => null, 'tags' => null, 'sourse' => null, 'sourse_email' => null, 
 				'sourse_site' => null, 'commented' => null, 'available' => null), $_POST);
-			redirect('/news/edit_form/' . $id);
+			redirect('/' . $this->module . '/edit_form/' . $id);
 		}
 		
 		
 		// Check fields
+		if (empty($in_cat))                     	
+			$error = $error . '<li>' . __('Category not selected') . '</li>'."\n";
 		if (empty($title))                   	
 			$error = $error.'<li>' . __('Empty field "title"') . '</li>'."\n";
-		if (!$valobj->cha_val($title, V_TITLE))  	
+		else if (!$valobj->cha_val($title, V_TITLE))  	
 			$error = $error.'<li>' . __('Wrong chars in "title"') . '</li>'."\n";
+			
+			
+		$max_lenght = $this->Register['Config']->read('max_lenght', $this->module);
+		if ($max_lenght <= 0) $max_lenght = 10000;
+			
 		if (empty($edit))                 		
-			$error = $error.'<li>' . __('Empty field "material"') . '</li>'."\n";
-		else if (mb_strlen($edit) > Config::read('max_lenght', 'news'))
-			$error = $error . '<li>' . sprintf(__('Wery big "material"'), Config::read('max_lenght', 'news')) .'</li>'."\n";
+			$error = $error . '<li>' . __('Empty field "material"') . '</li>' . "\n";
+		else if (mb_strlen($edit) > $max_lenght)
+			$error = $error . '<li>' . sprintf(__('Wery big "material"'), $max_lenght) .'</li>' . "\n";
 		if (!empty($tags) && !$valobj->cha_val($tags, V_TITLE)) 
-			$error = $error.'<li>' . __('Wrong chars in "tags"') . '</li>'."\n";
+			$error = $error . '<li>' . __('Wrong chars in "tags"') . '</li>' . "\n";
 		if (!empty($sourse) && !$valobj->cha_val($sourse, V_TITLE)) 
-			$error = $error.'<li>' . __('Wrong chars in "sourse"') . '</li>'."\n";
+			$error = $error . '<li>' . __('Wrong chars in "sourse"') . '</li>' . "\n";
 		if (!empty($sourse_email) && !$valobj->cha_val($sourse_email, V_MAIL)) 
-			$error = $error.'<li>' . __('Wrong chars in "email"') . '</li>'."\n";
+			$error = $error . '<li>' . __('Wrong chars in "email"') . '</li>' . "\n";
 		if (!empty($sourse_site) && !$valobj->cha_val($sourse_site, V_URL)) 
-			$error = $error.'<li>' . __('Wrong chars in "sourse site"') . '</li>'."\n";
+			$error = $error . '<li>' . __('Wrong chars in "sourse site"') . '</li>' . "\n";
 		
 		
-		
-		$className = $this->Register['ModManager']->getModelNameFromModule($this->module . 'Sections');
-		$catModel = new $className;
-		$category = $catModel->getById($in_cat);
-		if (!$category) $error = $error.'<li>' . __('Can not find category') . '</li>'."\n";
+		if (!empty($in_cat)) {
+			$catModel = $this->Register['ModManager']->getModelInstance($this->module . 'Sections');
+			$category = $catModel->getById($in_cat);
+			if (!$category) $error = $error . '<li>' . __('Can not find category') . '</li>' . "\n";
+		}
 		
 
         // Check attaches size and format
@@ -950,14 +944,14 @@ Class NewsModule extends Module {
 
 
                 if ($_FILES[$attach_name]['size'] > $max_attach_size) {
-                    $error .= '<li>' . sprintf(__('Wery big file'), $i, round(($max_attach_size / 1000), 2)) . '</li>'."\n";
+                    $error .= '<li>' . sprintf(__('Wery big file'), $i, round(($max_attach_size / 1000), 2)) . '</li>' . "\n";
                 }
                 if (($_FILES[$attach_name]['type'] != 'image/jpeg'
                 && $_FILES[$attach_name]['type'] != 'image/jpg'
                 && $_FILES[$attach_name]['type'] != 'image/gif'
                 && $_FILES[$attach_name]['type'] != 'image/png')
                 || !in_array(strtolower($ext), $img_extentions)) {
-                    $error .= '<li>' . __('Wrong file format') . '</li>'."\n";
+                    $error .= '<li>' . __('Wrong file format') . '</li>' . "\n";
                 }
             }
         }
@@ -965,23 +959,23 @@ Class NewsModule extends Module {
 		
 
 		// Errors
-		if (!empty( $error )) {
+		if (!empty($error)) {
 			$_SESSION['FpsForm'] = array_merge(array('title' => null, 'mainText' => null, 'in_cat' => $in_cat, 
 				'description' => null, 'tags' => null, 'sourse' => null, 'sourse_email' => null, 
 				'sourse_site' => null, 'commented' => null, 'available' => null), $_POST);
 			$_SESSION['FpsForm']['error']   = '<p class="errorMsg">' . __('Some error in form') . '</p>'
 				."\n".'<ul class="errorMsg">'."\n".$error.'</ul>'."\n";
-			redirect('/news/edit_form/' . $id);
+			redirect('/' . $this->module . '/edit_form/' . $id);
 		}
 		
 
-		if (!$this->ACL->turn(array('news', 'record_comments_management'), false)) $commented = '1';
-		if (!$this->ACL->turn(array('news', 'hide_material'), false)) $available = '1';
+		if (!$this->ACL->turn(array($this->module, 'record_comments_management'), false)) $commented = '1';
+		if (!$this->ACL->turn(array($this->module, 'hide_material'), false)) $available = '1';
 		
 		
 		//remove cache
-		$this->Cache->clean(CACHE_MATCHING_TAG, array('module_news', 'record_id_' . $id));
-		$this->Register['DB']->cleanSqlCache();
+		$this->Cache->clean(CACHE_MATCHING_TAG, array('module_' . $this->module, 'record_id_' . $id));
+		$this->DB->cleanSqlCache();
 		
 		
 		// Auto tags generation
@@ -991,7 +985,7 @@ Class NewsModule extends Module {
 			$tags = (!empty($tags) && is_array($tags)) ? implode(',', array_keys($tags)) : '';
 		}
 		
-		$edit = mb_substr($edit, 0, $this->Register['Config']->read('max_lenght', 'news'));
+		$edit = mb_substr($edit, 0, $max_lenght);
 		$data = array(
 			'title' 	   => $title,
 			'main' 		   => $edit,
@@ -1002,7 +996,7 @@ Class NewsModule extends Module {
 			'sourse_email' => $sourse_email,
 			'sourse_site'  => $sourse_site,
 			'commented'    => $commented,
-			'available'    => $available,
+			'available'    => $category->getView_on_home(),
 		);
 		$target->__construct($data);
 		$target->save();
@@ -1011,7 +1005,7 @@ Class NewsModule extends Module {
 		}
 		
 		
-		if ($this->Log) $this->Log->write('editing new', 'new id(' . $id . ')');
+		if ($this->Log) $this->Log->write('editing ' . $this->module, $this->module . ' id(' . $id . ')');
 		return $this->showInfoMessage(__('Operation is successful'), getReferer());
 	}
 
@@ -1035,30 +1029,30 @@ Class NewsModule extends Module {
 		
 		
 		//turn access
-		if (!$this->ACL->turn(array('news', 'delete_materials'), false) 
+		if (!$this->ACL->turn(array($this->module, 'delete_materials'), false) 
 		&& (!empty($_SESSION['user']['id']) && $target->getAuthor_id() == $_SESSION['user']['id'] 
-		&& $this->ACL->turn(array('news', 'delete_mine_materials'), false)) === false) {
-			return showInfoMessage(__('Permission denied'), '/news/');
+		&& $this->ACL->turn(array($this->module, 'delete_mine_materials'), false)) === false) {
+			return showInfoMessage(__('Permission denied'), '/' . $this->module . '/');
 		}
 		
 		
 		//remove cache
-		$this->Cache->clean(CACHE_MATCHING_TAG, array('module_news', 'record_id_' . $id));
-		$this->Register['DB']->cleanSqlCache();
+		$this->Cache->clean(CACHE_MATCHING_TAG, array('module_' . $this->module, 'record_id_' . $id));
+		$this->DB->cleanSqlCache();
 
 		$target->delete();
 		
 		$user_id = (!empty($_SESSION['user']['id'])) ? intval($_SESSION['user']['id']) : 0;
-		if ($this->Log) $this->Log->write('delete new', 'new id(' . $id . ') user id('.$user_id.')');
-		return $this->showInfoMessage(__('Operation is successful'), '/news/');
+		if ($this->Log) $this->Log->write('delete ' . $this->module, $this->module . ' id(' . $id . ') user id('.$user_id.')');
+		return $this->showInfoMessage(__('Operation is successful'), '/' . $this->module . '/');
 	}
 
 	
 	
 	/**
-	* add comment to stat
+	* add comment to entity
 	*
-	* @id (int)    stat ID
+	* @id (int)    entity ID
 	* @return      info message
 	*/
 	public function add_comment($id = null)
@@ -1068,9 +1062,9 @@ Class NewsModule extends Module {
 	
 	
 	/**
-	* add comment form to stat
+	* add comment form to entity
 	*
-	* @id (int)    stat ID
+	* @id (int)    entity ID
 	* @return      html form
 	*/
 	private function _add_comment_form($id = null)
@@ -1082,7 +1076,7 @@ Class NewsModule extends Module {
 	
 	
 	/**
-	* edit comment form to stat
+	* edit comment form to entity
 	*
 	* @id (int)    comment ID
 	* @return      html form
@@ -1108,9 +1102,9 @@ Class NewsModule extends Module {
 	
 	
 	/**
-	* get comments for stat
+	* get comments for entity
 	*
-	* @id (int)    stat ID
+	* @id (int)    entity ID
 	* @return      html comments list
 	*/
 	private function _get_comments($entity = null)
@@ -1142,17 +1136,17 @@ Class NewsModule extends Module {
 	public function upper($id)
     {
 		//turn access
-		$this->ACL->turn(array('news', 'up_materials'));
+		$this->ACL->turn(array($this->module, 'up_materials'));
 		$id = (int)$id;
-		if ($id < 1) redirect('/news/');
+		if ($id < 1) redirect('/' . $this->module . '/');
 
 		
 		$entity = $this->Model->getById($id);
-		if (!$entity) redirect('/news/');
+		if (!$entity) redirect('/' . $this->module . '/');
 		
 		$entity->setDate(date("Y-m-d H-i-s"));
 		$entity->save();
-		return $this->showInfoMessage(__('Operation is successful'), '/news/');
+		return $this->showInfoMessage(__('Operation is successful'), '/' . $this->module . '/');
 	}
 
 	
@@ -1165,17 +1159,17 @@ Class NewsModule extends Module {
 	public function on_home($id)
     {
 		//turn access
-		$this->ACL->turn(array('news', 'on_home'));
+		$this->ACL->turn(array($this->module, 'on_home'));
 		$id = (int)$id;
-		if ($id < 1) redirect('/news/');
+		if ($id < 1) redirect('/' . $this->module . '/');
 
 		
 		$entity = $this->Model->getById($id);
-		if (!$entity) redirect('/news/');
+		if (!$entity) redirect('/' . $this->module . '/');
 		
 		$entity->setView_on_home('1');
 		$entity->save();
-		return $this->showInfoMessage(__('Operation is successful'), '/news/');
+		return $this->showInfoMessage(__('Operation is successful'), '/' . $this->module . '/');
 	}
 
 
@@ -1188,17 +1182,17 @@ Class NewsModule extends Module {
 	public function off_home($id)
     {
 		//turn access
-		$this->ACL->turn(array('news', 'on_home'));
+		$this->ACL->turn(array($this->module, 'on_home'));
 		$id = (int)$id;
-		if ($id < 1) redirect('/news/');
+		if ($id < 1) redirect('/' . $this->module . '/');
 
 		
 		$entity = $this->Model->getById($id);
-		if (!$entity) redirect('/news/');
+		if (!$entity) redirect('/' . $this->module . '/');
 		
 		$entity->setView_on_home('0');
 		$entity->save();
-		return $this->showInfoMessage(__('Operation is successful'), '/news/');
+		return $this->showInfoMessage(__('Operation is successful'), '/' . $this->module . '/');
 	}
 	
 	
@@ -1210,9 +1204,9 @@ Class NewsModule extends Module {
 	*/
 	public function fix_on_top($id)
     {
-		$this->ACL->turn(array('news', 'on_home'));
+		$this->ACL->turn(array($this->module, 'on_home'));
 		$id = (int)$id;
-		if ($id < 1) redirect('/news/');
+		if ($id < 1) redirect('/' . $this->module . '/');
 
 		$target = $this->Model->getById($id);
 		if (!$target) redirect('/');
@@ -1221,7 +1215,7 @@ Class NewsModule extends Module {
 		$dest = ($curr_state) ? '0' : '1';
 		$target->setOn_home_top($dest);
 		$target->save();
-		return $this->showInfoMessage(__('Operation is successful'), '/news/');
+		return $this->showInfoMessage(__('Operation is successful'), '/' . $this->module . '/');
 	}
 	
 	
@@ -1237,60 +1231,40 @@ Class NewsModule extends Module {
 	protected function _getAdminBar($record)
     {
 		$moder_panel = '';
-		$id = $record->getId();
-		if(isset($_SESSION['user']) and $_SESSION['user']['id'] == $record->getAuthor()->getId()) {
-			if ($this->ACL->turn(array('news', 'edit_mine_materials'), false)) {
-				$moder_panel .= get_link(get_img('/sys/img/edit_16x16.png', array('title' => __('Edit'))), '/news/edit_form/' . $id) . '&nbsp;';
-			}
-			
-			if ($this->ACL->turn(array('news', 'up_materials'), false)) {
-				$moder_panel .= get_link(get_img('/sys/img/star.png'), '/news/fix_on_top/' . $id, array('onClick' => "return confirm('" . __('Are you sure') . "')")) . '&nbsp;';
-				$moder_panel .= get_link(get_img('/sys/img/up_arrow_16x16.png', array('title' => __('Up'))), 
-				'/news/upper/' . $id, array('onClick' => "return confirm('" . __('Are you sure') . "')")) . '&nbsp;';
-			}
-			
-			if ($this->ACL->turn(array('news', 'on_home'), false)) {
-				if ($record->getView_on_home() == 1) {
-					$moder_panel .= get_link(get_img('/sys/img/round_ok.png', array('title' => __('On home'))), 
-					'/news/off_home/' . $id, array('onClick' => "return confirm('" . __('Are you sure') . "')")) . '&nbsp;';
-				} else {
-					$moder_panel .= get_link(get_img('/sys/img/round_not_ok.png', array('title' => __('On home'))), 
-					'/news/on_home/' . $id, array('onClick' => "return confirm('" . __('Are you sure') . "')")) . '&nbsp;';
-				}
-			}
-			
-			if ($this->ACL->turn(array('news', 'delete_mine_materials'), false)) {
-				$moder_panel .= get_link(get_img('/sys/img/delete_16x16.png', array('title' => __('Delete'))), 
-				'/news/delete/' . $id, array('onClick' => "return confirm('" . __('Are you sure') . "')")) . '&nbsp;';
-			}
-			
-			
-		} else {
-		
-			if ($this->ACL->turn(array('news', 'edit_materials'), false)) {
-				$moder_panel .= get_link(get_img('/sys/img/edit_16x16.png', array('title' => __('Edit'))), '/news/edit_form/' . $id) . '&nbsp;';
-			}
-			
-			if ($this->ACL->turn(array('news', 'up_materials'), false)) {
-				$moder_panel .= get_link(get_img('/sys/img/up_arrow_16x16.png', array('title' => __('Up'))), 
-				'/news/upper/' . $id, array('onClick' => "return confirm('" . __('Are you sure') . "')")) . '&nbsp;';
-			}
-			
-			if ($this->ACL->turn(array('news', 'on_home'), false)) {
-				if ($record->getView_on_home() == 1) {
-					$moder_panel .= get_link(get_img('/sys/img/round_ok.png', array('title' => __('On home'))), 
-					'/news/off_home/' . $id, array('onClick' => "return confirm('" . __('Are you sure') . "')")) . '&nbsp;';
-				} else {
-					$moder_panel .= get_link(get_img('/sys/img/round_not_ok.png', array('title' => __('On home'))), 
-					'/news/on_home/' . $id, array('onClick' => "return confirm('" . __('Are you sure') . "')")) . '&nbsp;';
-				}
-			}
-			
-			if ($this->ACL->turn(array('news', 'delete_materials'), false)) {
-				$moder_panel .= get_link(get_img('/sys/img/delete_16x16.png', array('title' => __('Delete'))), 
-				'/news/delete/' . $id, array('onClick' => "return confirm('" . __('Are you sure') . "')")) . '&nbsp;';
-			}
+        $uid = $record->getAuthor_id();
+        $id = $record->getId();
+
+
+		if ($this->ACL->turn(array($this->module, 'edit_materials'), false) 
+		|| (!empty($_SESSION['user']['id']) && $uid == $_SESSION['user']['id']
+		&& $this->ACL->turn(array($this->module, 'edit_mine_materials'), false))) {
+			$moder_panel .= get_link(get_img('/sys/img/edit_16x16.png'), '/' . $this->module . '/edit_form/' . $id) . '&nbsp;';
 		}
+		
+		if ($this->ACL->turn(array($this->module, 'up_materials'), false)) {
+			$moder_panel .= get_link(get_img('/sys/img/star.png'), '/' . $this->module . '/fix_on_top/' . $id,
+				array('onClick' => "return confirm('" . __('Are you sure') . "')")) . '&nbsp;';
+			$moder_panel .= get_link(get_img('/sys/img/up_arrow_16x16.png'), '/' . $this->module . '/upper/' . $id,
+				array('onClick' => "return confirm('" . __('Are you sure') . "')")) . '&nbsp;';
+		}
+		
+		if ($this->ACL->turn(array($this->module, 'on_home'), false)) {
+				if ($record->getvView_on_home() == 1) {
+					$moder_panel .= get_link(get_img('/sys/img/round_ok.png', array('alt' => __('On home'), 'title' => __('On home'))), 
+						'/' . $this->module . '/off_home/' . $id, array('onClick' => "return confirm('" . __('Are you sure') . "')")) . '&nbsp;';
+				} else {
+					$moder_panel .= get_link(get_img('/sys/img/round_not_ok.png', array('alt' => __('On home'), 'title' => __('On home'))), 
+						'/' . $this->module . '/on_home/' . $id, array('onClick' => "return confirm('" . __('Are you sure') . "')")) . '&nbsp;';
+				}
+		}
+		
+		if ($this->ACL->turn(array($this->module, 'delete_materials'), false) 
+		|| (!empty($_SESSION['user']['id']) && $uid == $_SESSION['user']['id']
+		&& $this->ACL->turn(array($this->module, 'delete_mine_materials'), false))) {
+			$moder_panel .= get_link(get_img('/sys/img/delete_16x16.png'), '/' . $this->module . '/delete/' . $id,
+				array('onClick' => "return confirm('" . __('Are you sure') . "')")) . '&nbsp;';
+		}
+		
 		return $moder_panel;
 	}
 

@@ -502,7 +502,7 @@ Class UsersModule extends Module {
 		
 		
 		/* clean DB cache */
-		$this->Register['DB']->cleanSqlCache();
+		$this->DB->cleanSqlCache();
 		cleanAllUsersCount();
 		
 		

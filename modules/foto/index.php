@@ -158,7 +158,7 @@ Class FotoModule extends Module {
 		if (empty($id) || $id < 1) redirect('/');
 
 		
-		$SectionsModel = $this->_loadModel(ucfirst($this->module) . 'Sections');
+		$SectionsModel = $this->Register['ModManager']->getModelInstance($this->module . 'Sections');
 		$category = $SectionsModel->getById($id);
 		if (!$category)
 			return showInfoMessage(__('Can not find category'), '/foto/');
@@ -346,7 +346,7 @@ Class FotoModule extends Module {
 		
 		$entity->setViews($entity->getViews() + 1);
 		$entity->save();
-		$this->Register['DB']->cleanSqlCache();
+		$this->DB->cleanSqlCache();
 		
 		return $this->_view($source);
 	}
@@ -551,7 +551,7 @@ Class FotoModule extends Module {
 		
 		//clean cache
 		$this->Cache->clean(CACHE_MATCHING_TAG, array('module_foto'));
-		$this->Register['DB']->cleanSqlCache();
+		$this->DB->cleanSqlCache();
 		if ($this->Log) $this->Log->write('adding foto', 'foto id(' . $id . ')');
 		return $this->showInfoMessage(__('Material successful added'), '/foto/' );		  
 	}
@@ -706,7 +706,7 @@ Class FotoModule extends Module {
 		
 		//clean cache
 		$this->Cache->clean(CACHE_MATCHING_TAG, array('module_foto', 'record_id_' . $id));
-		$this->Register['DB']->cleanSqlCache();
+		$this->DB->cleanSqlCache();
 		if ($this->Log) $this->Log->write('editing foto', 'foto id(' . $id . ')');
 		return $this->showInfoMessage(__('Operation is successful'), '/foto/' );
 	}
@@ -741,7 +741,7 @@ Class FotoModule extends Module {
 
 		//clean cache
 		$this->Cache->clean(CACHE_MATCHING_TAG, array('module_foto'));
-		$this->Register['DB']->cleanSqlCache();
+		$this->DB->cleanSqlCache();
 		if ($this->Log) $this->Log->write('delete foto', 'foto id(' . $id . ')');
 		return $this->showInfoMessage(__('Operation is successful'), '/foto/' );
 	}
