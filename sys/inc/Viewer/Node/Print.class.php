@@ -28,6 +28,6 @@ class Fps_Viewer_Node_Print
 	
 	public function __toString()
 	{
-		// TODO
+		return (string)$this->value;
 	}
 }

@@ -7,6 +7,7 @@ class Fps_Viewer_ExpresionParser
 	
 	private $parser;
 	private $binaryOperators;
+	private $inFunc = false;
 
 	
 	
@@ -32,9 +33,12 @@ class Fps_Viewer_ExpresionParser
 	
 	public function parseExpression($precedence = 0)
 	{
+
 		$node = $this->parsePrimaryExpression();
 		$currToken = $this->parser->getStream()->getCurrent();
 		
+
+	
 		switch ($currToken->getType()) {
 			case Fps_Viewer_Token::OPERATOR_TYPE:
 				if ('for2' === $this->parser->getEnv()) $this->parser->setEnv('for');
@@ -162,7 +166,7 @@ class Fps_Viewer_ExpresionParser
         }
 
         $node = $this->postfixExpression($node);
-		return $this->parser->setNode($node);
+		return $this->parser->setNode($node, $this->inFunc);
     }
 	
 	
@@ -204,11 +208,14 @@ class Fps_Viewer_ExpresionParser
 	{
 		$this->parser->getStream()->next();
 		$param = $this->parser->getStream()->getCurrent();
-		$this->parser->getStream()->next();
-		
+
+		$this->inFunc = true;
+
 		if (')' === $param->getValue()) return new Fps_Viewer_Node_Text($func . '()');
-		$expr = new Fps_Viewer_Node_Function($func, $param->getValue());
 		
+		$expr = new Fps_Viewer_Node_Function($func, $this->parseExpression());
+		$this->inFunc = false;
+		//pr($this->parser->getStream()); die();
 		$this->parser->getStream()->next();
 		return $expr;
 	}

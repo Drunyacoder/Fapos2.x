@@ -20,6 +20,8 @@ class Fps_Viewer_Node_Function
 	
 	public function compile(Fps_Viewer_CompileParser $compiler)
 	{
-		$compiler->raw("$this->func($this->param)");
+		$compiler->raw("$this->func(");
+		$compiler->raw($this->param->compile($compiler));
+		$compiler->raw(")");
 	}
 }

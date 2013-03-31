@@ -165,7 +165,7 @@ class Fps_Viewer_TreesParser
 	
 	
 	
-	public function setNode($node)
+	public function setNode($node, $inFunc = false)
 	{
 		if (!$node instanceof Fps_Viewer_Node_Var
 			&& !$node instanceof Fps_Viewer_Node_Const
@@ -174,8 +174,8 @@ class Fps_Viewer_TreesParser
 		) {
 			return $node;
 		}
+
 		
-	
 		switch ($this->getEnv()) {
 			case 'if':
 			case 'for':
@@ -189,7 +189,7 @@ class Fps_Viewer_TreesParser
 				
 			default:
 				if ($node instanceof Fps_Viewer_Node_Var) $node->setDef(true);
-				$node = $this->setPrint($node);
+				if (!$inFunc) $node = $this->setPrint($node);
 				//$node = new Fps_Viewer_Node($node);
 				break;
 		}
