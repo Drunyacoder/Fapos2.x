@@ -84,7 +84,7 @@ class Module {
 	*/
 	protected $Log;
 	/**
-	* uses for work with parser (chuncks, snippets, global markets ...)
+	* uses for work with parser (chuncks, snippets, global markers ...)
 	*
 	* @var    parser object
 	*/
@@ -310,14 +310,14 @@ class Module {
 			//$html = $this->Parser->ParseTemplate($html);
 			
 			
-			// Cache global markets
+			// Cache global markers
 			if ($this->cached) {
-				if ($this->Cache->check($this->cacheKey . '_global_markets')) {
-					$gdata = $this->Cache->read($this->cacheKey . '_global_markets');
-					$this->globalMarkets = array_merge($this->globalMarkets, unserialize($gdata));
+				if ($this->Cache->check($this->cacheKey . '_global_markers')) {
+					$gdata = $this->Cache->read($this->cacheKey . '_global_markers');
+					$this->globalMarkers = array_merge($this->globalMarkers, unserialize($gdata));
 				} else {
-					$gdata = serialize($this->globalMarkets);
-					$this->Cache->write($gdata, $this->cacheKey . '_global_markets', $this->cacheTags);
+					$gdata = serialize($this->globalMarkers);
+					$this->Cache->write($gdata, $this->cacheKey . '_global_markers', $this->cacheTags);
 				}
 			}
 			
@@ -393,8 +393,8 @@ class Module {
 
 
     /**
-     * Save markets. Get list of markets
-     * and content wthat will be instead markets
+     * Save markers. Get list of markers
+     * and content wthat will be instead markers
      * Before view this markers will be replaced in
      * all content
      *

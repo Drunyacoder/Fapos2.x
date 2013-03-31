@@ -93,49 +93,7 @@ class ChatModule extends Module {
 	}
 	
 
-	
-	
-	/**
-	* view add message form
-	*
-	* @return (str)  add form
-	*/
-	/*
-	private function __add_form() {
-		$content = '';
-		$markets = array();
 
-		// if an errors 
-		if (isset($_SESSION['addForm'])) {
-			$content  = $_SESSION['addForm']['error'] . $content;
-			$message  = $this->Parser->quoteTags($_SESSION['addForm']['message']);
-			$name     = $this->Parser->quoteTags($_SESSION['addForm']['name']);
-			unset( $_SESSION['addForm'] );
-		} else if (isset($_SESSION['chat_name'])) {
-			$message = '';
-			$name    = (!empty($_SESSION['chat_name'])) ? $_SESSION['chat_name'] : '';
-		} else {
-			$message = '';
-			$name = (!empty($_SESSION['user']['name'])) ? $_SESSION['user']['name'] : '';
-		}
-		
-		
-		$tpl = $this->Parser->getAndParse('addform.html' );
-		$kcaptcha = '';
-		if (!$this->ACL->turn(array('other', 'no_captcha'), false)) {
-			$kcaptcha = getCaptcha();
-		}
-		$markets['{ACTION}'] = get_url('/chat/add/');
-		$markets['{NAME}'] = h($name);
-		$markets['{MESSAGE}'] = h($message);
-		$markets['{CAPTCHA}'] = $kcaptcha;
-		
-
-
-		$content = $content . $this->_replaceMarkets($markets, $tpl);
-		return $content;
-	}
-	*/
 	
 	
 	/**

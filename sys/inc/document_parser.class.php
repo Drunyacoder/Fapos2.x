@@ -169,64 +169,64 @@ class Document_Parser {
 	public function getGlobalMarkers($page = '')
     {
         $Register = Register::getInstance();
-		$markets = array();
+		$markers = array();
 		
-		$markets['fps_wday'] = date("D");
-		$markets['fps_date'] = date("d-m-Y");
-		$markets['fps_time'] = date("H:i");
-		$markets['fps_year'] = date("Y");
+		$markers['fps_wday'] = date("D");
+		$markers['fps_date'] = date("d-m-Y");
+		$markers['fps_time'] = date("H:i");
+		$markers['fps_year'] = date("Y");
 		
-		$markets['powered_by'] = 'Fapos';
-		$markets['site_title'] = Config::read('site_title');
+		$markers['powered_by'] = 'Fapos';
+		$markers['site_title'] = Config::read('site_title');
 		
 		if (isset($_SESSION['user']) && isset($_SESSION['user']['name'])) {
-			$markets['personal_page_link'] = get_url('/users/info/' . $_SESSION['user']['id']);
-			$markets['fps_user_name'] = $_SESSION['user']['name'];
+			$markers['personal_page_link'] = get_url('/users/info/' . $_SESSION['user']['id']);
+			$markers['fps_user_name'] = $_SESSION['user']['name'];
 			$userGroup = $Register['ACL']->get_user_group($_SESSION['user']['status']);
-			$markets['fps_user_group'] = $userGroup['title'];
+			$markers['fps_user_group'] = $userGroup['title'];
 		} else {
-			$markets['personal_page_link'] = get_url('/users/add_form/');
-			$markets['fps_user_name'] = 'Гость'; //TODO
-			$markets['fps_user_group'] = 'Гости';
+			$markers['personal_page_link'] = get_url('/users/add_form/');
+			$markers['fps_user_name'] = 'Гость'; //TODO
+			$markers['fps_user_group'] = 'Гости';
 		}
 		
 		
-		$markets['fps_admin_access'] = ($Register['ACL']->turn(array('panel', 'entry'), false)) ? '1' : '0';
-		$markets['fps_user_id'] = (!empty($_SESSION['user']['id'])) ? $_SESSION['user']['id'] : 0;
+		$markers['fps_admin_access'] = ($Register['ACL']->turn(array('panel', 'entry'), false)) ? '1' : '0';
+		$markers['fps_user_id'] = (!empty($_SESSION['user']['id'])) ? $_SESSION['user']['id'] : 0;
 		
 		
 		$online = getWhoOnline();
-		$markets['all_online'] = ($online['users'] + $online['guests']);
-		$markets['users_online'] = $online['users'];
-		$markets['guests_online'] = $online['guests'];
-		$markets['online_users_list'] = (!empty($_SESSION['online_users_list'])) ? $_SESSION['online_users_list'] : '';
-		$markets['count_users'] = getAllUsersCount();
+		$markers['all_online'] = ($online['users'] + $online['guests']);
+		$markers['users_online'] = $online['users'];
+		$markers['guests_online'] = $online['guests'];
+		$markers['online_users_list'] = (!empty($_SESSION['online_users_list'])) ? $_SESSION['online_users_list'] : '';
+		$markers['count_users'] = getAllUsersCount();
 		
 		$overal_stats = getOveralStat();
-		$markets['max_online_all_time'] = (!empty($overal_stats['max_users_online'])) 
+		$markers['max_online_all_time'] = (!empty($overal_stats['max_users_online'])) 
 		? intval($overal_stats['max_users_online']) : 0;
-		$markets['max_online_all_time_date'] = (!empty($overal_stats['max_users_online_date'])) 
+		$markers['max_online_all_time_date'] = (!empty($overal_stats['max_users_online_date'])) 
 		? h($overal_stats['max_users_online_date']) : 'Uncnown';
 		
 	
 		if (strstr($page, '{{ fps_chat }}')) {
 			include_once ROOT . '/modules/chat/index.php';
 			$chat_link = get_url('/chat/view_messages/');
-			$markets['fps_chat'] = '<iframe id="fpsChat" src="' . $chat_link 
+			$markers['fps_chat'] = '<iframe id="fpsChat" src="' . $chat_link 
 			. '" width="100%" height="400" style="overflow:auto; margin:0px; padding:0px; border:none;"></iframe>';
-			$markets['fps_chat'] .= ChatModule::add_form();
+			$markers['fps_chat'] .= ChatModule::add_form();
 		}
 		
 		
-		$markets['counter'] = get_url('/sys/img/counter.png?rand=' . rand(0,999999));
-		$markets['template_path'] = get_url('/template/' . Config::read('template'));
-		$markets['www_root'] = WWW_ROOT;
+		$markers['counter'] = get_url('/sys/img/counter.png?rand=' . rand(0,999999));
+		$markers['template_path'] = get_url('/template/' . Config::read('template'));
+		$markers['www_root'] = WWW_ROOT;
 		
 		
-		$markets['fps_rss'] = $this->getRss();
+		$markers['fps_rss'] = $this->getRss();
 		
 		if (false !== (strpos($page, '{{ mainmenu }}'))) {
-			$markets['mainmenu'] = $this->builMainMenu();
+			$markers['mainmenu'] = $this->builMainMenu();
 		}
 		
 		// today borned users
@@ -239,9 +239,9 @@ class Document_Parser {
 			}
 			$tbout = implode(', ', $names);
 		}
-		$markets['today_born_users'] = (!empty($tbout)) ? $tbout : __('No today born users');
+		$markers['today_born_users'] = (!empty($tbout)) ? $tbout : __('No today born users');
 		
-		return 	$markets;
+		return 	$markers;
 	}
 	
 	

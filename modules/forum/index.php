@@ -62,13 +62,13 @@ Class ForumModule extends Module {
 		
 		
 		// navigation block
-		$markets = array();
-		$markets['navigation'] = get_link(__('Home'), '/') . __('Separator') 
+		$markers = array();
+		$markers['navigation'] = get_link(__('Home'), '/') . __('Separator') 
 		. get_link(__('Forums list'), '/forum/') . "\n";
-		$markets['pagination'] = '';
-		$markets['add_link'] = '';
-		$markets['meta'] = '';
-		$this->_globalize($markets);
+		$markers['pagination'] = '';
+		$markers['add_link'] = '';
+		$markers['meta'] = '';
+		$this->_globalize($markers);
 		
 		
 		if ($this->cached && $this->Cache->check($this->cacheKey)) {
@@ -167,7 +167,7 @@ Class ForumModule extends Module {
 	
 	/**
 	 * @param array $forum
-	 * @retrun string HTML forum table wiht replaced markets
+	 * @retrun string HTML forum table wiht replaced markers
 	 */
 	private function _parseForumTable($forum) 
 	{
@@ -447,12 +447,11 @@ Class ForumModule extends Module {
 	 * @param array $theme
 	 * @param string $template
 	 * If $template = FALSE, use default template file
-	 * @retrun string HTML theme table with replaced markets
+	 * @retrun string HTML theme table with replaced markers
 	 */
 	private function __parseThemeTable($theme, $template = false) 
 	{
 		$htmltheme = null;
-		$markets = array();
 		
 		//ICONS
 		$themeicon = $this->__getThemeIcon($theme); 
@@ -797,7 +796,7 @@ Class ForumModule extends Module {
 								. $attach->getFilename(), array('target' => '_blank')) . '<br />';
 								
 								
-							//if attach is image and isset markets for this image
+							//if attach is image and isset markers for this image
 							if ($attach->getIs_image() == 1) {
 							
 								$message = $this->insertImageAttach($message, $attach->getFilename(), $attach->getAttach_number());
@@ -1572,7 +1571,6 @@ Class ForumModule extends Module {
 		
 		
 		$html    = '';
-		$markets = array();
 		
 		// preview
 		if (isset($_SESSION['viewMessage']) and !empty($_SESSION['viewMessage']['message'])) {
@@ -1861,7 +1859,6 @@ Class ForumModule extends Module {
 		
 		$id_forum = $theme->getId_forum();
 		$html = '';
-		$markets = array();
 		
 		
 		//check access
@@ -2259,7 +2256,6 @@ Class ForumModule extends Module {
 
 				$message = '';
 				$html = '';
-				$markets = array();
 				if (isset($_SESSION['viewMessage']) and !empty($_SESSION['viewMessage'])) {
 					$view = $this->render('previewmessage.html', array(
 						'context' => array(
@@ -2578,7 +2574,6 @@ Class ForumModule extends Module {
 
 		$message = $post->getMessage();
 		$html    = '';
-		$markets = array();
 		
 		//if user vant preview message
 		if (isset($_SESSION['viewMessage']) and !empty($_SESSION['viewMessage'])) {
@@ -3040,20 +3035,20 @@ Class ForumModule extends Module {
 	* @return forum statistic block
 	*/
 	protected function _get_stat() {
-		$markets = array();
+		$markers = array();
 		$result = $this->Model->getStats();
 		
 		
 		if (!empty($result[0]['last_user_id']) && !empty($result[0]['last_user_name'])) {
-			$markets['new_user'] = get_link(h($result[0]['last_user_name']), 
+			$markers['new_user'] = get_link(h($result[0]['last_user_name']), 
 			'/users/info/' . $result[0]['last_user_id']);
 		}
-		$markets['count_users'] = getAllUsersCount();
-		$markets['count_posts'] = (!empty($result[0]['posts_cnt'])) ? $result[0]['posts_cnt'] : 0;
-		$markets['count_themes'] = (!empty($result[0]['themes_cnt'])) ? $result[0]['themes_cnt'] : 0;
+		$markers['count_users'] = getAllUsersCount();
+		$markers['count_posts'] = (!empty($result[0]['posts_cnt'])) ? $result[0]['posts_cnt'] : 0;
+		$markers['count_themes'] = (!empty($result[0]['themes_cnt'])) ? $result[0]['themes_cnt'] : 0;
 
 		
-		$html = $this->render('get_stat.html', $markets);
+		$html = $this->render('get_stat.html', $markers);
 		return $html;
 	}
 
