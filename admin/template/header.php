@@ -64,6 +64,13 @@
 					:  WWW_ROOT . '/sys/img/noavatar.png';
 				
 				}
+				
+				
+				@ini_set('default_socket_timeout', 5);
+				$new_ver = @file_get_contents('http://home.develdo.com/cdn/versions.txt');
+				$new_ver = (!empty($new_ver) && $new_ver != FPS_VERSION) 
+				? '<a href="http://home.develdo.com/downloads.php" title="Last version">' . h($new_ver) . '</a>' 
+				: '';
 				?>
 				<div class="ava"><img src="<?php echo $ava_path; ?>" alt="user ava" title="user ava" /></div>
 				<div class="name"><a href="#"><?php echo h($_SESSION['user']['name']); ?></a><span>Admin</span></div>
@@ -81,6 +88,10 @@
 		  '<a href="/admin"><?php echo __('Main page'); ?></a>',
 		  'sep',
 		  '<span><?php echo __('Version of Fapos'); ?> [ <b><?php echo FPS_VERSION ?></b> ]</span>',
+		  <?php if ($new_ver): ?>
+		  'sep',
+		  '<span><?php echo __('New version of Fapos'); ?> [ <?php echo $new_ver; ?> ]</span>',
+		  <?php endif; ?>
 		  'sep',
 		  '<a href="/admin/settings.php?m=sys"><?php echo __('Common settings'); ?></a>',
 		  'sep',

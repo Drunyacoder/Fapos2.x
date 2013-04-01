@@ -234,6 +234,7 @@ $language = array(
 	'General'                       => 'Общее',
 	'Main page'                     => 'Главная страница',
 	'Version of Fapos'              => 'Версия CMS Fapos:',
+	'New version of Fapos'          => 'Новая версия:',
 	'Common settings'               => 'Общие настройки',
 	'Plugins'                       => 'Плагины',
 	'List'                          => 'Список',

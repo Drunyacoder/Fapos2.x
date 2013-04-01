@@ -718,7 +718,8 @@ function fillForm(id){
 			$(this).val('');
 		});
 		$(form).find('input[name="visible"]').attr('checked', false);
-		$(form).find('input[name="content"]').html('');
+		$(form).find('textarea[name="content"]').val('');
+		$('div.redactor_editor').html('');
 		
 		FpsLib.hideLoader();
 		return;
@@ -739,7 +740,8 @@ function fillForm(id){
 		$(form).find('input[name="meta_keywords"]').val(data.meta_keywords);
 		$(form).find('input[name="meta_description"]').val(data.meta_description);
 		$(form).find('input[name="template"]').val(data.template);
-		$(form).find('input[name="content"]').html(data.content);
+		$(form).find('textarea[name="content"]').val(data.content);
+		$('div.redactor_editor').html(data.content); 
 		FpsLib.hideLoader();
 	});
 }

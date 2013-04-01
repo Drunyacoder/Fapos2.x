@@ -168,7 +168,7 @@ if ($_GET['ac'] == 'index'):
 	<?php
 		$params = (!empty($field['params'])) ? unserialize($field['params']) : array();
 		$values = (!empty($params['values'])) ? $params['values'] : '-';
-		$field_market = 'add_field_' . $field['id'];
+		$field_marker = 'add_field_' . $field['id'];
 		
 		$required = (!empty($params['required'])) 
 		? '<span style="color:red;">' . __('Yes') . '</span>' 
@@ -277,7 +277,7 @@ if ($_GET['ac'] == 'index'):
 		<?php
 			$params = (!empty($field['params'])) ? unserialize($field['params']) : array();
 			$values = (!empty($params['values'])) ? $params['values'] : '-';
-			$field_market = 'add_field_' . $field['id'];
+			$field_marker = 'add_field_' . $field['id'];
 			
 			$required = (!empty($params['required'])) 
 			? '<span style="color:red;">' . __('Yes') . '</span>' 
@@ -292,7 +292,7 @@ if ($_GET['ac'] == 'index'):
 					<td><?php echo (!empty($field['size'])) ? h($field['size']) : '-'; ?></td>
 					<td><?php echo (!empty($values)) ? h($values) : ''; ?></td>
 					<td><?php echo $required; ?></td>
-					<td><?php echo h(strtolower($field_market)); ?></td>
+					<td><?php echo h(strtolower($field_marker)); ?></td>
 					<td>
 						<a class="edit" title="Edit" href="javascript://" onClick="openPopup('edit_<?php echo $field['id'] ?>')"></a>
 						<a class="delete" title="Delete" href="additional_fields.php?m=<?php echo $_GET['m'] ?>&ac=del&id=<?php echo $field['id'] ?>" onClick="return confirm('Are you sure?');"></a>
