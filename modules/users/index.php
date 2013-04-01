@@ -2217,10 +2217,10 @@ Class UsersModule extends Module {
 		$message = 'ОТ: '.$fromUser."\n".'ТЕМА: '.$subject."\n\n".$message;
 		
 		/* clean DB cache */
-		$this->Register['DB']->cleanSqlCache();
+		$this->DB->cleanSqlCache();
 		// формируем заголовки письма
 		$headers = "From: ".$_SERVER['SERVER_NAME']." <" . $this->Register['Config']->read('admin_email') . ">\n";
-		$headers = $headers."Content-type: text/plain; charset=\"utf-8\"\n";
+		$headers = $headers."Content-type: text/html; charset=\"utf-8\"\n";
 		$headers = $headers."Return-path: <" . $this->Register['Config']->read('admin_email') . ">\n";
 		$subject = 'Письмо с форума '.$_SERVER['SERVER_NAME'].' от '.$fromUser;
 		if (mail($toUser->getEmail(), $subject, $message, $headers))
