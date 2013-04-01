@@ -185,10 +185,24 @@ Class ForumModule extends Module {
 		
 		
 		//выводим название темы в которой было добавлено последнее сообщение и дату его добавления
-		if (!$forum->getLast_theme()/* ||  !$forum->getLast_author()*/) {
+		if ($forum->getLast_theme_id() < 1) {
 			$last_post = __('No posts');
 			
 		} else {
+			
+			// That situation can be in subforums
+			if (!$forum->getLast_theme() || !$forum->getLast_author()) {
+				$themesClass = $this->Register['ModManager']->getModelInstance('Themes');
+				$themesClass->bindModel('last_author');
+				$theme = $themesClass->getById($forum->getLast_theme_id());
+				if ($theme) {
+					$forum->setLast_theme($theme);
+					$forum->setLast_author($theme->getLast_author());
+				}
+			}
+		
+		
+		
 			$last_post_title = (mb_strlen($forum->getLast_theme()->getTitle()) > 30) 
 			? mb_substr($forum->getLast_theme()->getTitle(), 0, 30) . '...' : $forum->getLast_theme()->getTitle();
 			
@@ -285,12 +299,15 @@ Class ForumModule extends Module {
 		} else {
 
 		
-			// Получаем информацию о форуме
+			// count themes for page nav
+			$this->Model->bindModel('subforums');
+			$this->Model->bindModel('category');
+			$this->Model->bindModel('last_theme');
 			$forum = $this->Model->getById($id_forum);
 			if (empty($forum)) {
 				return $this->showInfoMessage(__('Can not find forum'), '/forum/');
 			}
-			
+			//pr($forum); die();
 			
 			// Check access to this forum. May be locked by pass or posts count
 			$this->__checkForumAccess($forum);
@@ -304,11 +321,7 @@ Class ForumModule extends Module {
 			array('alt' => __('New topic'))), '/forum/add_theme_form/' . $id_forum) : '';
 			
 			
-			// count themes for page nav
-			$this->Model->bindModel('subforums');
-			$this->Model->bindModel('category');
-			$this->Model->bindModel('last_theme');
-			$forum = $this->Model->getById($id_forum);
+
 			$themesClassName = $this->Register['ModManager']->getModelName('Themes');
 			$themesClass = new $themesClassName;
 			$themesClass->bindModel('author');
@@ -1732,11 +1745,12 @@ Class ForumModule extends Module {
 			'group_access'   => $gr_access, 
 			'first_top'      => $first_top,
 		);
+		
 		$theme = new ThemesEntity($data);
 		$theme->save();
 		$id_theme = mysql_insert_id();
 		$theme->setId($id_theme);
-		
+
 		
 		
 		// Check poll
