@@ -231,8 +231,8 @@ function buildMenu($node) {
 							В новом окне:
 						</div>
 						<div class="right">
-							<input id="newwin" type="checkbox" value="1" name="newwin" ' . $checked . ' />
-							<label for="newwin"></lael>
+							<input id="newwin' . $value['id'] . '" type="checkbox" value="1" name="newwin" ' . $checked . ' />
+							<label for="newwin' . $value['id'] . '"></lael>
 						</div>
 						<div class="clear"></div>
 					</div>
@@ -436,7 +436,7 @@ function form1() {
 			</div>
 			<div class="right">
 				<input id="newwin" type="checkbox" value="1" name="newwin" />
-				<label for="newwin"></lael>
+				<label for="newwin"></label>
 			</div>
 			<div class="clear"></div>
 		</div>

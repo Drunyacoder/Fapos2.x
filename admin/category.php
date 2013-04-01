@@ -265,7 +265,7 @@ function buildCatsList($catsTree, $catsList, $indent = '') {
 							$id = md5(rand(0, 99999) . $n);
 							
 							$popups .= '<td><input id="' . $id . '" type="checkbox" name="access[' . $id . ']" value="' . $id 
-							. '"' . $checked . '  /><label for="' . $id . '"></label>&nbsp;' . h($group['title']) . '</td>';
+							. '"' . $checked . '  /><label for="' . $id . '">' . h($group['title']) . '</label></td>';
 							$n++;
 						}
 						$popups .= '</tr></table></div>
@@ -376,7 +376,7 @@ function index(&$page_title) {
 						foreach ($acl_groups as $id => $group) {
 							if (($n % 3) == 0) $popups .= '</tr><tr>';
 							$popups .= '<td><input type="checkbox" name="access[' . $id . ']" value="' . $id 
-							. '"  checked="checked" /><label for="' . $id . '"></label>&nbsp;' . h($group['title']) . '</td>';
+							. '"  checked="checked" /><label for="' . $id . '">' . h($group['title']) . '</label></td>';
 							$n++;
 						}
 						$popups .= '</tr></table>

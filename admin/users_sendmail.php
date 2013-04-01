@@ -154,8 +154,8 @@ include_once ROOT . '/admin/template/header.php';
 						<tr>
 						<?php foreach ($users_groups as $id => $group):  $chb_id = md5(rand(0, 9999) . $id); ?>
 							<td style="text-align:center;">
-								<input id="<?php echo $chb_id; ?>" type="checkbox" name="groups[<?php echo (int)$id; ?>]" value="<?php echo (int)$id; ?>" checked="checked" /><label for="<?php echo $chb_id; ?>"></label><br />
-								<?php echo h($group['title']) . ' (' . $group['cnt'] . ')'; ?>
+								<input id="<?php echo $chb_id; ?>" type="checkbox" name="groups[<?php echo (int)$id; ?>]" value="<?php echo (int)$id; ?>" checked="checked" /><label for="<?php echo $chb_id; ?>"><?php echo h($group['title']) . ' (' . $group['cnt'] . ')'; ?></label><br />
+								
 							</td>
 						<?php endforeach; ?>
 						</tr>

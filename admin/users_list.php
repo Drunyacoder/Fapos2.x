@@ -340,7 +340,7 @@ function editAnk(&$page_title) {
 															'<option value="' . $key . '">' . $value['title'] . '</option>';
 							}
 							$activation = (!empty($activation)) 
-										? 'Активировать <input name="activation" type="checkbox" value="1" >' : '<span style="color:blue;">Активирован</span>';
+							? '<input id="activation" name="activation" type="checkbox" value="1" ><label for="activation">Активировать</label>' : '<span style="color:blue;">Активирован</span>';
 							$content .=	 '</select>
 						</div>
 						<div class="clear"></div>
