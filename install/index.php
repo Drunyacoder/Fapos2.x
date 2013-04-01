@@ -5,7 +5,7 @@
 <meta content="text/html; charset=utf-8" http-equiv="content-type">
 <link rel="shortcut icon" href="../sys/img/favicon.ico" type="image/x-icon">
 <link type="text/css" rel="StyleSheet" href="css/style.css" />
-<script language="JavaScript" type="text/javascript" src="../sys/js/jquery-1.5.2.min.js"></script>
+<script language="JavaScript" type="text/javascript" src="../sys/js/jquery.js"></script>
 </head>
 <body>
 <div id="head">
