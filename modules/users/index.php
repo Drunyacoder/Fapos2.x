@@ -1520,7 +1520,7 @@ Class UsersModule extends Module {
 
 		
 		if (isset($_SESSION['user'])) {
-			$email = get_link(__('Send maail'), '/users/send_mail_form/' . $id);
+			$email = get_link(__('Send mail'), '/users/send_mail_form/' . $id);
 			$privateMessage = get_link(__('Send PM'), '/users/send_msg_form/' . $id);
 		} else {
 			$email = __('Only register users');
