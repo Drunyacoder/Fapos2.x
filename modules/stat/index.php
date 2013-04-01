@@ -158,7 +158,7 @@ Class StatModule extends Module {
 			
 			$markers['category_url'] = get_url('/' . $this->module . '/category/' . $result->getCategory_id());
 			$markers['profile_url'] = getProfileUrl($result->getAuthor()->getId());
-			$result->setTags(explode(',', $result->getTags()));
+			if ($result->getTags()) $result->setTags(explode(',', $result->getTags()));
 
 
 			//set users_id that are on this page
@@ -314,7 +314,7 @@ Class StatModule extends Module {
 			
 			$markers['category_url'] = get_url('/' . $this->module . '/category/' . $result->getCategory_id());
 			$markers['profile_url'] = getProfileUrl($result->getAuthor()->getId());
-			$result->setTags(explode(',', $result->getTags()));
+			if ($result->getTags()) $result->setTags(explode(',', $result->getTags()));
 
 
 			//set users_id that are on this page
@@ -438,7 +438,7 @@ Class StatModule extends Module {
 		$markers['mainText'] = $announce;
 		$markers['main_text'] = $announce;
 		$entity->setAdd_markers($markers);
-		$entity->setTags(explode(',', $entity->getTags()));
+		if ($entity->getTags()) $entity->setTags(explode(',', $entity->getTags()));
 		
 		
 		$source = $this->render('material.html', array('entity' => $entity));

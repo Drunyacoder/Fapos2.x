@@ -171,7 +171,7 @@ Class LoadsModule extends Module {
             $markers[$this->module] = $entity->getDownloads();
             $markers['profile_url'] = getProfileUrl($entity->getAuthor_id());
             $markers['category_url'] = get_url('/' . $this->module . '/category/' . $entity->getCategory_id());
-			$entity->setTags(explode(',', $entity->getTags())); 
+			if ($entity->getTags()) $entity->setTags(explode(',', $entity->getTags())); 
             $entity->setAdd_markers($markers);
 
 
@@ -480,7 +480,7 @@ Class LoadsModule extends Module {
 		
 		$markers['profile_url'] = getProfileUrl($entity->getAuthor_id());
         $entity->setAdd_markers($markers);
-		$entity->setTags(explode(',', $entity->getTags()));
+		if ($entity->getTags()) $entity->setTags(explode(',', $entity->getTags()));
 
 
         $source = $this->render('material.html', array('entity' => $entity));
