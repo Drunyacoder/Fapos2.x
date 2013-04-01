@@ -127,7 +127,7 @@ function index(&$page_title) {
 						<td><span style=\"color:#{$color}\">{$status}</span></td>
 						<td>{$result['themes']}</td>
 						<td>{$result['posts']}</td>
-						<td colspan=\"2\"><a href='users_list.php?ac=ank&id={$result['id']}'><img src=\"template/img/edit_16x16.png\" /></a>
+						<td colspan=\"2\"><a class=\"edit\" href='users_list.php?ac=ank&id={$result['id']}'></a>
 						</td>";
 	}
 	$content .= '</table></div>';
