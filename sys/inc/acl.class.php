@@ -80,12 +80,14 @@ class ACL {
 		} else {
 			$user_group = (int)$group;
 		}
+		
 		if (!isset($this->rules[$params[0]]) || !is_array($this->rules[$params[0]])) return false;
 		switch (count($params)) {
 			case 1:
 				$access = (bool)in_array($user_group, $this->rules[$params[0]]);
 				break;
 			case 2:
+			case 3:
 				if (!empty($this->rules[$params[0]][$params[1]]) 
 				&& is_array($this->rules[$params[0]][$params[1]])) {
 					$access = (bool)in_array($user_group, $this->rules[$params[0]][$params[1]]);
@@ -97,6 +99,8 @@ class ACL {
 				$access = false;
 				break;
 		}
+		
+
 		
 		
 		// Check forum access (Moderators rules)

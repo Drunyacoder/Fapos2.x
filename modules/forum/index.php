@@ -2247,7 +2247,7 @@ Class ForumModule extends Module {
 		if ($id_theme < 1) return null;
 		$writer_status = (!empty($_SESSION['user']['status'])) ? $_SESSION['user']['status'] : 0;
 
-
+		
 		if ($this->ACL->turn(array('forum', 'add_posts', $theme->getId_forum()), false)) {
 			if ($theme->getLocked() == 1) {
 				$html = '<div class="not-auth-mess">' . __('Theme is locked') . '</div>';

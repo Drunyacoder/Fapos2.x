@@ -46,4 +46,3 @@ function resampleImage($path, $new_path, $size) {
 	return true;
 }
 
-?>

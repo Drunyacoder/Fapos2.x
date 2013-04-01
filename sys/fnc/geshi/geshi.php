@@ -4296,6 +4296,7 @@ class GeSHi {
             '<' => '&lt;',
             '>' => '&gt;',
 
+
             //This fix is related to SF#1923020, but has to be applied
             //regardless of actually highlighting symbols.
 
