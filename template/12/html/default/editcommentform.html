@@ -1,4 +1,5 @@
 {{ form.errors }}
+{{ editor_body }}
 <div class="addcomments-block">
 <form method="POST" action="{{ form.action }}">
 <table>
@@ -8,7 +9,7 @@
 	</tr>
 	<tr>
 		<td colspan="2">
-			<textarea id="editor" name="message">
+			<textarea id="editor" {{ editor_text }} name="message">
 			{{ form.message }}
 			</textarea>
 		</td>

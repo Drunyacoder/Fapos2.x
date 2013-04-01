@@ -28,7 +28,7 @@ html{height:100% !important;}
   overflow-x: hidden
 }
 .wysibb-body ul,ol{padding:0 0 0 30px}
-.wysibb{margin:0 0 15px 0 !important;border:1px solid #ddd;position:relative;background:#fff;font-family:Arial,Verdana,Tahoma;font-size:12px;}
+.wysibb{margin:0 0 15px 0 !important;border:1px solid #666;position:relative;background:#333;font-family:Arial,Verdana,Tahoma;font-size:12px;}
 .wysibb-texarea{
   border:none !important;
   margin:0 !important;
@@ -38,23 +38,23 @@ html{height:100% !important;}
 }
 /* TOOLBAR */
 .wysibb .wysibb-toolbar{
-  background:#f4f4f4;
+  background:#999;
   
-  background-image: linear-gradient(bottom, #eee 50%, #fafafa 100%);
-  background-image: -o-linear-gradient(bottom, #eee 50%, #fafafa 100%);
-  background-image: -moz-linear-gradient(bottom, #eee 50%, #fafafa 100%);
-  background-image: -webkit-linear-gradient(bottom, #eee 50%, #fafafa 100%);
-  background-image: -ms-linear-gradient(bottom, #eee 50%, #fafafa 100%);
+  background-image: linear-gradient(bottom, #333 50%, #999 100%);
+  background-image: -o-linear-gradient(bottom, #333 50%, #999 100%);
+  background-image: -moz-linear-gradient(bottom, #333 50%, #999 100%);
+  background-image: -webkit-linear-gradient(bottom, #333 50%, #999 100%);
+  background-image: -ms-linear-gradient(bottom, #333 50%, #999 100%);
   
 }
 .wysibb .wysibb-toolbar {
-  border-bottom:1px solid #ddd;
+  border-bottom:1px solid #666;
   position:relative;
   padding:0 60px 0 4px;
 }
 .wysibb .wysibb-toolbar .wysibb-toolbar-container {
   margin:4px 4px 4px 0;
-  border-right: 1px solid #ddd;
+  border-right: 1px solid #666;
   padding:0 8px 0 4px;
   display:inline-block;*display:inline;zoom: 1;
 }
@@ -88,8 +88,8 @@ html{height:100% !important;}
 }
 .wysibb .wysibb-toolbar .wysibb-toolbar-container .wysibb-toolbar-btn span.btn-tooltip {
   display:none;
-  background:#333;
-  border:1px solid #fff;
+  background:#999;
+  border:1px solid #666;
   position:absolute;
   line-height:20px;
   font-size:11px;
@@ -106,12 +106,13 @@ html{height:100% !important;}
   height:0;
   border-left: 10px solid transparent;
   border-right: 10px solid transparent;
-  border-top: 10px solid #333;
+  border-top: 10px solid #666;
   position:absolute;
   bottom:-5px;
   left:3px;
 }
 .wysibb .wysibb-toolbar .wysibb-toolbar-container .wysibb-toolbar-btn span.btn-text {
+  color: #fff;
   text-transform: uppercase;
   font-family: sans-serif,Verdana,Tahoma;
   font-weight:bold;
@@ -123,23 +124,23 @@ html{height:100% !important;}
   border:1px solid #bbb;
   /* box-shadow:-1px 1px 1px #aaa; */
   border-radius:3px;
-  background:#fff;
+  background:#666;
 }
 .wysibb .wysibb-toolbar .wysibb-toolbar-container .wysibb-toolbar-btn:hover span.btn-tooltip{
   display:block;
 }
 .wysibb .wysibb-toolbar .wysibb-toolbar-container .wysibb-toolbar-btn .fonticon{
-  color:#333;
+  color:#fff;
   font-family: 'WysiBBiconFont';
   font-size:18px;
   line-height:20px;
-  text-shadow:0px 1px 0px #fff;
+  text-shadow:0px 1px 0px #333;
   text-align:center;
   /* -webkit-font-smoothing: antialiased; */
   speak: none;
 }
 .wysibb .wysibb-toolbar .wysibb-toolbar-container .wysibb-toolbar-btn:hover .fonticon{
-  color:#000;
+  color:#fff;
 }
 .wysibb .wysibb-toolbar .wysibb-toolbar-container .wysibb-toolbar-btn.on .fonticon{
   text-shadow:none;
@@ -156,6 +157,7 @@ html{height:100% !important;}
   /* width:46px; */
 }
 .modesw{
+  color:#fff;
   font-weight:bold;
   font-size:0.9em;
   line-height:20px;
@@ -343,7 +345,7 @@ html{height:100% !important;}
 }
 .wysibb .wysibb-toolbar .wysibb-toolbar-container .wysibb-toolbar-btn.wbb-select:hover{
   border: 1px solid #bbb;
-  background:#fff;
+  background:#666;
 }
 .wysibb .wysibb-toolbar .wysibb-toolbar-container .wysibb-toolbar-btn.wbb-select.on{
    padding: 1px 1px 1px 5px;
@@ -368,6 +370,7 @@ html{height:100% !important;}
   padding:0 3px;
 }
 .wbb-select .val{
+  color:#fff;
   height:24px;
   line-height:24px;
   font-weight:bold;

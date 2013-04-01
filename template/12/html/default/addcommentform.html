@@ -1,3 +1,4 @@
+{{ editor_body }}
 <div class="comm-pagi">{{ comments_pagination }}</div>
 <div class="addcomments-block">
 	<form method="POST" action="{{ data.action }}">
@@ -8,7 +9,7 @@
 			</tr>
 			<tr>
 				<td colspan="2">
-					<textarea id="editor" name="message" >{{ data.add_comment_message }}</textarea>
+					<textarea id="editor" {{ editor_text }} name="message" >{{ data.add_comment_message }}</textarea>
 				</td>
 			</tr>
 			{{ data.add_comment_captcha }}

@@ -2,6 +2,7 @@
 	{{ context.preview }}
 {% endif %}
 {{ context.error }}
+{{ editor_body }}
 <form name="sendForm" id="sendForm" action="{{ context.action }}" method="POST"
 enctype="multipart/form-data" onsubmit="return checkForm(this)">
 <table border="0"  class="add-form" cellspacing="1" cellpadding="0">
@@ -13,72 +14,10 @@ enctype="multipart/form-data" onsubmit="return checkForm(this)">
 		<td>Заголовок сообщения:<font color="red" class="manStar">*</font></td>
 		<td class="right"><input type="text" name="subject" maxlength="60" value="{{ context.subject }}" /></td>
 	</tr>
-	<tr>
-		<td colspan="2">
-			<input type="button" accesskey="b" name="addbbcode0" value=" b " onClick="bbstyle(0)" 
-			onMouseOver="helpline('b')" onMouseOut="helpline('h')" class="codeButtons" />
-
-			<input type="button" accesskey="i" name="addbbcode2" value=" i " onClick="bbstyle(2)" 
-			onMouseOver="helpline('i')" onMouseOut="helpline('h')" class="codeButtons" />
-
-			<input type="button" name="addbbcode4" value=" u " onClick="bbstyle(4)" 
-			onMouseOver="helpline('u')" onMouseOut="helpline('h')" class="codeButtons" />
-
-			<input type="button" name="addbbcode6" value="Quote" onClick="bbstyle(6)" 
-			onMouseOver="helpline('q')" onMouseOut="helpline('h')" class="codeButtons" />
-
-			<input type="button" name="addbbcode8" value="Code" onClick="bbstyle(8)" 
-			onMouseOver="helpline('c')" onMouseOut="helpline('h')" class="codeButtons" />
-
-			<input type="button" name="addbbcode10" value="PHP" onClick="bbstyle(10)" 
-			onMouseOver="helpline('p')" onMouseOut="helpline('h')" class="codeButtons" />
-
-			<input type="button" name="addbbcode12" value="List" onClick="bbstyle(12)" 
-			onMouseOver="helpline('l')" onMouseOut="helpline('h')" class="codeButtons" />
-
-			<input type="button" name="addbbcode14" value="List=" onClick="bbstyle(14)" 
-			onMouseOver="helpline('o')" onMouseOut="helpline('h')" class="codeButtons" />
-
-			<input type="button" name="addbbcode16" value="Img"  onClick="bbstyle(16)" 
-			onMouseOver="helpline('m')" onMouseOut="helpline('h')" class="codeButtons" />
-
-			<input type="button" name="addbbcode18" value="URL" onClick="bbstyle(18)" 
-			onMouseOver="helpline('w')" onMouseOut="helpline('h')" class="codeButtons" />
-			
-			<input type="button" name="addbbcode20" value="Hide" onClick="bbstyle(20)" 
-			onMouseOver="helpline('hd')" onMouseOut="helpline('h')" class="codeButtons" />
-
-			<input type="button" name="addbbcode22" value="Left" onClick="bbstyle(22)" 
-			onMouseOver="helpline('le')" onMouseOut="helpline('h')" class="codeButtons" />
-
-			<input type="button" name="addbbcode24" value="Center" onClick="bbstyle(24)" 
-			onMouseOver="helpline('ce')" onMouseOut="helpline('h')" class="codeButtons" />
-
-			<input type="button" name="addbbcode26" value="Right" onClick="bbstyle(26)" 
-			onMouseOver="helpline('ri')" onMouseOut="helpline('h')" class="codeButtons" />
-			
-			<span class="code-help">Цвет шрифта:</span>
-			<select class="codeSelect" name="addbbcode30" onChange="bbfontstyle('[color=' + this.form.addbbcode30.options[this.form.addbbcode30.selectedIndex].value + ']', '[/color]');this.selectedIndex=0;" onMouseOver="helpline('s')" onMouseOut="helpline('h')">
-				<option style="color:#000000;" value="default">По умолчанию</option>
-				<option style="color:#FF0000;" value="red" />Красный</option>
-				<option style="color:#008000;" value="green" />Зелёный</option>
-				<option style="color:#0000FF;" value="blue" />Синий</option>
-			</select>
-			
-			<span class="code-help">Размер шрифта:</span>
-			<select class="codeSelect"  name="addbbcode31" onChange="bbfontstyle('[size=' + this.form.addbbcode31.options[this.form.addbbcode31.selectedIndex].value + ']', '[/size]');this.selectedIndex=0;" onMouseOver="helpline('si')" onMouseOut="helpline('h')">
-				<option style="font-size:13px;" value="13">По умолчанию</option>
-				<option style="font-size:10px;" value="10">Текст 2</option>
-				<option style="font-size:15px;" value="15">Текст 3</option>
-				<option style="font-size:20px;" value="20">Текст 4</option>
-				<option style="font-size:25px;" value="25">Текст 5</option>
-			</select>
-		</td>
-	</tr>
 
 	<tr>
 		<td colspan="2">
-			<textarea class="text-area" name="mainText" onselect="storeCaret(this);" onclick="storeCaret(this);" onkeyup="storeCaret(this);">{{ context.main_text }}</textarea>
+			<textarea id="editor" {{ editor_text }} class="text-area" name="mainText" onselect="storeCaret(this);" onclick="storeCaret(this);" onkeyup="storeCaret(this);">{{ context.main_text }}</textarea>
 		</td>
 	</tr>
 	<tr>

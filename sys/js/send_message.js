@@ -114,8 +114,8 @@ function checkForm() {
 }
 
 function emoticon(text) {
-	var txtarea = document.getElementById("sendForm").mainText;
-	text = ' ' + text + ' ';
+	var txtarea = document.getElementById("editor");
+	var text = ' ' + text + ' ';
 	if (txtarea.createTextRange && txtarea.caretPos) {
 		var caretPos = txtarea.caretPos;
 		caretPos.text = caretPos.text.charAt(caretPos.text.length - 1) == ' ' ? caretPos.text + text + ' ' : caretPos.text + text;

@@ -18,7 +18,7 @@
 				<tr>
 					<td class="meta">
 						<div style="width:140px;overflow:hidden;">
-							<a class="postUser" href="javascript://" onClick="emoticon('[b]{{ post.author.name }}[/b],');return false;">{{ post.author.name }}</a>
+							<a class="postUser" href="javascript://" {{ editor_forum_name }} >{{ post.author.name }}</a>
 						</div>
 					</td>
 					<td class="meta">
@@ -81,8 +81,7 @@
 								    {% endif %}
                                 </td>
 								<td align="center">
-									<span class="quoteAuthor" onClick="quoteSelection('{{ post.author.name }}');" onMouseOver="catchSelection(); this.className='quoteAuthorOver'"
-									onMouseOut="this.className='quoteAuthor'">Цитировать</span>
+									<span class="quoteAuthor" {{ editor_forum_quote }}>Цитировать</span>
 								</td>
 								<td width="2%" nowrap align="right">
                                     {{ post.on_top_link }} | {{ post.edit_link }} | {{ post.delete_link }}
