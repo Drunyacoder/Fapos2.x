@@ -7,6 +7,11 @@
 	<span style="color:#789435;">Информация</span><br />
 	{{ data.info_message }}
 </div>
+{% if data.error_message %}
+	<div id="sql_querys" style="color:#809197;">
+	<br />{{ data.error_message }}
+	</div>
+{% endif %} 
 </body>
 </html>
 
