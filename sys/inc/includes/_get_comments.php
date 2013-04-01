@@ -2,21 +2,20 @@
 $id = (int)$entity->getId();
 if (empty($id) || $id < 1) $html = true;
 
-
-$modelName = ucfirst($this->module) . 'CommentsModel';
-$CommentsModel = new $modelName;
-$CommentsModel->bindModel('Users');
+$commentsModel = $this->Register['ModManager']->getModelInstance($this->module . 'Comments');
 
 
-if (empty($html)) {
+if (empty($html) && $commentsModel) {
+	$commentsModel->bindModel('Users');
+	
+	
 	/* pages nav */
-	$total = $CommentsModel->getTotal(array('cond' => array('entity_id' => $id)));
 	$this->_globalize(array('comments_pagination' => ''));
 	
 	
 	$order_way = ($this->Register['Config']->read('comments_order', $this->module)) ? 'DESC' : 'ASC';
 	$params = array('order' => 'date ' . $order_way,);
-	$comments = $CommentsModel->getCollection(array('entity_id' => $id), $params);
+	$comments = $commentsModel->getCollection(array('entity_id' => $id), $params);
 	if ($comments) {
 		foreach ($comments as $comment) {
 			$markers = array();

@@ -98,16 +98,28 @@ $data = array(
 	'date'     => new Expr('NOW()'),
 	'mail'     => $mail,
 );
-$className = ucfirst($this->module) . 'CommentsEntity';
-$entityComm = new $className($data);
-$entityComm->save();
 
-$entity = $this->Model->getById($id);
-$entity->setComments($entity->getComments() + 1);
-$entity->save();
+
+
+$className = $this->Register['ModManager']->getEntityName($this->module . 'Comments');
+$entityComm = new $className($data);
+
+if ($entityComm) {
+
+	$entityComm->save();
+
+	$entity = $this->Model->getById($id);
+	if ($entity) {
+		$entity->setComments($entity->getComments() + 1);
+		$entity->save();
+		
+
+		if ($this->Log) $this->Log->write('adding comment to ' . $this->module, $this->module . ' id(' . $id . ')');
+		return $this->showInfoMessage(__('Comments is added'), '/' . $this->module . '/view/' . $id);
+	}
+}
 
 
 
 if ($this->Log) $this->Log->write('adding comment to ' . $this->module, $this->module . ' id(' . $id . ')');
 return $this->showInfoMessage(__('Comments is added'), '/' . $this->module . '/view/' . $id );
-?>

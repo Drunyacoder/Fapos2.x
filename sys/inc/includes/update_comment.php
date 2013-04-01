@@ -6,8 +6,7 @@ if ($id < 1) redirect('/' . $this->module);
 $error = '';
 
 
-$commClassName = ucfirst($this->module) . 'CommentsModel';
-$commModel = new $commClassName;
+$commModel = $this->Register['ModManager']->getModelInstance($this->module . 'Comments');
 $comment = $commModel->getById($id);
 if (!$comment) return $this->showInfoMessage(__('Comment not found'), $this->module);
 
@@ -17,12 +16,17 @@ $message = mb_substr($message, 0, $this->Register['Config']->read('comment_lengh
 $message = trim($message);
 
 
-$name = '';
+/* cut and trim values */
+if ($comment->getUser_id() > 0) {
+	$name = $comment->getName();
+} else {
+	$name = mb_substr($_POST['login'], 0, 70);
+	$name = trim($name);
+}
+
+
 $valobj = $this->Register['Validate'];
 if ($comment->getUser_id()) {
-	//$name = (!empty($_POST['login'])) ? (string)$_POST['login'] : '';
-	//$name = trim(mb_substr($name, 0, 70));
-	$name = $comment->getName();
 	
 	if (empty($name)) {
 		$error = $error . '<li>' . __('Empty field "login"') . '</li>' . "\n";

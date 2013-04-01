@@ -3,22 +3,22 @@
 $this->ACL->turn(array($this->module, 'add_comments'));
 
 $id = (int)$id;
-if ($id < 1) $html = true;
 
 
 
-if (empty($html)) {
+if ($id < 1) {
+	$html = '';
+} else { 
+
 	$markers = array();
 	$name = (!empty($_SESSION['user']['name'])) ? h($_SESSION['user']['name']) : '';
 	$message = '';	
+	$info = '';
 	
 
 	/* if an error */
 	if (isset($_SESSION['addCommentForm'])) {
-		$errMarkers = array();
-		$errMarkers['info_message'] = $_SESSION['addCommentForm']['error'];
-		$info = $this->render('infomessage.html', array('data' => $errMarkers));
-		$html = $info . $html . "\n";
+		$info = $this->render('infomessage.html', array('info_message' => $_SESSION['addCommentForm']['error']));
 		$name = h($_SESSION['addCommentForm']['name']);
 		$message = h($_SESSION['addCommentForm']['message']);
 		unset($_SESSION['addCommentForm']);
@@ -33,12 +33,12 @@ if (empty($html)) {
 		$kcaptcha = getCaptcha();
 	}
 	
+	$markers['disabled'] = (!empty($_SESSION['user'])) ? ' disabled="disabled"' : '';
 	$markers['add_comment_captcha'] = $kcaptcha;
 	$markers['add_comment_name'] = $name;
 	$markers['add_comment_message'] = $message;
 	$html = $this->render('addcommentform.html', array('data' => $markers));
-} else {
-	$html = '';
+	$html = $info . $html . "\n";
 }
 
 

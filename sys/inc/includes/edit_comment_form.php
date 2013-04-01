@@ -5,15 +5,15 @@ $id = (!empty($id)) ? (int)$id : 0;
 if ($id < 1) redirect('/' . $this->module);
 
 
-$commClassName = ucfirst($this->module) . 'CommentsModel';
-$commModel = new $commClassName;
+
+$commModel = $this->Register['ModManager']->getModelInstance($this->module . 'Comments');
 $comment = $commModel->getById($id);
-if (!$comment) return $this->showInfoMessage(__('Comment not found'), $this->module);
+if (!$comment) return $this->showInfoMessage(__('Comment not found'), '/' . $this->module . '/');
 
 
 // Categories tree
 $entity = $this->Model->getById($comment->getEntity_id());
-if ($entity->getCategory_id()) {
+if ($entity && $entity->getCategory_id()) {
 	$this->categories = $this->_getCatsTree($entity->getCategory_id());
 } else {
 	$this->categories = $this->_getCatsTree();
