@@ -2,12 +2,12 @@
 ##################################################
 ##												##
 ## Author:       Andrey Brykin (Drunya)         ##
-## Version:      1.4                            ##
+## Version:      1.5                            ##
 ## Project:      CMS                            ##
 ## package       CMS Fapos                      ##
 ## subpackege    Install                        ##
 ## copyright     ©Andrey Brykin 2010-2013       ##
-## last mod.     2013/02/23                     ##
+## last mod.     2013/04/02                     ##
 ##################################################
 
 
@@ -96,13 +96,13 @@ $array[] = "CREATE TABLE `{$set['db']['prefix']}pages` (
   `content` longtext collate utf8_general_ci NOT NULL,
   `url` varchar(255) default ''  NOT NULL,
   `meta_keywords` varchar(255) default ''  NOT NULL,
-  `meta_description` text default ''  NOT NULL,
+  `meta_description` text,
   `parent_id` int(11) default 0  NOT NULL,
   `path` varchar(255) default '1.'  NOT NULL,
   `visible` enum('1','0') default '1'  NOT NULL,
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci";
-$array[] = "INSERT INTO `{$set['db']['prefix']}pages` (`id`,`name`,`path`) VALUES ('1','root','.')";
+$array[] = "INSERT INTO `{$set['db']['prefix']}pages` (`id`,`name`,`path`,`content`) VALUES ('1', 'root', '.', '')";
 #####################################################################
 $array[] = "DROP TABLE IF EXISTS `{$set['db']['prefix']}loads`";
 $array[] = "CREATE TABLE `{$set['db']['prefix']}loads` (
