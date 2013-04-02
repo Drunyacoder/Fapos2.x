@@ -59,7 +59,7 @@ class ThemesEntity extends FpsEntity
 			'views' 			=> $this->views,
 			'important' 		=> $this->important,
 			'description' 		=> $this->description,
-			'group_access' 		=> implode('.', (array)$this->group_access),
+			'group_access' 		=> (is_array($this->group_access) && count($this->group_access) == 1 && $this->group_access[0] !== '') ? intval($this->group_access[0]) : implode('.', (array)$this->group_access),
 			'first_top' 		=> $this->first_top,
 		);
 		if ($this->id) $params['id'] = $this->id;
