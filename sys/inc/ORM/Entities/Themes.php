@@ -2,12 +2,12 @@
 /*---------------------------------------------\
 |											   |
 | @Author:       Andrey Brykin (Drunya)        |
-| @Version:      1.1                           |
+| @Version:      1.2                           |
 | @Project:      CMS                           |
 | @package       CMS Fapos                     |
 | @subpackege    Themes Entity                 |
 | @copyright     ©Andrey Brykin 2010-2013      |
-| @last mod      2013/02/25                    |
+| @last mod      2013/04/03                    |
 |----------------------------------------------|
 |											   |
 | any partial or not partial extension         |
@@ -49,18 +49,20 @@ class ThemesEntity extends FpsEntity
 	{
 		$params = array(
 			'title' 			=> $this->title,
-			'id_author' 		=> $this->id_author,
+			'id_author' 		=> intval($this->id_author),
 			'time' 				=> $this->time,
-			'id_last_author' 	=> $this->id_last_author,
+			'id_last_author' 	=> intval($this->id_last_author),
 			'last_post' 		=> $this->last_post,
-			'id_forum' 			=> $this->id_forum,
-			'locked' 			=> $this->locked,
-			'posts' 			=> $this->posts,
-			'views' 			=> $this->views,
-			'important' 		=> $this->important,
+			'id_forum' 			=> intval($this->id_forum),
+			'locked' 			=> intval($this->locked),
+			'posts' 			=> intval($this->posts),
+			'views' 			=> intval($this->views),
+			'important' 		=> (!empty($this->important)) ? '1' : new Expr("'0'"),
 			'description' 		=> $this->description,
-			'group_access' 		=> (is_array($this->group_access) && count($this->group_access) == 1 && $this->group_access[0] !== '') ? intval($this->group_access[0]) : implode('.', (array)$this->group_access),
-			'first_top' 		=> $this->first_top,
+			'group_access' 		=> (is_array($this->group_access) && count($this->group_access) == 1 && $this->group_access[0] !== '') 
+									? $this->group_access[0] 
+									: implode('.', (array)$this->group_access),
+			'first_top' 		=> (!empty($this->first_top)) ? '1' : new Expr("'0'"),
 		);
 		if ($this->id) $params['id'] = $this->id;
 		$Register = Register::getInstance();

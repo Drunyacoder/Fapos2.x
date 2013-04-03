@@ -2,12 +2,12 @@
 /*---------------------------------------------\
 |											   |
 | @Author:       Andrey Brykin (Drunya)        |
-| @Version:      1.0                           |
+| @Version:      1.1                           |
 | @Project:      CMS                           |
 | @package       CMS Fapos                     |
 | @subpackege    Users Entity                  |
-| @copyright     ©Andrey Brykin 2010-2012      |
-| @last mod      2012/02/27                    |
+| @copyright     ©Andrey Brykin 2010-2013      |
+| @last mod      2013/04/03                    |
 |----------------------------------------------|
 |											   |
 | any partial or not partial extension         |
@@ -67,7 +67,7 @@ class UsersEntity extends FpsEntity
             'email' => $this->email,
             'color' => $this->color,
             'state' => $this->state,
-            'rating' => $this->rating,
+            'rating' => intval($this->rating),
             'timezone' => $this->timezone,
             'url' => $this->url,
             'icq' => $this->icq,
@@ -76,18 +76,18 @@ class UsersEntity extends FpsEntity
             'pol' => $this->pol,
             'jabber' => $this->jabber,
             'city' => $this->city,
-            'telephone' => $this->telephone,
-            'byear' => $this->byear,
-            'bmonth' => $this->bmonth,
-            'bday' => $this->bday,
+            'telephone' => intval($this->telephone),
+            'byear' => intval($this->byear),
+            'bmonth' => intval($this->bmonth),
+            'bday' => intval($this->bday),
             'photo' => $this->photo,
             'puttime' => $this->puttime,
-            'themes' => $this->themes,
-            'posts' => $this->posts,
-            'status' => $this->status,
-            'locked' => $this->locked,
+            'themes' => intval($this->themes),
+            'posts' => intval($this->posts),
+            'status' => intval($this->status),
+            'locked' => intval($this->locked),
             'activation' => $this->activation,
-            'warnings' => $this->warnings,
+            'warnings' => intval($this->warnings),
             'ban_expire' => $this->ban_expire,
         );
         if ($this->id) $params['id'] = $this->id;

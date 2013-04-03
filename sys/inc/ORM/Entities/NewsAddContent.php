@@ -2,12 +2,12 @@
 /*---------------------------------------------\
 |											   |
 | @Author:       Andrey Brykin (Drunya)        |
-| @Version:      1.1                           |
+| @Version:      1.2                           |
 | @Project:      CMS                           |
 | @package       CMS Fapos                     |
 | @subpackege    NewsAddContent Entity         |
-| @copyright     ©Andrey Brykin 2010-2012      |
-| @last mod      2012/03/02                    |
+| @copyright     ©Andrey Brykin 2010-2013      |
+| @last mod      2013/04/03                    |
 |----------------------------------------------|
 |											   |
 | any partial or not partial extension         |
@@ -37,8 +37,8 @@ class NewsAddContentEntity extends FpsEntity
 	public function save()
 	{
 		$params = array(
-			'entity_id' => $this->entity_id,
-			'field_id' => $this->field_id,
+			'entity_id' => intval($this->entity_id),
+			'field_id' => intval($this->field_id),
 			'content' => $this->content,
 		);
 		if ($this->id) $params['id'] = $this->id;

@@ -2,12 +2,12 @@
 /*---------------------------------------------\
 |											   |
 | @Author:       Andrey Brykin (Drunya)        |
-| @Version:      1.1                           |
+| @Version:      1.2                           |
 | @Project:      CMS                           |
 | @package       CMS Fapos                     |
 | @subpackege    Stat Entity                   |
 | @copyright     ©Andrey Brykin 2010-2013      |
-| @last mod      2013/01/30                    |
+| @last mod      2013/04/03                    |
 |----------------------------------------------|
 |											   |
 | any partial or not partial extension         |
@@ -59,9 +59,9 @@ class StatEntity extends FpsEntity
 			'main' => $this->main,
 			'views' => intval($this->views),
 			'date' => $this->date,
-			'category_id' => $this->category_id,
-			'author_id' => $this->author_id,
-			'comments' => (!empty($this->comments)) ? intval($this->comments) : 0,
+			'category_id' => intval($this->category_id),
+			'author_id' => intval($this->author_id),
+			'comments' => intval($this->comments),
 			'tags' => (is_array($this->tags)) ? implode(',', $this->tags) : $this->tags,
 			'description' => $this->description,
 			'sourse' => $this->sourse,

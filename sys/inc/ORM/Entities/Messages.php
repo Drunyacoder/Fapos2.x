@@ -2,12 +2,12 @@
 /*---------------------------------------------\
 |											   |
 | @Author:       Andrey Brykin (Drunya)        |
-| @Version:      1.0                           |
+| @Version:      1.1                           |
 | @Project:      CMS                           |
 | @package       CMS Fapos                     |
 | @subpackege    Messages Entity               |
-| @copyright     ©Andrey Brykin 2010-2012      |
-| @last mod      2012/05/16                    |
+| @copyright     ©Andrey Brykin 2010-2013      |
+| @last mod      2013/04/03                    |
 |----------------------------------------------|
 |											   |
 | any partial or not partial extension         |
@@ -42,13 +42,13 @@ class MessagesEntity extends FpsEntity
 	public function save()
 	{
 		$params = array(
-			'to_user' => $this->to_user,
-			'from_user' => $this->from_user,
+			'to_user' => intval($this->to_user),
+			'from_user' => intval($this->from_user),
 			'sendtime' => new Expr($this->sendtime),
 			'subject' => $this->subject,
 			'message' => $this->message,
-			'id_rmv' => $this->id_rmv,
-			'viewed' => $this->viewed,
+			'id_rmv' => intval($this->id_rmv),
+			'viewed' => intval($this->viewed),
 		);
 		if ($this->id) $params['id'] = $this->id;
 		$Register = Register::getInstance();

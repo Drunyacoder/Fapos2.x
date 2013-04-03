@@ -2,12 +2,12 @@
 /*---------------------------------------------\
 |											   |
 | @Author:       Andrey Brykin (Drunya)        |
-| @Version:      1.2                           |
+| @Version:      1.3                           |
 | @Project:      CMS                           |
 | @package       CMS Fapos                     |
 | @subpackege    Stat Entity                   |
-| @copyright     ©Andrey Brykin 2010-2012      |
-| @last mod      2012/06/04                    |
+| @copyright     ©Andrey Brykin 2010-2013      |
+| @last mod      2013/04/03                    |
 |----------------------------------------------|
 |											   |
 | any partial or not partial extension         |
@@ -47,11 +47,11 @@ class StatisticsEntity extends FpsEntity
 			'cookie' => $this->cookie,
 			'referer' => $this->referer,
 			'date' => $this->date,
-			'views' => $this->views,
-			'yandex_bot_views' => $this->yandex_bot_views,
-			'google_bot_views' => $this->google_bot_views,
-			'other_bot_views' => $this->other_bot_views,
-			'other_site_visits' => $this->other_site_visits,
+			'views' => intval($this->views),
+			'yandex_bot_views' => intval($this->yandex_bot_views),
+			'google_bot_views' => intval($this->google_bot_views),
+			'other_bot_views' => intval($this->other_bot_views),
+			'other_site_visits' => intval($this->other_site_visits),
 		);
 		if ($this->id) $params['id'] = $this->id;
 		$Register = Register::getInstance();

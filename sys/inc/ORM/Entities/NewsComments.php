@@ -2,12 +2,12 @@
 /*---------------------------------------------\
 |											   |
 | @Author:       Andrey Brykin (Drunya)        |
-| @Version:      1.1                           |
+| @Version:      1.2                           |
 | @Project:      CMS                           |
 | @package       CMS Fapos                     |
 | @subpackege    NewsComments Entity           |
-| @copyright     ©Andrey Brykin 2010-2012      |
-| @last mod      2012/02/28                    |
+| @copyright     ©Andrey Brykin 2010-2013      |
+| @last mod      2013/04/03                    |
 |----------------------------------------------|
 |											   |
 | any partial or not partial extension         |
@@ -40,16 +40,15 @@ class NewsCommentsEntity extends FpsEntity
 	public function save()
 	{
 		$data = array(
-			'id' => $this->id,
-			'entity_id' => $this->entity_id,
-			'user_id' => $this->user_id,
+			'entity_id' => intval($this->entity_id),
+			'user_id' => intval($this->user_id),
 			'name' => $this->name,
 			'message' => $this->message,
 			'ip' => $this->ip,
 			'mail' => $this->mail,
 			'date' => $this->date,
 		);
-		
+		if($this->id) $data['id'] = $this->id;
 		$Register = Register::getInstance();
 		$Register['DB']->save('news_comments', $data);
 	}

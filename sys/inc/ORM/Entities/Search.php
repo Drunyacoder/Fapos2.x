@@ -2,12 +2,12 @@
 /*---------------------------------------------\
 |											   |
 | @Author:       Andrey Brykin (Drunya)        |
-| @Version:      1.0                           |
+| @Version:      1.1                           |
 | @Project:      CMS                           |
 | @package       CMS Fapos                     |
-| @subpackege    Search Entity                   |
-| @copyright     ©Andrey Brykin 2010-2012      |
-| @last mod      2012/04/28                    |
+| @subpackege    Search Entity                 |
+| @copyright     ©Andrey Brykin 2010-2013      |
+| @last mod      2013/04/03                    |
 |----------------------------------------------|
 |											   |
 | any partial or not partial extension         |
@@ -42,7 +42,7 @@ class SearchEntity extends FpsEntity
 	{
 		$params = array(
 			'index' => $this->index,
-			'entity_id' => $this->entity_id,
+			'entity_id' => intval($this->entity_id),
 			'entity_table' => $this->entity_table,
 			'date' => $this->date,
 			'entity_view' => $this->entity_view,

@@ -2,12 +2,12 @@
 /*---------------------------------------------\
 |											   |
 | @Author:       Andrey Brykin (Drunya)        |
-| @Version:      1.0                           |
+| @Version:      1.1                           |
 | @Project:      CMS                           |
 | @package       CMS Fapos                     |
 | @subpackege    ForumCat Entity               |
-| @copyright     ©Andrey Brykin 2010-2012      |
-| @last mod      2012/05/20                    |
+| @copyright     ©Andrey Brykin 2010-2013      |
+| @last mod      2013/04/03                    |
 |----------------------------------------------|
 |											   |
 | any partial or not partial extension         |
@@ -38,7 +38,7 @@ class ForumCatEntity extends FpsEntity
 	{
 		$params = array(
 			'title' => $this->title,
-			'previev_id ' => $this->preview_id,
+			'previev_id ' => intval($this->preview_id),
 		);
 		if ($this->id) $params['id'] = $this->id;
 		$Register = Register::getInstance();
@@ -49,6 +49,7 @@ class ForumCatEntity extends FpsEntity
 	
 	public function delete()
 	{ 
+		$Register = Register::getInstance();
 		$Register['DB']->delete('forum_cat', array('id' => $this->id));
 	}
 

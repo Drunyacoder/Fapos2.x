@@ -2,12 +2,12 @@
 /*---------------------------------------------\
 |											   |
 | @Author:       Andrey Brykin (Drunya)        |
-| @Version:      1.0                           |
+| @Version:      1.1                           |
 | @Project:      CMS                           |
 | @package       CMS Fapos                     |
 | @subpackege    UsersVotes Entity             |
-| @copyright     ©Andrey Brykin 2010-2012      |
-| @last mod      2012/05/19                    |
+| @copyright     ©Andrey Brykin 2010-2013      |
+| @last mod      2013/04/03                    |
 |----------------------------------------------|
 |											   |
 | any partial or not partial extension         |
@@ -41,12 +41,11 @@ class UsersVotesEntity extends FpsEntity
     public function save()
     {
         $params = array(
-            'from_user' => $this->from_user,
-            'to_user' => $this->to_user,
+            'from_user' => intval($this->from_user),
+            'to_user' => intval($this->to_user),
             'comment' => $this->comment,
-            'date' => new Expr($this->date),
-            'points' => $this->points,
-   
+            'date' => $this->date,
+            'points' => intval($this->points),
         );
         if ($this->id) $params['id'] = $this->id;
         $Register = Register::getInstance();

@@ -2,12 +2,12 @@
 /*---------------------------------------------\
 |											   |
 | @Author:       Andrey Brykin (Drunya)        |
-| @Version:      1.0                           |
+| @Version:      1.1                           |
 | @Project:      CMS                           |
 | @package       CMS Fapos                     |
 | @subpackege    UsersWarnings Entity          |
-| @copyright     ©Andrey Brykin 2010-2012      |
-| @last mod      2012/05/19                    |
+| @copyright     ©Andrey Brykin 2010-2013      |
+| @last mod      2013/04/03                    |
 |----------------------------------------------|
 |											   |
 | any partial or not partial extension         |
@@ -40,11 +40,11 @@ class UsersEntity extends FpsEntity
     public function save()
     {
         $params = array(
-            'user_id' => $this->user_id,
-            'admin_id' => $this->admin_id,
+            'user_id' => intval($this->user_id),
+            'admin_id' => intval($this->admin_id),
             'cause' => $this->cause,
-            'date' => new Expr($this->date),
-            'points' => $this->points,
+            'date' => $this->date,
+            'points' => intval($this->points),
         );
         if ($this->id) $params['id'] = $this->id;
         $Register = Register::getInstance();

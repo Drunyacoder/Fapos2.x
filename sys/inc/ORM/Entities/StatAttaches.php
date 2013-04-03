@@ -2,12 +2,12 @@
 /*---------------------------------------------\
 |											   |
 | @Author:       Andrey Brykin (Drunya)        |
-| @Version:      1.1                           |
+| @Version:      1.2                           |
 | @Project:      CMS                           |
 | @package       CMS Fapos                     |
 | @subpackege    StatAttaches Entity           |
-| @copyright     ©Andrey Brykin 2010-2012      |
-| @last mod      2012/04/25                    |
+| @copyright     ©Andrey Brykin 2010-2013      |
+| @last mod      2013/04/03                    |
 |----------------------------------------------|
 |											   |
 | any partial or not partial extension         |
@@ -40,11 +40,11 @@ class StatAttachesEntity extends FpsEntity
 	public function save()
 	{
 		$params = array(
-			'entity_id' => $this->entity_id,
-			'user_id' => $this->user_id,
-			'attach_number' => $this->attach_number,
+			'entity_id' => intval($this->entity_id),
+			'user_id' => intval($this->user_id),
+			'attach_number' => intval($this->attach_number),
 			'filename' => $this->filename,
-			'size' => $this->size,
+			'size' => intval($this->size),
 			'date' => $this->date,
 			'is_image' => (!empty($this->is_image)) ? '1' : new Expr("'0'"),
 		);

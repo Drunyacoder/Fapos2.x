@@ -2,12 +2,12 @@
 /*---------------------------------------------\
 |											   |
 | @Author:       Andrey Brykin (Drunya)        |
-| @Version:      1.0                           |
+| @Version:      1.1                           |
 | @Project:      CMS                           |
 | @package       CMS Fapos                     |
 | @subpackege    Pages Entity                  |
 | @copyright     ©Andrey Brykin 2010-2013      |
-| @last mod      2013/01/24                    |
+| @last mod      2013/04/03                    |
 |----------------------------------------------|
 |											   |
 | any partial or not partial extension         |
@@ -38,7 +38,7 @@ class PollsEntity extends FpsEntity
 	public function save()
 	{
 		$params = array(
-			'theme_id' => $this->theme_id,
+			'theme_id' => intval($this->theme_id),
 			'variants' => $this->variants,
 			'voted_users' => $this->voted_users,
 			'question' => $this->question,

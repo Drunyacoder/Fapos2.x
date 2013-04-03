@@ -2,12 +2,12 @@
 /*---------------------------------------------\
 |											   |
 | @Author:       Andrey Brykin (Drunya)        |
-| @Version:      1.2                           |
+| @Version:      1.3                           |
 | @Project:      CMS                           |
 | @package       CMS Fapos                     |
 | @subpackege    Loads Entity                  |
 | @copyright     ©Andrey Brykin 2010-2013      |
-| @last mod      2013/01/30                    |
+| @last mod      2013/04/03                    |
 |----------------------------------------------|
 |											   |
 | any partial or not partial extension         |
@@ -68,10 +68,10 @@ class LoadsEntity extends FpsEntity
 			'rate' => intval($this->rate),
 			'download' => $this->download,
 			'download_url' => $this->download_url,
-			'download_url_size' => $this->download_url_size,
+			'download_url_size' => intval($this->download_url_size),
 			'date' => $this->date,
-			'category_id' => $this->category_id,
-			'author_id' => $this->author_id,
+			'category_id' => intval($this->category_id),
+			'author_id' => intval($this->author_id),
 			'comments' => (!empty($this->comments)) ? intval($this->comments) : 0,
 			'tags' => (is_array($this->tags)) ? implode(',', $this->tags) : $this->tags,
 			'description' => $this->description,

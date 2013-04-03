@@ -2,12 +2,12 @@
 /*---------------------------------------------\
 |											   |
 | @Author:       Andrey Brykin (Drunya)        |
-| @Version:      1.0                           |
+| @Version:      1.1                           |
 | @Project:      CMS                           |
 | @package       CMS Fapos                     |
 | @subpackege    ForumAttaches Entity          |
-| @copyright     ©Andrey Brykin 2010-2012      |
-| @last mod      2012/05/20                    |
+| @copyright     ©Andrey Brykin 2010-2013      |
+| @last mod      2013/04/03                    |
 |----------------------------------------------|
 |											   |
 | any partial or not partial extension         |
@@ -42,14 +42,14 @@ class ForumAttachesEntity extends FpsEntity
 	public function save()
 	{
 		$params = array(
-			'post_id' => $this->post_id,
-			'theme_id ' => $this->theme_id ,
-			'user_id' => $this->user_id,
-			'attach_number' => $this->attach_number,
+			'post_id' => intval($this->post_id),
+			'theme_id ' => intval($this->theme_id),
+			'user_id' => intval($this->user_id),
+			'attach_number' => intval($this->attach_number),
 			'filename' => $this->filename,
-			'size' => $this->size,
+			'size' => intval($this->size),
 			'date' => $this->date,
-			'is_image' => $this->is_image,
+			'is_image' => (!empty($this->is_image)) ? '1' : new Expr("'0'"),
 		);
 		if ($this->id) $params['id'] = $this->id;
 		$Register = Register::getInstance();
