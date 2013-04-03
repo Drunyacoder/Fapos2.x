@@ -171,9 +171,9 @@ $set = array (
   ),
   'db' => 
   array (
-    'host' => 'localhost',
-    'name' => 'aa',
-    'user' => 'root',
+    'host' => '',
+    'name' => '',
+    'user' => '',
     'pass' => '',
     'prefix' => '',
   ),
