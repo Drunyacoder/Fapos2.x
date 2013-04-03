@@ -44,13 +44,13 @@ class PostsEntity extends FpsEntity
 	{
 		$params = array(
 			'message' => $this->message,
-			'attaches' => $this->attaches,
-			'id_author' => $this->id_author,
+			'attaches' => (!empty($this->attaches)) ? '1' : new Expr("'0'"),
+			'id_author' => intval($this->id_author),
 			'time' => $this->time,
 			'edittime' => $this->edittime,
-			'id_editor' => $this->id_editor,
-			'id_theme' => $this->id_theme,
-			'locked' => $this->locked,
+			'id_editor' => intval($this->id_editor),
+			'id_theme' => intval($this->id_theme),
+			'locked' => (!empty($this->locked)) ? '1' : new Expr("'0'"),
 		);
 		if ($this->id) $params['id'] = $this->id;
 		$Register = Register::getInstance();
