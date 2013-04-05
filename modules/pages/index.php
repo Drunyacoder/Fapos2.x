@@ -2,12 +2,12 @@
 /*-----------------------------------------------\
 | 												 |
 |  @Author:       Andrey Brykin (Drunya)         |
-|  @Version:      1.5.4                          |
+|  @Version:      1.5.5                          |
 |  @Project:      CMS                            |
 |  @package       CMS Fapos                      |
 |  @subpackege    Pages Module                   |
 |  @copyright     ©Andrey Brykin 2010-2013       |
-|  @last mod      2013/02/22                     |
+|  @last mod      2013/04/05                     |
 \-----------------------------------------------*/
 
 /*-----------------------------------------------\
@@ -28,15 +28,15 @@ Class PagesModule extends Module {
 	/**
 	* @module_title  title of module
 	*/
-	var $module_title;
+	public $module_title;
 	/**
 	* @template  layout for module
 	*/
-	//var $template;
+	public $template = 'pages';
 	/**
 	* @module module indentifier
 	*/
-	var $module = 'pages';
+	public $module = 'pages';
 
 
 	
@@ -54,7 +54,7 @@ Class PagesModule extends Module {
 				$id = (int)$id;
 				if ($id < 2)  redirect('/pages/');
 			} else {
-				if (!preg_match('#^[\da-z_\-]+$#i', $id))  redirect('/pages/');
+				if (!preg_match('#^[\da-z_\-.]+$#i', $id))  redirect('/pages/');
 			
 				$record = $this->Model->getByUrl($id);
 				if (empty($record)) return $this->showInfoMessage(__('Can not find this page'), '/');

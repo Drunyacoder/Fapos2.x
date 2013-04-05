@@ -2,8 +2,9 @@
 /**
  * @author      Brykin Andrey
  * @url         http://fapos.net
- * @version     0.9.9
- * @copyright   ©Andrey Brykin
+ * @version     1.0.0
+ * @copyright   ©Andrey Brykin 2010 - 2013
+ * @last mod.   2013/04/05
  *
  * Parse url path and get from him requested needed params
  * (module, action, etc.)
@@ -96,7 +97,7 @@ Class Pather {
 		}
 
 		//may be i need upgrade this...hz
-		if (count($pathParams) == 1 && preg_match('#^\d+$#', $pathParams[0])) {
+		if (count($pathParams) == 1 /* && preg_match('#^\d+$#', $pathParams[0])*/) {
 			$pathParams = array(
 				0 => 'pages',
 				1 => 'index',
