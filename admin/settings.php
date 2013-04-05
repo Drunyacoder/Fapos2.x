@@ -2,12 +2,12 @@
 ##################################################
 ##												##
 ## @Author:       Andrey Brykin (Drunya)        ##
-## @Version:      1.6.0                         ##
+## @Version:      1.6.1                         ##
 ## @Project:      CMS                           ##
 ## @package       CMS Fapos                     ##
 ## @subpackege    Admin Panel module            ##
 ## @copyright     ©Andrey Brykin 2010-2013      ##
-## @last mod.     2013/03/31                    ##
+## @last mod.     2013/04/05                    ##
 ##################################################
 
 
@@ -161,8 +161,9 @@ if (isset($_POST['send'])) {
 			if (!empty($params['onsave']['func'])
 			&& function_exists((string)$params['onsave']['func'])) {
 				call_user_func((string)$params['onsave']['func'], $tmpSet);
+				continue;
 			}
-			continue;
+			
 			
 			$value = trim((string)$_POST[$fname]);
 		
