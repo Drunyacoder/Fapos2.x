@@ -5,6 +5,7 @@ class Fps_Viewer_Manager
 
 	
 	protected $moduleTitle;
+	protected $layout;
 	protected $tokensParser;
 	protected $treesParser;
 	protected $compileParser;
@@ -15,13 +16,22 @@ class Fps_Viewer_Manager
 
 	public function __construct(Module $instance = null)
 	{
-		if (null !== $instance) $this->moduleTitle = $instance->module;
+		if (null !== $instance) {
+			$this->moduleTitle = $instance->module;
+			$this->layout = $instance->template;
+		}
 		
 		$this->tokensParser = new Fps_Viewer_TokensParser();
 		$this->treesParser = new Fps_Viewer_TreesParser();
 		$this->compileParser = new Fps_Viewer_CompileParser();
 	}
 	
+	
+	
+	public function setLayout($layout)
+	{
+		$this->layout = trim($layout);
+	}
 	
 	
 	public function setModuleTitle($title)
@@ -87,7 +97,7 @@ class Fps_Viewer_Manager
 	{
 		$Register = Register::getInstance();
 		$path = ROOT . '/template/' . $Register['Config']->read('template') . '/html/' . '%s' . '/' . $fileName;
-		if (file_exists(sprintf($path, $this->moduleTitle))) $path = sprintf($path, $this->moduleTitle);
+		if (file_exists(sprintf($path, $this->layout))) $path = sprintf($path, $this->layout);
 		else $path = sprintf($path, 'default');
 		
 		return $path;

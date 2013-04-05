@@ -302,6 +302,7 @@ class Module {
             Plugins::intercept('before_parse_layout', $this);
 			
 		
+			$this->View->setLayout($this->template);
 			$markers = $this->getGlobalMarkers(file_get_contents($this->View->getTemplateFilePath('main.html')));
             $markers['content'] = $content;
 			
