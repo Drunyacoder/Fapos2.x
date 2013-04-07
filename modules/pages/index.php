@@ -2,12 +2,12 @@
 /*-----------------------------------------------\
 | 												 |
 |  @Author:       Andrey Brykin (Drunya)         |
-|  @Version:      1.5.5                          |
+|  @Version:      1.5.6                          |
 |  @Project:      CMS                            |
 |  @package       CMS Fapos                      |
 |  @subpackege    Pages Module                   |
 |  @copyright     ©Andrey Brykin 2010-2013       |
-|  @last mod      2013/04/05                     |
+|  @last mod      2013/04/07                     |
 \-----------------------------------------------*/
 
 /*-----------------------------------------------\
@@ -28,7 +28,7 @@ Class PagesModule extends Module {
 	/**
 	* @module_title  title of module
 	*/
-	public $module_title;
+	public $module_title = 'Страницы';
 	/**
 	* @template  layout for module
 	*/
@@ -53,18 +53,18 @@ Class PagesModule extends Module {
 			if (is_int($id)) {
 				$id = (int)$id;
 				if ($id < 2)  redirect('/pages/');
+				
+				$page = $this->Model->getById($id);
+				
+				
 			} else {
 				if (!preg_match('#^[\da-z_\-.]+$#i', $id))  redirect('/pages/');
 			
-				$record = $this->Model->getByUrl($id);
+				$page = $this->Model->getByUrl($id);
 				if (empty($record)) return $this->showInfoMessage(__('Can not find this page'), '/');
-				
-				$id = $record->getId();
 			}
 		
 		
-			$page = $this->Model->getById($id);
-			if (!$page) return $this->showInfoMessage(__('Can not find this page'), '/');
 			
 			
 			$this->page_title = $page->getName();
