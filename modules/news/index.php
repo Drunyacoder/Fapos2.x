@@ -842,7 +842,7 @@ Class NewsModule extends Module {
 		$error = '';
 		
 
-		$target = $this->Model->getbyId($id);
+		$target = $this->Model->getById($id);
 		if (!$target) redirect('/' . $this->module . '/');
 		
 		
