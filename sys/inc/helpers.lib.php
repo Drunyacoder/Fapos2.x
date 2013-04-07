@@ -668,7 +668,7 @@ function utf8Filter($str) {
 
 function _unlink($path) {
 	if (is_dir($path)) {
-		$files = glob(trim($path, '/\\') . '/*');
+		$files = glob(rtrim($path, '/\\') . '/*');
 		if (is_array($files) && count($files)) {
 			foreach ($files as $file) {
 				_unlink($file);
