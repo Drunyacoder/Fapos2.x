@@ -20,7 +20,7 @@ if ($commentsModel) {
 
 
 			if ($this->Log) $this->Log->write('delete comment for ' . $this->module, $this->module . ' id(' . $entityID . ')');
-			return $this->showInfoMessage(__('Comments is deleted'), '/' . $this->module . '/view/' . $entityID );
+			return $this->showInfoMessage(__('Comment is deleted'), '/' . $this->module . '/view/' . $entityID );
 		}
 	}
 }
