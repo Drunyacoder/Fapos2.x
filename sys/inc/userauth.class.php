@@ -81,7 +81,7 @@ class UserAuth
             setcookie( 'autologin', '', time() - 1, $path );
             setcookie( 'userid', '', time() - 1, $path );
             setcookie( 'password', '', time() - 1, $path );
-            return showInfoMessage( 'Ваша учетная запись не активирована', '/' );
+            return showInfoMessage(__('Your account not activated'), '/' );
         }
 
         // Если пользователь заблокирован

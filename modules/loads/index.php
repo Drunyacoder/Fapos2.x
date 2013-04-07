@@ -646,17 +646,17 @@ Class LoadsModule extends Module {
 		if (empty($addLoad))                    
 			$error = $error . '<li>' . __('Empty field "material"') . '</li>' ."\n";
 		else if (mb_strlen($addLoad) > $max_lenght)
-			$error = $error .'<li>'. sprintf(__('Wery big "material"'), $max_lenght) .'</li>'."\n";
+			$error = $error .'<li>'. sprintf(__('Very big "material"'), $max_lenght) .'</li>'."\n";
 		else if (mb_strlen($addLoad) < $min_lenght)
-			$error = $error .'<li>'. sprintf(__('Wery small "material"'), $min_lenght) .'</li>'."\n";
+			$error = $error .'<li>'. sprintf(__('Very small "material"'), $min_lenght) .'</li>'."\n";
 		
 		if ($this->Register['Config']->read('require_file', $this->module) == 1) {
 			if (empty($_FILES['attach']['name'])) 
-				$error = $error . '<li>' . __('Not attaches') . '</li>' . "\n";	
+				$error = $error . '<li>' . __('Not attachment') . '</li>' . "\n";	
 		}
 		if (isset($_FILES['attach']['name']) 
 		&& $_FILES['attach']['size'] > $this->Register['Config']->read('max_file_size', $this->module))
-			$error = $error .'<li>'. sprintf(__('Wery big file2')
+			$error = $error .'<li>'. sprintf(__('Very big file2')
             , ($this->Register['Config']->read('max_file_size', $this->module)/1024)) . '</li>' . "\n";
 		
 		if (!empty($tags) && !$valobj->cha_val($tags, V_TITLE)) 
@@ -693,7 +693,7 @@ Class LoadsModule extends Module {
 
 
                 if ($_FILES[$attach_name]['size'] > $max_attach_size) {
-                    $error .= '<li>' . sprintf(__('Wery big file'), $i, round(($max_attach_size / 1000), 2)) . '</li>' . "\n";
+                    $error .= '<li>' . sprintf(__('Very big file'), $i, round(($max_attach_size / 1000), 2)) . '</li>' . "\n";
                 }
                 if (($_FILES[$attach_name]['type'] != 'image/jpeg'
                     && $_FILES[$attach_name]['type'] != 'image/jpg'
@@ -775,7 +775,7 @@ Class LoadsModule extends Module {
         $this->Cache->clean(CACHE_MATCHING_ANY_TAG, array('module_' . $this->module));
         $this->DB->cleanSqlCache();
         if ($this->Log) $this->Log->write('adding ' . $this->module, $this->module . ' id(' . $last_id . ')');
-        return $this->showInfoMessage(__('Material successful added'), '/' . $this->module . '/' );
+        return $this->showInfoMessage(__('Material successfully added'), '/' . $this->module . '/' );
 	}
 
 
@@ -989,9 +989,9 @@ Class LoadsModule extends Module {
 		if (empty($editLoad))
 			$error = $error . '<li>' . __('Empty field "material"') . '</li>' . "\n";
 		elseif (mb_strlen($editLoad) > $max_lenght)
-			$error = $error . '<li>' . sprintf(__('Wery big "material"'), $max_lenght) . '</li>' . "\n";
+			$error = $error . '<li>' . sprintf(__('Very big "material"'), $max_lenght) . '</li>' . "\n";
 		elseif (mb_strlen($editLoad) < $min_lenght)
-			$error = $error . '<li>' . sprintf(__('Wery small "material"'), $min_lenght) . '</li>' . "\n";
+			$error = $error . '<li>' . sprintf(__('Very small "material"'), $min_lenght) . '</li>' . "\n";
 		
 
 		if (!empty($tags) && !$valobj->cha_val($tags, V_TITLE)) 
@@ -1051,7 +1051,7 @@ Class LoadsModule extends Module {
 
 
                 if ($_FILES[$attach_name]['size'] > $max_attach_size) {
-                    $error .= '<li>' . sprintf(__('Wery big file'), $i, round(($max_attach_size / 1000), 2)) . '</li>'."\n";
+                    $error .= '<li>' . sprintf(__('Very big file'), $i, round(($max_attach_size / 1000), 2)) . '</li>'."\n";
                 }
                 if (($_FILES[$attach_name]['type'] != 'image/jpeg'
                     && $_FILES[$attach_name]['type'] != 'image/jpg'

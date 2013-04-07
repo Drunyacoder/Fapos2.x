@@ -707,7 +707,7 @@ Class ForumModule extends Module {
 				'title' => __('Answer'))), '/forum/view_theme/' . $id_theme . '#sendForm');
 			} else {
 				$markers['add_link'] = get_img('/sys/img/reply_locked.png', 
-				array('alt' => __('Theme locked'), 'title' => __('Theme locked')));
+				array('alt' => __('Theme is locked'), 'title' => __('Theme is locked')));
 			}
 			
 			
@@ -1712,7 +1712,7 @@ Class ForumModule extends Module {
 		for ($i = 1; $i < 6; $i++) {
 			if (!empty($_FILES['attach' . $i]['name'])) {
 				if ($_FILES['attach' . $i]['size'] > $this->Register['Config']->read('max_file_size')) {
-					$error = $error . '<li>' . sprintf(__('Wery big file'), $i, ($this->Register['Config']->read('max_file_size')/1024)) . '</li>'."\n";
+					$error = $error . '<li>' . sprintf(__('Very big file'), $i, ($this->Register['Config']->read('max_file_size')/1024)) . '</li>'."\n";
 				}
 			}
 		}
@@ -2372,7 +2372,7 @@ Class ForumModule extends Module {
 		for ($i = 1; $i < 6; $i++) {
 			if (!empty($_FILES['attach' . $i]['name'])) {
 				if ($_FILES['attach' . $i]['size'] > $this->Register['Config']->read('max_file_size')) {
-					$error = $error . '<li>' . sprintf(__('Wery big file'), $i
+					$error = $error . '<li>' . sprintf(__('Very big file'), $i
 					, ($this->Register['Config']->read('max_file_size')/1024)) . '</li>'."\n";
 				}
 				//if exists attach files we do not gluing posts
@@ -2707,7 +2707,7 @@ Class ForumModule extends Module {
 		for ($i = 1; $i <= 5; $i++) {
 			if (!empty($_FILES['attach' . $i]['name'])) {
 				if ($_FILES['attach' . $i]['size'] > $this->Register['Config']->read('max_file_size')) {
-					$error = $error . '<li>' . sprintf(__('Wery big file'), $i
+					$error = $error . '<li>' . sprintf(__('Very big file'), $i
 					, ($this->Register['Config']->read('max_file_size') / 1024)) . '</li>'."\n";
 				}
 			}

@@ -164,9 +164,9 @@ if(isset($_POST['send']) && isset($_POST['templ'])) {
 	
 	
 	if(fputs($file, $_POST['templ'])) {
-		$mess = __('Templates is saved');
+		$mess = __('Template is saved');
 	} else {
-		$mess = __('Templates is not saved');
+		$mess = __('Template is not saved');
 	}
 	fclose($file);
 }

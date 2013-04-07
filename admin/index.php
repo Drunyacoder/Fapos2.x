@@ -91,7 +91,7 @@ include 'template/header.php';
 <?php
 if (!empty($_SESSION['clean_cache'])):
 ?>
-<script type="text/javascript">showHelpWin('<?php echo __('Cache is clened'); ?>', 'Сообщение');</script>
+<script type="text/javascript">showHelpWin('<?php echo __('Cache is cleared'); ?>', 'Сообщение');</script>
 <?php
 	unset($_SESSION['clean_cache']);
 endif;
@@ -120,7 +120,7 @@ endif;
 			<div class="setting-item">
 				<div class="left">
 					<?php echo __('SQL inj state'); ?>
-					<span class="comment"><?php echo __('Is the controll of SQL inj'); ?></span>
+					<span class="comment"><?php echo __('Is the control of SQL inj'); ?></span>
 				</div>
 				<div class="right"><div class="<?php echo (Config::read('antisql', 'secure') == 1) ? 'yes' : 'no' ?>"></div></div>
 				<div class="clear"></div>

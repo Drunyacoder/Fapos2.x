@@ -443,16 +443,16 @@ Class FotoModule extends Module {
 			$error = $error.'<li>'.__('Empty field "description"').'</li>'."\n";
 		}
 		if (mb_strlen($description) > $this->Register['Config']->read('description_lenght', 'foto'))
-			$error = $error .'<li>'.sprintf(__('Wery big "description"'), $this->Register['Config']->read('description_lenght', 'foto')).'</li>'."\n";
+			$error = $error .'<li>'.sprintf(__('Very big "description"'), $this->Register['Config']->read('description_lenght', 'foto')).'</li>'."\n";
 		
 		
 		
 		/* check file */
 		if (empty($_FILES['foto']['name']))	{
-			$error = $error .'<li>'.__('Not attaches').'</li>'. "\n";
+			$error = $error .'<li>'.__('Not attachment').'</li>'. "\n";
 		} else {
 			if ($_FILES['foto']['size'] > $this->Register['Config']->read('max_file_size', 'foto')) 
-				$error = $error .'<li>'. sprintf(__('Wery big file2'), $this->Register['Config']->read('max_file_size', 'foto')/1000) .'</li>'."\n";
+				$error = $error .'<li>'. sprintf(__('Very big file2'), $this->Register['Config']->read('max_file_size', 'foto')/1000) .'</li>'."\n";
 			if ($_FILES['foto']['type'] != 'image/jpeg' &&
 			$_FILES['foto']['type'] != 'image/gif' &&
 			//$_FILES['foto']['type'] != 'image/bmp' &&
@@ -553,7 +553,7 @@ Class FotoModule extends Module {
 		$this->Cache->clean(CACHE_MATCHING_TAG, array('module_foto'));
 		$this->DB->cleanSqlCache();
 		if ($this->Log) $this->Log->write('adding foto', 'foto id(' . $id . ')');
-		return $this->showInfoMessage(__('Material successful added'), '/foto/' );		  
+		return $this->showInfoMessage(__('Material successfully added'), '/foto/' );		  
 	}
 
 
@@ -679,7 +679,7 @@ Class FotoModule extends Module {
 		if (empty($description) && $this->Register['Config']->read('description_requred', 'foto')) 
 			$error = $error.'<li>'.__('Empty field "description"').'</li>'."\n";
 		if (mb_strlen($description) > $this->Register['Config']->read('description_lenght', 'foto'))
-			$error = $error.'<li>'.sprintf(__('Wery big "description"'), $this->Register['Config']->read('description_lenght', 'foto')).'</li>'."\n";
+			$error = $error.'<li>'.sprintf(__('Very big "description"'), $this->Register['Config']->read('description_lenght', 'foto')).'</li>'."\n";
 			
 			
 		$className = $this->Register['ModManager']->getModelNameFromModule('fotoSections');

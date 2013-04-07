@@ -139,9 +139,9 @@
 		  'sep',
 		  '<a href="system_log.php"><?php echo __('Action log'); ?></a>',
 		  'sep',
-		  '<a href="ip_ban.php"><?php echo __('Bann by IP'); ?></a>',
+		  '<a href="ip_ban.php"><?php echo __('Bans by IP'); ?></a>',
 		  'sep',
-		  '<a href="dump.php"><?php echo __('Backup controll'); ?></a>'
+		  '<a href="dump.php"><?php echo __('Backup control'); ?></a>'
 		  ]],
 		  
 		  
@@ -157,7 +157,7 @@
 
 		['<?php echo __('Help'); ?>',
 		  [
-		  '<a href="http://fapos.net" target="_blank"><?php echo __('Fapos CMS Comunity'); ?></a>',
+		  '<a href="http://fapos.net" target="_blank"><?php echo __('Fapos CMS Community'); ?></a>',
 		  '<a href="faq.php"><?php echo __('FAQ'); ?></a>',
 		  'sep',
 		  '<a href="authors.php"><?php echo __('Dev. Team'); ?></a>',

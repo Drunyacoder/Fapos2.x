@@ -663,7 +663,7 @@ function edit() {
 		}
 		if (!empty($_POST['lock_posts'])) {
 			$lock_posts = $_POST['lock_posts'];
-			if (mb_strlen($lock_posts) > 100) $error = $error . '<li>' . __('Posts cnt must be numeric') . '</li>';
+			if (mb_strlen($lock_posts) > 100) $error = $error . '<li>' . __('Posts count must be numeric') . '</li>';
 		}
 		
 		
@@ -840,7 +840,7 @@ function add() {
 		}
 		if (!empty($_POST['lock_posts'])) {
 			$lock_posts = $_POST['lock_posts'];
-			if (mb_strlen($lock_posts) > 100) $error = $error . '<li>' . __('Posts cnt must be numeric') . '</li>';
+			if (mb_strlen($lock_posts) > 100) $error = $error . '<li>' . __('Posts count must be numeric') . '</li>';
 		}
 		
 		

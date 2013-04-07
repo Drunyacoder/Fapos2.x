@@ -116,7 +116,7 @@ Class UsersModule extends Module {
 				
 			if ($user->getPol() === 'f') $markers['pol'] = __('f');
 			else if ($user->getPol() === 'm') $markers['pol'] = __('m');
-			else $markers['pol'] = __('no pol');
+			else $markers['pol'] = __('no gender');
 
 			
 			if ($user->getByear() && $user->getBmonth() && $user->getBday()) {
@@ -352,10 +352,10 @@ Class UsersModule extends Module {
 			
 		// Проверяем, не слишком ли короткий пароль
 		if (!empty($password) and mb_strlen($password) < $this->Register['Config']->read('min_password_lenght'))
-			$error = $error.'<li>' . sprintf(__('Wery short pass'), $this->Register['Config']->read('min_password_lenght')) . '</li>'."\n";
+			$error = $error.'<li>' . sprintf(__('Very short pass'), $this->Register['Config']->read('min_password_lenght')) . '</li>'."\n";
 		// Проверяем, совпадают ли пароли
 		if (!empty($password) and !empty($confirm) and $password != $confirm)
-			$error = $error.'<li>' . __('Passwords is diferend') . '</li>'."\n";
+			$error = $error.'<li>' . __('Passwords are different') . '</li>'."\n";
 	
 	// Проверяем поле "код"
 		if (!empty($keystring)) {
@@ -414,7 +414,7 @@ Class UsersModule extends Module {
         $res = $this->Model->getSameNics($new_name);
 
 
-		if (count($res) > 0) $error = $error.'<li>' . sprintf(__('Name already state'), $new_name) . '</li>'."\n";
+		if (count($res) > 0) $error = $error.'<li>' . sprintf(__('Name already exists'), $new_name) . '</li>'."\n";
 		
 		/* check avatar */
 		$tmp_key = rand(0, 9999999);
@@ -427,7 +427,7 @@ Class UsersModule extends Module {
 				$check_image = true;
 			}
 			if ($_FILES['avatar']['size'] > $this->Register['Config']->read('max_avatar_size', 'users')) {
-				$error = $error.'<li>'. sprintf(__('Avatar is wery big')
+				$error = $error.'<li>'. sprintf(__('Avatar is very big')
 				, ($this->Register['Config']->read('max_avatar_size', 'users') / 1024)) .'</li>'."\n";
 				$check_image = true;
 			}
@@ -532,7 +532,7 @@ Class UsersModule extends Module {
 				  по адресу, указанному в письме.';
 			
 		} else { // Activate without Email
-			$msg = __('Registeration complete');
+			$msg = __('Registration complete');
 		}
 		$source = $this->render('infomessage.html', array('info_message' => $msg));
 		return $this->_view($source);
@@ -563,7 +563,7 @@ Class UsersModule extends Module {
             $res[0]->setLast_visit(new Expr('NOW()'));
             $res[0]->save();
 			if ($this->Log) $this->Log->write('activate user', 'user id(' . $id . ')');
-			return $this->showInfoMessage(__('Accaunt activated'), '/users/login_form/' );
+			return $this->showInfoMessage(__('Account activated'), '/users/login_form/' );
 		}
 		if ($this->Log) $this->Log->write('wrong activate user', 'activate code(' . $code . ')');
 		return $this->showInfoMessage(__('Wrong activation code'), '/');
@@ -595,7 +595,7 @@ Class UsersModule extends Module {
         // Navigation PAnel
         $nav = array();
         $nav['navigation'] = get_link(__('Home'), '/') . __('Separator')
-            . get_link(h($this->module_title), '/users/') . __('Separator') . __('Pass repair');
+            . get_link(h($this->module_title), '/users/') . __('Separator') . __('Password repair');
         $this->_globalize($nav);
 
 
@@ -814,7 +814,7 @@ Class UsersModule extends Module {
         $data->setAction(get_url('/users/update/'));
         if ($data->getPol() === 'f') $data->setPol(__('f'));
         else if ($data->getPol() === 'm') $data->setPol(__('m'));
-        else $data->setPol(__('no pol'));
+        else $data->setPol(__('no gender'));
 		
 
 
@@ -972,9 +972,9 @@ Class UsersModule extends Module {
 				if (empty($confirm)) 	
 					$error = $error.'<li>' . __('Empty field "confirm"') . '</li>'."\n";
 				if (strlen($newpassword) < $this->Register['Config']->read('min_password_lenght'))
-					$error = $error.'<li>'. sprintf(__('Wery short pass'), Config::read('min_password_lenght')) . '</li>'."\n";
+					$error = $error.'<li>'. sprintf(__('Very short pass'), Config::read('min_password_lenght')) . '</li>'."\n";
 				if (!empty($confirm) and $newpassword != $confirm)
-					$error = $error.'<li>' . __('Passwords is diferend') . '</li>'."\n";
+					$error = $error.'<li>' . __('Passwords are different') . '</li>'."\n";
 				if (!$valobj->cha_val($newpassword, V_LOGIN))
 					$error = $error.'<li>' . __('Wrong chars in field "password"') . '</li>'."\n";
 				if (!empty($confirm) and !$valobj->cha_val($confirm, V_LOGIN))
@@ -1020,7 +1020,7 @@ Class UsersModule extends Module {
 				$check_image = true;
 			}
 			if ($_FILES['avatar']['size'] > $this->Register['Config']->read('max_avatar_size', 'users')) {
-				$error = $error.'<li>'. sprintf(__('Avatar is wery big'), Config::read('max_avatar_size', 'users')).'</li>'."\n";
+				$error = $error.'<li>'. sprintf(__('Avatar is very big'), Config::read('max_avatar_size', 'users')).'</li>'."\n";
 				$check_image = true;
 			}
 			if (!isset($check_image) && move_uploaded_file($_FILES['avatar']['tmp_name'], $path)) {
@@ -1163,7 +1163,7 @@ Class UsersModule extends Module {
         $data->setAction(get_url('/users/update_by_admin/' . $id));
         if ($data->getPol() === 'f') $data->setPol(__('f'));
         else if ($data->getPol() === 'm') $data->setPol(__('m'));
-        else $data->setPol(__('no pol'));
+        else $data->setPol(__('no gender'));
 		
 
 
@@ -1353,9 +1353,9 @@ Class UsersModule extends Module {
 			if ( empty( $confirm ) )    
 				$error = $error.'<li>' . __('Empty field "confirm"') . '</li>'."\n";
 			if (strlen($newpassword) < $this->Register['Config']->read('min_password_lenght'))
-				$error = $error.'<li>' . sprintf(__('Wery short pass'), $this->Register['Config']->read('min_password_lenght')).'</li>'."\n";
+				$error = $error.'<li>' . sprintf(__('Very short pass'), $this->Register['Config']->read('min_password_lenght')).'</li>'."\n";
 			if (!empty($confirm) and $newpassword != $confirm)
-				$error = $error.'<li>' . __('Passwords is diferend') . '</li>'."\n";
+				$error = $error.'<li>' . __('Passwords are different') . '</li>'."\n";
 			if ( !$valobj->cha_val($newpassword, V_LOGIN))
 				$error = $error.'<li>' . __('Wrong chars in field "password"') . '</li>'."\n";
 			if (!empty($confirm) and !$valobj->cha_val($confirm, V_LOGIN))
@@ -1405,7 +1405,7 @@ Class UsersModule extends Module {
 				$check_image = true;
 			}
 			if ($_FILES['avatar']['size'] > $this->Register['Config']->read('max_avatar_size', 'users')) {
-				$error = $error.'<li>'. sprintf(__('Avatar is wery big'), $this->Register['Config']->read('max_avatar_size', 'users')).'</li>'."\n";
+				$error = $error.'<li>'. sprintf(__('Avatar is very big'), $this->Register['Config']->read('max_avatar_size', 'users')).'</li>'."\n";
 				$check_image = true;
 			}
 			if (!isset($check_image) && move_uploaded_file($_FILES['avatar']['tmp_name'], $path)) {
@@ -1523,8 +1523,8 @@ Class UsersModule extends Module {
 			$email = get_link(__('Send mail'), '/users/send_mail_form/' . $id);
 			$privateMessage = get_link(__('Send PM'), '/users/send_msg_form/' . $id);
 		} else {
-			$email = __('Only register users');
-			$privateMessage = __('Only register users');
+			$email = __('Only registered users');
+			$privateMessage = __('Only registered users');
 		}
 		
 
@@ -1554,7 +1554,7 @@ Class UsersModule extends Module {
 		
 		if ($user->getPol() === 'f') $markers['pol'] = __('f');
 		else if ($user->getPol() === 'm') $markers['pol'] = __('m');
-		else $markers['pol'] = __('no pol');
+		else $markers['pol'] = __('no gender');
 		
 		$markers['fpol'] = ($user->getPol() && ($user->getPol() === 'f' || $user->getPol() === '0')) ? ' checked="checked"' : '';
 		$markers['mpol'] = ($user->getPol() && $user->getPol() !== 'f') ? ' checked="checked"' : '';
@@ -1764,9 +1764,9 @@ Class UsersModule extends Module {
 
 
 			if (empty($res))
-				$error = $error.'<li>' . sprintf(__('Not user with this name'), $to) . '</li>'."\n";
+				$error = $error.'<li>' . sprintf(__('No user with this name'), $to) . '</li>'."\n";
 			if ((count($res) && is_array($res) ) && ($res[0]->getId() == $_SESSION['user']['id']) )
-				$error = $error.'<li>' . __('You can not send message to you') . '</li>'."\n";
+				$error = $error.'<li>' . __('You can not send message to yourself') . '</li>'."\n";
 
 
 			//chek max count messages
@@ -1790,10 +1790,10 @@ Class UsersModule extends Module {
 
 
 				if (!empty($cnt_to) && $cnt_to >= $this->Register['Config']->read('max_count_mess', 'users')) {
-					$error = $error.'<li>' . __('This user hav full  messagebox') . '</li>'."\n";
+					$error = $error.'<li>' . __('This user has full  messagebox') . '</li>'."\n";
 				}
 				if (!empty($cnt_from) && $cnt_from >= $this->Register['Config']->read('max_count_mess', 'users')) {
-					$error = $error.'<li>' . __('You hav full  messagebox') . '</li>'."\n";
+					$error = $error.'<li>' . __('You have full  messagebox') . '</li>'."\n";
 				}
 			}
 		}
@@ -1833,7 +1833,7 @@ Class UsersModule extends Module {
 		/* clean DB cache */
 		$this->Register['DB']->cleanSqlCache();
 		if ($this->Log) $this->Log->write('adding pm message', 'message id(' . mysql_insert_id() . ')');
-		return $this->showInfoMessage(__('Message successfuly send'), '/users/out_msg_box/' );
+		return $this->showInfoMessage(__('Message successfully send'), '/users/out_msg_box/' );
 	}
 
 
@@ -1897,7 +1897,7 @@ Class UsersModule extends Module {
 		if ($inBox)
 			$markers['in_on_message'] = __('Sended');
 		else
-			$markers['in_on_message'] = __('Geting');
+			$markers['in_on_message'] = __('Getting');
 			
 
 		$text = $this->Textarier->print_page($message->getMessage(), $message->getFromuser()->getStatus());
@@ -2195,7 +2195,7 @@ Class UsersModule extends Module {
 			$to = preg_replace("#[^- _0-9a-zа-яА-Я]#ui", '', $toUser);
 			$user = $this->Model->getByName($to);
 			if (empty($user))				
-				$error = $error.'<li>' . sprintf(__('Not user with this name'), $to) . '</li>'."\n";
+				$error = $error.'<li>' . sprintf(__('No user with this name'), $to) . '</li>'."\n";
 		}
 		
 		// Если были допущены ошибки при заполнении формы -
@@ -2359,7 +2359,7 @@ Class UsersModule extends Module {
 		unset($_SESSION['loginForm']);
 
 
-		if ($user->getActivation()) return $this->showInfoMessage(__('Your accaunt not activated'), '/');
+		if ($user->getActivation()) return $this->showInfoMessage(__('Your account not activated'), '/');
 
 		// Если пользователь заблокирован
 		if ($user->getLocked()) return redirect('/users/baned/');
