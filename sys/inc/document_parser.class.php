@@ -181,13 +181,14 @@ class Document_Parser {
 		$path = (!empty($path) ? $path : 'fapos');
 		$markers['smiles_set'] = $path;
 		$path = ROOT . '/sys/img/smiles/' . $path . '/info.php';
-		include_once $path;
+		include $path;
 		
 		if (isset($smilesList) && is_array($smilesList)) {
 			$markers['smiles_list'] = (isset($smilesInfo) && isset($smilesInfo['show_count'])) ? array_slice($smilesList, 0, $smilesInfo['show_count']) : $smilesList;
 		} else {
 			$markers['smiles_list'] = array();
 		}
+		
 		
 		
 		$markers['powered_by'] = 'Fapos';

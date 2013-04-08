@@ -294,20 +294,25 @@ Class PagesModule extends Module {
 	protected function _getAdminBar($id, $module) {
 		$moder_panel = '';
 		if ($this->ACL->turn(array($module, 'edit_materials'), false)) {
-			$moder_panel .= get_link(get_img('/sys/img/edit_16x16.png', array('alt' => __('Edit'), 'title' => __('Edit'))),
-			'/' . $module . '/edit_form/' . $id) . '&nbsp;';
+			$moder_panel .= get_link('', '/' . $module . '/edit_form/' . $id, array('class' => 'fps-edit')) . '&nbsp;';
 		}
 		if ($this->ACL->turn(array($module, 'up_materials'), false)) {
-			$moder_panel .= get_link(get_img('/sys/img/up_arrow_16x16.png', array('alt' => __('Up'), 'title' => __('Up'))),
-			'/' . $module . '/upper/' . $id, array('onClick' => "return confirm('" . __('Are you sure') . "')")) . '&nbsp;';
+			$moder_panel .= get_link('', '/' . $module . '/upper/' . $id, array(
+				'class' => 'fps-up',
+				'onClick' => "return confirm('" . __('Are you sure') . "')",
+			)) . '&nbsp;';
 		}
 		if ($this->ACL->turn(array($module, 'on_home'), false)) {
-			$moder_panel .= get_link(get_img('/sys/img/round_ok.png', array('alt' => __('On home'), 'title' => __('On home'))),
-			'/' . $module . '/off_home/' . $id, array('onClick' => "return confirm('" . __('Are you sure') . "')")) . '&nbsp;';
+			$moder_panel .= get_link('', '/' . $module . '/off_home/' . $id, array(
+				'class' => 'fps-on',
+				'onClick' => "return confirm('" . __('Are you sure') . "')",
+			)) . '&nbsp;';
 		}
 		if ($this->ACL->turn(array($module, 'delete_materials'), false)) {
-			$moder_panel .= get_link(get_img('/sys/img/delete_16x16.png', array('alt' => __('Delete'), 'title' => __('Delete'))),
-			'/' . $module . '/delete/' . $id, array('onClick' => "return confirm('" . __('Are you sure') . "')")) . '&nbsp;';
+			$moder_panel .= get_link('', '/' . $module . '/delete/' . $id, array(
+				'class' => 'fps-delete',
+				'onClick' => "return confirm('" . __('Are you sure') . "')",
+			)) . '&nbsp;';
 		}
 
 		return $moder_panel;

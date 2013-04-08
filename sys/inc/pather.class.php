@@ -97,7 +97,7 @@ Class Pather {
 		}
 
 		//may be i need upgrade this...hz
-		if (count($pathParams) == 1 /* && preg_match('#^\d+$#', $pathParams[0])*/) {
+		if (count($pathParams) == 1 && !file_exists(ROOT . '/modules/' . $pathParams[0] . '/index.php') /* && preg_match('#^\d+$#', $pathParams[0])*/) {
 			$pathParams = array(
 				0 => 'pages',
 				1 => 'index',
