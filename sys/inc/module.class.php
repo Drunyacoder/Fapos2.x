@@ -171,6 +171,9 @@ class Module {
         $this->Register['params'] = $params;
 		
 		
+		// Use for templater (layout)
+		$this->template = $this->module;
+		
 		
 		$this->setModel();
 		
@@ -188,7 +191,7 @@ class Module {
 		if ($this->set['secure']['system_log']) $this->Log = new Logination;
 		
 		// init aditional fields
-		if (true) {
+		if ($this->Register['Config']->read('use_additional_fields')) {
 			$this->AddFields = new FpsAdditionalFields;
 			$this->AddFields->module = $this->module;
 		}

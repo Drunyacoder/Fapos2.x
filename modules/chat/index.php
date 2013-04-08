@@ -62,7 +62,7 @@ class ChatModule extends Module {
 	*/
 	public function view_messages() {
 		$content = '';
-		$this->template = '';
+		//$this->template = '';
 		$chatDataPath = ROOT . '/sys/tmp/chat/messages.dat';
 		
 		
@@ -244,6 +244,7 @@ class ChatModule extends Module {
 		
 		$View = new Fps_Viewer_Manager();
 		$View->setModuleTitle('chat');
+		$View->setLayout('chat');
 		$source = $View->view('addform.html', array('data' => $markers));
 
 
