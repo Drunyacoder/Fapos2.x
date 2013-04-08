@@ -94,9 +94,9 @@ Class UsersModule extends Module {
 			
 			$markers['moder_panel'] = '';
 			if ($this->ACL->turn(array('users', 'edit_users'), false)) {
-				$markers['adm_panel'] = get_link(get_img('/sys/img/edit_16x16.png',
-				array('alt' => __('Edit'), 'title' => __('Edit'))),
-				'/users/edit_form_by_admin/' . $uid);
+				$markers['adm_panel'] = get_link('',
+				'/users/edit_form_by_admin/' . $uid, 
+				array('class' => 'fps-edit'));
 			}
 			
 			
@@ -2551,30 +2551,28 @@ Class UsersModule extends Module {
 		if (empty($to_user)) redirect('/');
 
 		
-		$votesModel = $this->Register['ModManager']->getModelName('UsersVotes');
-		$votesModel = new $votesModel;
-		$votesModel->bindModel('Users');
+		$votesModel = $this->Register['ModManager']->getModelInstance('UsersVotes');
+		$votesModel->bindModel('touser');
+		$votesModel->bindModel('fromuser');
 		$messages = $votesModel->getCollection(array('to_user' => $user_id), array('order' => '`date` DESC'));
-		if (count($messages) < 1) {
+		if (!is_array($messages) || count($messages) < 1) {
 			return $this->_view(__('No votes for user'));
 		}
 		
 		
-
-
+		
 		foreach ($messages as $message) {
 			// Admin buttons
 			$message->setModer_panel('');
 			if ($this->ACL->turn(array('users', 'delete_rating_comments'), false)) {
-				$message->setModer_panel(get_img('/sys/img/delete_16x16.png', 
+				$message->setModer_panel(get_link('', 'javascript://',
 					array(
 						'onclick' => "deleteUserVote('" . $message->getId() . "'); return false;", 
-						'class' => 'aimg',
+						'class' => 'fps-delete',
 					)
 				));
 			}
 		}
-		
 		
 
 		$source = $this->render('rating_tb.html', array(
@@ -2791,10 +2789,10 @@ Class UsersModule extends Module {
 		$max_warnings_by_ban = $this->Register['Config']->read('warnings_by_ban', 'users');
 		$user_procent_warnings = (100 / $max_warnings_by_ban) * $to_user->getWarnings();
 		foreach ($warnings as $warning) {
-			$panel = get_img('/sys/img/delete_16x16.png', 
+			$panel = get_link('', 'javascript://', 
 				array(
 					'onclick' => "deleteUserWarning('" . $warning->getId() . "'); return false;", 
-					'class' => 'aimg',
+					'class' => 'fps-delete',
 				)
 			);
 			$warning->setModerPanel($panel);

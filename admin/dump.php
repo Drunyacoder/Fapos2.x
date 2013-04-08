@@ -181,8 +181,8 @@ include_once ROOT . '/admin/template/header.php';
 			<td><?php echo round((filesize($dump) / 1024), 1) ?> Kb</td>
 			
 			<td width="40px">
-				<a onClick="return confirm('Are you sure?')" href="dump.php?ac=restore&id=<?php echo $dump ?>"><img src="<?php echo get_url('/sys/img/undo.png'); ?>" title="<?php echo __('Restore') ?>" /></a>
-				<a onClick="return confirm('Are you sure?')" href="dump.php?ac=delete&id=<?php echo $dump ?>"><img src="<?php echo get_url('/sys/img/delete_16x16.png'); ?>" title="<?php echo __('Delete') ?>" /></a>
+				<a class="undo" onClick="return confirm('Are you sure?')" title="<?php echo __('Restore') ?>" href="dump.php?ac=restore&id=<?php echo $dump ?>"></a>
+				<a class="delete" onClick="return confirm('Are you sure?')" title="<?php echo __('Delete') ?>" href="dump.php?ac=delete&id=<?php echo $dump ?>"></a>
 			</td>
 		</tr>
 

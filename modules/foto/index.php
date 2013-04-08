@@ -773,24 +773,29 @@ Class FotoModule extends Module {
 	*/
 	protected function _getAdminBar($record) {
 		$moder_panel = '';
-		$id = $record->getId();
-		$author_id = $record->getAuthor_id();
+        $uid = $record->getAuthor_id();
+        $id = $record->getId();
+
+
+		if ($this->ACL->turn(array($this->module, 'edit_materials'), false) 
+		|| (!empty($_SESSION['user']['id']) && $uid == $_SESSION['user']['id']
+		&& $this->ACL->turn(array($this->module, 'edit_mine_materials'), false))) {
+			$moder_panel .= get_link('', '/' . $this->module . '/edit_form/' . $id, array('class' => 'fps-edit')) . '&nbsp;';
+		}
 		
-		if ($this->ACL->turn(array('foto', 'edit_materials'), false) 
-		|| (!empty($_SESSION['user']['id']) && $author_id == $_SESSION['user']['id'] 
-		&& $this->ACL->turn(array('foto', 'edit_mine_materials'), false))) {
-			$moder_panel .= get_link(get_img('/sys/img/edit_16x16.png'), '/foto/edit_form/' . $id) . '&nbsp;';
+		if ($this->ACL->turn(array($this->module, 'up_materials'), false)) {
+			$moder_panel .= get_link('', '/' . $this->module . '/upper/' . $id,
+				array('class' => 'fps-up', 'onClick' => "return confirm('" . __('Are you sure') . "')")) . '&nbsp;';
 		}
-		if ($this->ACL->turn(array('foto', 'up_materials'), false)) {
-			$moder_panel .= get_link(get_img('/sys/img/up_arrow_16x16.png'), '/foto/upper/' . $id, 
-			array('onClick' => "return confirm('" . __('Are you sure') . "')")) . '&nbsp;';
+		
+		
+		if ($this->ACL->turn(array($this->module, 'delete_materials'), false) 
+		|| (!empty($_SESSION['user']['id']) && $uid == $_SESSION['user']['id']
+		&& $this->ACL->turn(array($this->module, 'delete_mine_materials'), false))) {
+			$moder_panel .= get_link('', '/' . $this->module . '/delete/' . $id,
+				array('class' => 'fps-delete', 'onClick' => "return confirm('" . __('Are you sure') . "')")) . '&nbsp;';
 		}
-		if ($this->ACL->turn(array('foto', 'delete_materials'), false) 
-		|| (!empty($_SESSION['user']['id']) && $author_id == $_SESSION['user']['id'] 
-		&& $this->ACL->turn(array('foto', 'delete_mine_materials'), false))) {
-			$moder_panel .= get_link(get_img('/sys/img/delete_16x16.png'), '/foto/delete/' . $id, 
-			array('onClick' => "return confirm('" . __('Are you sure') . "')")) . '&nbsp;';
-		}
+		
 		return $moder_panel;
 	}	
 	

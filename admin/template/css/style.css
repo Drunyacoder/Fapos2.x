@@ -147,7 +147,7 @@ table.side-separator, table.side-separator tr td {vertical-align:top; min-height
 
 
 /* Action icons */
-.list a.edit, .list a.delete, .list a.add, .list a.off-home, .list a.on-home, .list a.move, a.off, a.on {display:inline-block; width:22px; height:22px; background:url('../img/icons-sprite.png') no-repeat;}
+.list a.edit, .list a.delete, .list a.add, .list a.off-home, .list a.on-home, .list a.move, a.off, a.on, a.undo {display:inline-block; width:22px; height:22px; background:url('../img/icons-sprite.png') no-repeat;}
 .list a.edit {background-position:-40px 0px;}
 .list a.delete {background-position:-76px 0px;}
 .list a.add {background-position:0px 0px;}
@@ -156,6 +156,7 @@ table.side-separator, table.side-separator tr td {vertical-align:top; min-height
 .list a.move {background-position:-156px 0px;}
 a.off {background-position:-208px 0px;}
 a.on {background-position:-184px 0px;}
+a.undo {background-position:-253px 0px;}
 
 
 /* Login page */
