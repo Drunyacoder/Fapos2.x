@@ -122,9 +122,9 @@ function index(&$page_title) {
 		
 	
 	
-		$content .= "<tr><td><a href='plugins.php?ac=edit&dir={$dir}'>{$name}</a></td>
-			<td>{$result}</td>
-			<td>{$descr}</td>
+		$content .= "<tr><td><div class=\"plugin_path\"><a href='plugins.php?ac=edit&dir={$dir}'>{$name}</a></div></td>
+			<td><div class=\"plugin_path\">{$result}</div></td>
+			<td><div class=\"plugin_path\">{$descr}</div></td>
 			<td><span style=\"color:#\">{$hook}</span></td>
 			<td>{$dir}</td>
 			<td colspan=\"2\">

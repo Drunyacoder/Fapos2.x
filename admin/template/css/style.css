@@ -259,6 +259,8 @@ table.grid td.group {font-weight:bold; color:#96C703; -moz-text-shadow:none; -we
 .pages strong {color:#F4F2F2;}
 .pages a {color:#96C703;}
 
+.plugin_path {word-break: break-all;word-wrap: break-word;} 
+
 table.grid ul {margin-left:40px; list-style-type:none;}
 table.grid ul li {list-style-type:none; cursor:pointer; min-height:20px;}
 ul#sort .plholder{width:100%; height:40px; border:1px solid #00E600; background:#C4C4C4;}
